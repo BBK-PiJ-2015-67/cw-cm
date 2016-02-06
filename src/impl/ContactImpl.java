@@ -10,6 +10,14 @@ import spec.Contact;
  */
 public class ContactImpl implements Contact {
 
+    public ContactImpl (int id, String name) {
+
+    }
+
+    public ContactImpl (int id, String name, String notes) {
+
+    }
+
     @Override
     public int getId() {
         return 0;
