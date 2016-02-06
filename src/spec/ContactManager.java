@@ -6,6 +6,8 @@ import java.util.Set;
 
 /**
  * A class to manage your contacts and meetings.
+ *
+ * @author PiJ
  */
 public interface ContactManager {
 
