@@ -1,3 +1,5 @@
+package spec;
+
 /**
  * A contact is a person we are making business with or may do in the future.
  * <p/>
