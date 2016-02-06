@@ -68,4 +68,34 @@ public class ContactTest {
 
         assertThat(testContact.getNotes()).isEqualTo(notesA + notesB);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNewContactWithNegativeID () {
+        Contact testContact = new ContactImpl(-2, stubName);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNewContactWithZeroID () {
+        Contact testContact = new ContactImpl(0, stubName);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNewContactWithEmptyStringAsName () {
+        Contact testContact = new ContactImpl(1, "");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testNewContactWithNullArgumentsA () {
+        Contact testContact = new ContactImpl(1, null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testNewContactWithNullArgumentsB () {
+        Contact testContact = new ContactImpl(1, null, null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testNewContactWithNullArgumentsC () {
+        Contact testContact = new ContactImpl(1, stubName, null);
+    }
 }
