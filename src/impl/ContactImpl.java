@@ -27,7 +27,7 @@ public class ContactImpl implements Contact {
      * @throws NullPointerException if the name is null
      */
     public ContactImpl (int id, String name) {
-        if (!isValidId(id)) {
+        if (id <= 0) {
             throw new IllegalArgumentException("IDs must be greater than 0");
         }
         if (name == null) {
@@ -55,16 +55,6 @@ public class ContactImpl implements Contact {
         } catch(NullPointerException e) {
             throw new NullPointerException(e.getMessage());
         }
-    }
-
-    /**
-     * Check if the ID argument is greater than 0
-     *
-     * @param id the ID to check
-     * @return true if the ID is valid (gt 0), false if it's 0 or negative
-     */
-    private boolean isValidId (int id) {
-        return id > 0;
     }
 
     /**
