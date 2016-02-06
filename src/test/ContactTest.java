@@ -9,6 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Testing a Contact
+ *
+ * @author lmignot
  */
 public class ContactTest {
 
