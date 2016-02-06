@@ -52,6 +52,15 @@ public class ContactTest {
     }
 
     @Test
+    public void testAddEmptyNoteToContact () {
+        Contact testContact = new ContactImpl(stubID, stubName);
+
+        testContact.addNotes("");
+
+        assertThat(testContact.getNotes()).isEqualTo("");
+    }
+
+    @Test
     public void testAddNotesToContactWithExistingNotes () {
         Contact testContact = new ContactImpl(stubID, stubName);
 
@@ -86,17 +95,24 @@ public class ContactTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testNewContactWithNullArgumentsA () {
+    public void testNewContactWithNullName() {
         Contact testContact = new ContactImpl(1, null);
     }
 
     @Test(expected = NullPointerException.class)
-    public void testNewContactWithNullArgumentsB () {
+    public void testNewContactWithNullNameAndNotes () {
         Contact testContact = new ContactImpl(1, null, null);
     }
 
     @Test(expected = NullPointerException.class)
-    public void testNewContactWithNullArgumentsC () {
+    public void testNewContactWithNullNotes () {
         Contact testContact = new ContactImpl(1, stubName, null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddNullNoteToContact () {
+        Contact testContact = new ContactImpl(stubID, stubName);
+
+        testContact.addNotes(null);
     }
 }
