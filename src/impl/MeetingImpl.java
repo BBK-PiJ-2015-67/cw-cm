@@ -13,19 +13,38 @@ import java.util.Set;
  * @author lmignot
  */
 public abstract class MeetingImpl implements Meeting {
-    
+
+    private Calendar meetingDate;
+    private int meetingId;
+    private Set<Contact> meetingContacts;
+
+    public MeetingImpl (int id, Calendar date, Set<Contact> contacts) {
+        this.meetingId = id;
+        this.meetingDate = date;
+        this.meetingContacts = contacts;
+    }
+
+    /**
+     * @see Meeting#getId()
+     */
     @Override
     public int getId() {
-        return 0;
+        return this.meetingId;
     }
 
+    /**
+     * @see Meeting#getDate()
+     */
     @Override
     public Calendar getDate() {
-        return null;
+        return this.meetingDate;
     }
 
+    /**
+     * @see Meeting#getContacts() 
+     */
     @Override
     public Set<Contact> getContacts() {
-        return null;
+        return this.meetingContacts;
     }
 }
