@@ -14,7 +14,7 @@ public interface ContactManager {
     /**
      * Add a new meeting to be held in the future.
      *
-     * An ID is returned when the meeting is put into the sytem. This
+     * An ID is returned when the meeting is put into the system. This
      * ID must be positive and non-zero.
      *
      * @param contacts a list of contacts that will participate in the meeting
