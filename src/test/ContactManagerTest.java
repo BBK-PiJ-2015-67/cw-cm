@@ -28,13 +28,13 @@ public class ContactManagerTest {
 
     @Test
     public void constructAContactManager () {
-        cMgr = new ContacManagerImpl();
+        cMgr = new ContactManagerImpl();
         assertThat(cMgr).isNotNull();
     }
 
     @Test
     public void constructAUniqueContactManager () {
-        ContactManager cm = new ContacManagerImpl();
+        ContactManager cm = new ContactManagerImpl();
 
         assertThat(cm).isNotNull();
 
