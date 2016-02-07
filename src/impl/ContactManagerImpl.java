@@ -100,8 +100,11 @@ public class ContactManagerImpl implements ContactManager {
         if(name == null) {
             throw new NullPointerException("null passed as argument for name");
         }
+        // if an empty string is passed we return the full/empty set of contacts
+        // in the Manager. I've opted to return a clone rather than a reference
+        // to the internal set.
         if(name.equals("")) {
-            return this.contacts;
+            return cloneContacts();
         }
         return null;
     }
@@ -114,5 +117,12 @@ public class ContactManagerImpl implements ContactManager {
     @Override
     public void flush() {
 
+    }
+
+    private Set<Contact> cloneContacts() {
+        Set<Contact> clone = new HashSet<>();
+        clone.addAll(this.contacts);
+
+        return clone;
     }
 }
