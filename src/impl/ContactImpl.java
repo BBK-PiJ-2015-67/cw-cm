@@ -102,6 +102,7 @@ public class ContactImpl implements Contact {
         if (note == null) {
             throw new NullPointerException("Notes cannot be null");
         }
+        // No point adding an empty string as a note.
         if (!note.equals("")) {
             this.notes.add(note);
         }

@@ -16,13 +16,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Meeting tests
  *
- * As Meeting is an abstract class I've implemented a nested mock
- * class so we can test basic functionality
- *
  * @author lmignot
  */
 public class MeetingTest {
 
+    // As Meeting is an abstract class I've implemented a nested mock
+    // class to test basic functionality
     private class MeetingMock implements Meeting {
 
         private Calendar meetingDate;
