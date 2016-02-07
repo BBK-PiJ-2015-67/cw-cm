@@ -92,8 +92,17 @@ public class ContactManagerImpl implements ContactManager {
         return id;
     }
 
+    /**
+     * @see ContactManager#getContacts(String)
+     */
     @Override
     public Set<Contact> getContacts(String name) {
+        if(name == null) {
+            throw new NullPointerException("null passed as argument for name");
+        }
+        if(name.equals("")) {
+            return this.contacts;
+        }
         return null;
     }
 
