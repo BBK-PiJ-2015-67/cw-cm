@@ -135,6 +135,12 @@ public class ContactManagerTest {
     }
 
     @Test(expected = NullPointerException.class)
+    public void testGetContactsIdsWithNull () {
+        int[] l = null;
+        cMgr.getContacts(l);
+    }
+
+    @Test(expected = NullPointerException.class)
     public void testGetContactsStringWithNull () {
         String s = null;
         cMgr.getContacts(s);
