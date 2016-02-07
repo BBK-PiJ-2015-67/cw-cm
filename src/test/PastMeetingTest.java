@@ -54,7 +54,7 @@ public class PastMeetingTest {
 
     @Test
     public void createAPastMeeting() {
-        Meeting mMtg = new PastMeetingImpl(99, 
+        Meeting mMtg = new PastMeetingImpl(99,
                 new GregorianCalendar(2015, 11, 12, 9, 30, 0), 
                 meetingContacts, "Some notes about this other meeting.");
 
@@ -64,9 +64,9 @@ public class PastMeetingTest {
         assertThat(mMtg.getContacts()).isNotEmpty();
         assertThat(mMtg.getContacts().size()).isEqualTo(3);
         assertThat(mMtg.getContacts()).isEqualTo(meetingContacts);
-        assertThat(mMtg.getNotes()).isNotNull();
-        assertThat(mMtg.getNotes()).isNotEmpty();
-        assertThat(mMtg.getNotes()).isEqualTo("Some notes about this other meeting.");
+        assertThat(((PastMeeting) mMtg).getNotes()).isNotEmpty();
+        assertThat(((PastMeeting) mMtg).getNotes()).isNotNull();
+        assertThat(((PastMeeting) mMtg).getNotes()).isEqualTo("Some notes about this other meeting.");
     }
 
     @Test
@@ -83,6 +83,7 @@ public class PastMeetingTest {
         assertThat(pMtg.getContacts()).isEqualTo(meetingContacts);
         assertThat(pMtg.getNotes()).isNotNull();
         assertThat(pMtg.getNotes()).isEmpty();
+        assertThat(pMtg.getNotes()).isEqualTo("");
     }
 
     @Test(expected = IllegalArgumentException.class)
