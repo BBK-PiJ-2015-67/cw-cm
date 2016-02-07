@@ -85,4 +85,14 @@ public class MeetingTest {
         assertThat(mtg.getId()).isEqualTo(id);
         assertThat(mtg.getContacts()).isEqualTo(meetingContacts);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void negativeIdShouldThrow () {
+        mtg = new MeetingMock(-2, date, meetingContacts);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void zeroIdShouldThrow () {
+        mtg = new MeetingMock(0, date, meetingContacts);
+    }
 }
