@@ -28,14 +28,13 @@ public class ContactManagerTest {
 
     @Test
     public void constructAContactManager () {
-        ContactManager cm = new ContacManagerImpl();
-        assertThat(cm).isNotNull();
+        cMgr = new ContacManagerImpl();
+        assertThat(cMgr).isNotNull();
     }
 
     @Test
     public void constructAUniqueContactManager () {
         ContactManager cm = new ContacManagerImpl();
-        cMgr = new ContacManagerImpl();
 
         assertThat(cm).isNotNull();
 
@@ -45,8 +44,6 @@ public class ContactManagerTest {
 
     @Test
     public void testAddContactsToCM () {
-        cMgr = new ContacManagerImpl();
-
         int contact1 = cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
         int contact2 = cMgr.addNewContact("Sherlene Westrich", "From the west");
         int contact3 = cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
@@ -57,7 +54,7 @@ public class ContactManagerTest {
         int contact8 = cMgr.addNewContact("Norman Wiedemann", "XXXXL");
         int contact9 = cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
         int contact10 = cMgr.addNewContact("Floyd Drager", "In France we say this man is popular with..");
-        
+
         assertThat(cMgr.getContacts("")).isNotEmpty();
         assertThat(cMgr.getContacts("")).isNotNull();
         assertThat(cMgr.getContacts("").size()).isEqualTo(10);
