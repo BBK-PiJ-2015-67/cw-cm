@@ -62,6 +62,12 @@ public class ContactManagerTest {
     }
 
     @Test(expected = NullPointerException.class)
+    public void testGetContactsStringWithNull () {
+        String s = null;
+        cMgr.getContacts(s);
+    }
+
+    @Test(expected = NullPointerException.class)
     public void testAddContactsWithNullName () {
         cMgr.addNewContact(null, "This one's xenophobic");
     }
