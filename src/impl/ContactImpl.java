@@ -22,8 +22,7 @@ public class ContactImpl implements Contact {
      *
      * @param id The contact's ID
      * @param name The contact's name
-     * @throws IllegalArgumentException if the ID is 0 or negative,
-     *                                  or if the name is an empty String
+     * @throws IllegalArgumentException if the ID is 0 or negative
      * @throws NullPointerException if the name is null
      */
     public ContactImpl (int id, String name) {
@@ -33,9 +32,7 @@ public class ContactImpl implements Contact {
         if (name == null) {
             throw new NullPointerException("A contact's name cannot be null");
         }
-        if (name.equals("")) {
-            throw new IllegalArgumentException("A contact's name should not be empty");
-        }
+
         this.initNotes();
         this.id = id;
         this.fullName = name;
