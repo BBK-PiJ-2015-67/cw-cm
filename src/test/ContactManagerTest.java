@@ -59,4 +59,34 @@ public class ContactManagerTest {
         assertThat(cMgr.getContacts("")).isNotNull();
         assertThat(cMgr.getContacts("").size()).isEqualTo(10);
     }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddContactsWithNullName () {
+        cMgr.addNewContact(null, "This one's xenophobic");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddContactsWithNullNotes () {
+        cMgr.addNewContact("Floyd Drager", null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddContactsWithNullNameAndNotes () {
+        cMgr.addNewContact(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddContactsWithEmptyName () {
+        cMgr.addNewContact("", "This one's xenophobic");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddContactsWithEmptyNotes () {
+        cMgr.addNewContact("Floyd Drager", "");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddContactsWithEmptyNameAndNotes () {
+        cMgr.addNewContact("", "");
+    }
 }
