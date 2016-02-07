@@ -110,6 +110,30 @@ public class ContactManagerTest {
         assertThat(testContacts.size()).isEqualTo(2);
     }
 
+    @Test
+    public void testGetContactsByIds () {
+        int c0 = cMgr.addNewContact("Aaron Kamen", "Camen get it!");
+        int c1 = cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
+        int c2 = cMgr.addNewContact("Sherlene Westrich", "From the west");
+        int c3 = cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
+        int c4 = cMgr.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
+        int c5 = cMgr.addNewContact("Ellis Pollak", "Unfortunate naming...");
+        int c6 = cMgr.addNewContact("Carrol Sin", "Christmas is his favourite time");
+        int c7 = cMgr.addNewContact("Norman Wiedemann", "XXXXL");
+        int c8 = cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
+        int c9 = cMgr.addNewContact("Floyd Drager", "In France we say this man is popular with..");
+
+        Set<Contact> testContacts = cMgr.getContacts(1, 2, 3);
+
+        assertThat(testContacts).isNotEmpty();
+        assertThat(testContacts).isNotNull();
+        assertThat(testContacts.size()).isEqualTo(3);
+
+        for(Contact c : testContacts) {
+            System.out.println(c.getId() + ": " + c.getName());
+        }
+    }
+
     @Test(expected = NullPointerException.class)
     public void testGetContactsStringWithNull () {
         String s = null;
