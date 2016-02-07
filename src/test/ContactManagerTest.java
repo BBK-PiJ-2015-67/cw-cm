@@ -96,6 +96,20 @@ public class ContactManagerTest {
         assertThat(b).isNotEqualTo(g);
     }
 
+    @Test
+    public void testGetContactsByNameDoesNotIgnoreWhitespace () {
+        int a = cMgr.addNewContact("Sherlene Westrich", "From the west");
+        // This one below has an extra space at the end
+        int b = cMgr.addNewContact("Sherlene Westrich ", "From the west");
+        int c = cMgr.addNewContact("Sherlene Westrich", "From the west");
+
+        Set<Contact> testContacts = cMgr.getContacts("Sherlene Westrich");
+
+        assertThat(testContacts).isNotEmpty();
+        assertThat(testContacts).isNotNull();
+        assertThat(testContacts.size()).isEqualTo(2);
+    }
+
     @Test(expected = NullPointerException.class)
     public void testGetContactsStringWithNull () {
         String s = null;
