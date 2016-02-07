@@ -77,10 +77,10 @@ public class MeetingTest {
 
     @Test
     public void createAMeeting () {
-        mtg = new MeetingMock(id, date, meetingContacts);
+        mtg = new MeetingMock(id, new GregorianCalendar(1979, 7, 10), meetingContacts);
 
-        assertThat(mtg.getDate()).isEqualTo(date);
-        assertThat(mtg.getId()).isEqualTo(id);
+        assertThat(mtg.getDate()).isEqualTo(new GregorianCalendar(1979, 7, 10));
+        assertThat(mtg.getId()).isEqualTo(23);
         assertThat(mtg.getContacts()).isEqualTo(meetingContacts);
         assertThat(mtg.getContacts()).isNotEmpty();
         assertThat(mtg).isNotNull();

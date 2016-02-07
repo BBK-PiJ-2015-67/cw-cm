@@ -49,7 +49,7 @@ public class FutureMeetingTest {
 
     @Test
     public void createAFutureMeeting() {
-        Meeting fMtg = new FutureMeetingImpl(48, date, meetingContacts);
+        Meeting fMtg = new FutureMeetingImpl(48, new GregorianCalendar(2020, 2, 29, 6, 59, 0), meetingContacts);
 
         assertThat(fMtg).isNotNull();
         assertThat(fMtg.getId()).isEqualTo(48);
