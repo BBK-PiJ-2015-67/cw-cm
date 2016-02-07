@@ -98,4 +98,19 @@ public class MeetingTest {
     public void zeroIdShouldThrow () {
         mtg = new MeetingMock(0, date, meetingContacts);
     }
+
+    @Test(expected = NullPointerException.class)
+    public void nullDateShouldThrow () {
+        mtg = new MeetingMock(0, null, meetingContacts);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void nullContactsShouldThrow () {
+        mtg = new MeetingMock(0, date, null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void nullContactsAndDateShouldThrow () {
+        mtg = new MeetingMock(0, null, null);
+    }
 }
