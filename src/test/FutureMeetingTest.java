@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import spec.Contact;
+import spec.FutureMeeting;
 import spec.Meeting;
 
 import java.util.Calendar;
@@ -49,7 +50,19 @@ public class FutureMeetingTest {
 
     @Test
     public void createAFutureMeeting() {
-        Meeting fMtg = new FutureMeetingImpl(48, new GregorianCalendar(2020, 2, 29, 6, 59, 0), meetingContacts);
+        Meeting mMtg = new FutureMeetingImpl(48, new GregorianCalendar(2020, 2, 29, 6, 59, 0), meetingContacts);
+
+        assertThat(mMtg).isNotNull();
+        assertThat(mMtg.getId()).isEqualTo(48);
+        assertThat(mMtg.getDate()).isEqualTo(new GregorianCalendar(2020, 2, 29, 6, 59, 0));
+        assertThat(mMtg.getContacts()).isNotEmpty();
+        assertThat(mMtg.getContacts().size()).isEqualTo(4);
+        assertThat(mMtg.getContacts()).isEqualTo(meetingContacts);
+    }
+
+    @Test
+    public void createAFutureMeetingOfTypeFutureMeeting() {
+        FutureMeeting fMtg = new FutureMeetingImpl(48, new GregorianCalendar(2020, 2, 29, 6, 59, 0), meetingContacts);
 
         assertThat(fMtg).isNotNull();
         assertThat(fMtg.getId()).isEqualTo(48);
