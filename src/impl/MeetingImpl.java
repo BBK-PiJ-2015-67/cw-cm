@@ -18,6 +18,19 @@ public abstract class MeetingImpl implements Meeting {
     private int meetingId;
     private Set<Contact> meetingContacts;
 
+    /**
+     * Creates a Meeting
+     *
+     * Extending classes should implement the same argument checks
+     *
+     * @param id A unique positive ID - this class does not check for uniqueness
+     * @param date The meeting's date
+     * @param contacts The contacts attending this meeting. Should not be empty
+     *
+     * @throws NullPointerException if the date or contacts are null
+     * @throws IllegalArgumentException if the id is negative or 0,
+     *                                  or if the set of contacts is empty
+     */
     public MeetingImpl (int id, Calendar date, Set<Contact> contacts) {
         if (id <= 0) {
             throw new IllegalArgumentException("IDs must be greater than 0");
