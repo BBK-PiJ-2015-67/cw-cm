@@ -129,8 +129,11 @@ public class ContactManagerTest {
         assertThat(testContacts).isNotNull();
         assertThat(testContacts.size()).isEqualTo(3);
 
+        int check = 1;
         for(Contact c : testContacts) {
             System.out.println(c.getId() + ": " + c.getName());
+            assertThat(c.getId()).isEqualTo(check);
+            check++;
         }
     }
 
