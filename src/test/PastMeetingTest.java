@@ -6,7 +6,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import spec.Contact;
-import spec.PastMeeting;
 import spec.Meeting;
 import spec.PastMeeting;
 
