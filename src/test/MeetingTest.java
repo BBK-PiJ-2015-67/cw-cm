@@ -1,5 +1,6 @@
 package test;
 
+import impl.ContactImpl;
 import org.junit.Before;
 import org.junit.Test;
 import spec.Contact;
@@ -15,29 +16,38 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Meeting tests
  *
+ * As Meeting is an abstract class I've implemented a nested mock
+ * class so we can test basic functionality
+ *
  * @author lmignot
  */
 public class MeetingTest {
 
     private class MeetingMock implements Meeting {
 
-        MeetingMock (int id, Calendar date, Set<Contact> contacts) {
+        private Calendar meetingDate;
+        private int meetingId;
+        private Set<Contact> meetingContacts;
 
+        MeetingMock (int id, Calendar date, Set<Contact> contacts) {
+            this.meetingId = id;
+            this.meetingDate = date;
+            this.meetingContacts = contacts;
         }
 
         @Override
         public int getId() {
-            return 0;
+            return this.meetingId;
         }
 
         @Override
         public Calendar getDate() {
-            return null;
+            return this.meetingDate;
         }
 
         @Override
         public Set<Contact> getContacts() {
-            return null;
+            return this.meetingContacts;
         }
     }
 
@@ -55,6 +65,11 @@ public class MeetingTest {
     public void setUp () {
         meetingContacts = new HashSet<>();
         date = new GregorianCalendar(1979, 7, 10);
+
+        organiser = new ContactImpl(23, "Jim Harrison");
+        attendee1 = new ContactImpl(33, "Van Wrinkle");
+        attendee2 = new ContactImpl(99, "Susan Doubtfire");
+        attendee3 = new ContactImpl(2, "Harry Smith");
 
         meetingContacts.add(organiser);
         meetingContacts.add(attendee1);
