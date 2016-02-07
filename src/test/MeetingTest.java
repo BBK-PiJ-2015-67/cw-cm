@@ -30,6 +30,9 @@ public class MeetingTest {
         private Set<Contact> meetingContacts;
 
         MeetingMock (int id, Calendar date, Set<Contact> contacts) {
+            if (id <= 0) {
+                throw new IllegalArgumentException("IDs must be greater than 0");
+            }
             this.meetingId = id;
             this.meetingDate = date;
             this.meetingContacts = contacts;
