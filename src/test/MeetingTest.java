@@ -64,25 +64,15 @@ public class MeetingTest {
     private Set<Contact> meetingContacts;
     private Calendar date;
 
-    private Contact organiser;
-    private Contact attendee1;
-    private Contact attendee2;
-    private Contact attendee3;
-
     @Before
     public void setUp () {
         meetingContacts = new HashSet<>();
         date = new GregorianCalendar(1979, 7, 10);
 
-        organiser = new ContactImpl(23, "Jim Harrison");
-        attendee1 = new ContactImpl(33, "Van Wrinkle");
-        attendee2 = new ContactImpl(99, "Susan Doubtfire");
-        attendee3 = new ContactImpl(2, "Harry Smith");
-
-        meetingContacts.add(organiser);
-        meetingContacts.add(attendee1);
-        meetingContacts.add(attendee2);
-        meetingContacts.add(attendee3);
+        meetingContacts.add(new ContactImpl(23, "Jim Harrison"));
+        meetingContacts.add(new ContactImpl(33, "Van Wrinkle"));
+        meetingContacts.add(new ContactImpl(99, "Susan Doubtfire"));
+        meetingContacts.add(new ContactImpl(2, "Harry Smith"));
     }
 
     @Test
@@ -92,6 +82,8 @@ public class MeetingTest {
         assertThat(mtg.getDate()).isEqualTo(date);
         assertThat(mtg.getId()).isEqualTo(id);
         assertThat(mtg.getContacts()).isEqualTo(meetingContacts);
+        assertThat(mtg.getContacts()).isNotEmpty();
+        assertThat(mtg).isNotNull();
     }
 
     @Test(expected = IllegalArgumentException.class)
