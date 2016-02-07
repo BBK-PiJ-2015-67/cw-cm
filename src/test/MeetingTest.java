@@ -101,16 +101,16 @@ public class MeetingTest {
 
     @Test(expected = NullPointerException.class)
     public void nullDateShouldThrow () {
-        mtg = new MeetingMock(0, null, meetingContacts);
+        mtg = new MeetingMock(id, null, meetingContacts);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullContactsShouldThrow () {
-        mtg = new MeetingMock(0, date, null);
+        mtg = new MeetingMock(id, date, null);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullContactsAndDateShouldThrow () {
-        mtg = new MeetingMock(0, null, null);
+        mtg = new MeetingMock(id, null, null);
     }
 }
