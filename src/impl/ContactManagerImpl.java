@@ -14,7 +14,9 @@ import java.util.Set;
  * @author lmignot
  */
 public class ContactManagerImpl implements ContactManager {
-    
+
+    public ContactManagerImpl () {}
+
     @Override
     public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
         return 0;
@@ -62,6 +64,9 @@ public class ContactManagerImpl implements ContactManager {
 
     @Override
     public int addNewContact(String name, String notes) {
+        if (name == null || notes == null) {
+            throw new NullPointerException("null argument passed to name or notes");
+        }
         return 0;
     }
 
