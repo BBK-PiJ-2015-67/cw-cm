@@ -106,7 +106,16 @@ public class ContactManagerImpl implements ContactManager {
         if(name.equals("")) {
             return cloneContacts();
         }
-        return null;
+
+        Set<Contact> result = new HashSet<>();
+
+        for(Contact c : this.contacts) {
+            if (c.getName().equals(name)) {
+                result.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
+            }
+        }
+
+        return result;
     }
 
     @Override
