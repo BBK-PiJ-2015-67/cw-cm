@@ -135,6 +135,16 @@ public class ContactManagerTest {
     }
 
     @Test(expected = NullPointerException.class)
+    public void testGetContactsIdsWithInvalidIds () {
+        cMgr.addNewContact("Aaron Kamen", "Camen get it!");
+        cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
+        cMgr.addNewContact("Sherlene Westrich", "From the west");
+        cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
+
+        cMgr.getContacts(2, 9, 23, 1, 3);
+    }
+
+    @Test(expected = NullPointerException.class)
     public void testGetContactsIdsWithNull () {
         int[] l = null;
         cMgr.getContacts(l);
