@@ -116,4 +116,9 @@ public class MeetingTest {
     public void nullContactsAndDateShouldThrow () {
         mtg = new MeetingMock(id, null, null);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void emptyContactsShouldThrow () {
+        mtg = new MeetingMock(id, date, new HashSet<>());
+    }
 }
