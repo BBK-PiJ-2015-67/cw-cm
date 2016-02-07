@@ -126,10 +126,21 @@ public class ContactManagerImpl implements ContactManager {
         if (ids == null || ids.length == 0) {
             throw new NullPointerException("null or empty list passed as argument for ids");
         }
-        return null;
         if (!isValidIds(ids)) {
             throw new NullPointerException("one or more of the specified ids does not exist");
         }
+
+        Set<Contact> result = new HashSet<>();
+
+        for (Contact c : this.contacts) {
+            for(int i : ids) {
+                if(c.getId() == i) {
+                    result.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
+                }
+            }
+        }
+
+        return result;
     }
 
     @Override
