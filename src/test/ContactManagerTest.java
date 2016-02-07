@@ -61,6 +61,13 @@ public class ContactManagerTest {
         assertThat(cMgr.getContacts("").size()).isEqualTo(10);
     }
 
+    @Test
+    public void testThatNewCMHasEmptyContacts () {
+        assertThat(cMgr.getContacts("")).isEmpty();
+        assertThat(cMgr.getContacts("")).isNotNull();
+        assertThat(cMgr.getContacts("").size()).isEqualTo(0);
+    }
+
     @Test(expected = NullPointerException.class)
     public void testGetContactsStringWithNull () {
         String s = null;
