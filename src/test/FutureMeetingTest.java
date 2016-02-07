@@ -2,6 +2,7 @@ package test;
 
 import impl.ContactImpl;
 import impl.FutureMeetingImpl;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import spec.Contact;
@@ -22,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FutureMeetingTest {
 
     private Meeting mtg;
-    private int id = 48;
+    private int id = 72;
     private Set<Contact> meetingContacts;
     private Calendar date;
 
@@ -35,11 +36,20 @@ public class FutureMeetingTest {
         meetingContacts.add(new ContactImpl(33, "Van Wrinkle"));
         meetingContacts.add(new ContactImpl(99, "Susan Doubtfire"));
         meetingContacts.add(new ContactImpl(2, "Harry Smith"));
+        
+        mtg = new FutureMeetingImpl(id, date, meetingContacts);
+    }
+    
+    @After
+    public void tearDown () {
+        meetingContacts = null;
+        mtg = null;
+        date = null;
     }
 
     @Test
     public void createAFutureMeeting() {
-        Meeting fMtg = new FutureMeetingImpl(id, date, meetingContacts);
+        Meeting fMtg = new FutureMeetingImpl(48, date, meetingContacts);
 
         assertThat(fMtg).isNotNull();
         assertThat(fMtg.getId()).isEqualTo(48);
@@ -47,5 +57,35 @@ public class FutureMeetingTest {
         assertThat(fMtg.getContacts()).isNotEmpty();
         assertThat(fMtg.getContacts().size()).isEqualTo(4);
         assertThat(fMtg.getContacts()).isEqualTo(meetingContacts);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void negativeIdShouldThrow () {
+        mtg = new FutureMeetingImpl(-2, date, meetingContacts);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void zeroIdShouldThrow () {
+        mtg = new FutureMeetingImpl(0, date, meetingContacts);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void nullDateShouldThrow () {
+        mtg = new FutureMeetingImpl(id, null, meetingContacts);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void nullContactsShouldThrow () {
+        mtg = new FutureMeetingImpl(id, date, null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void nullContactsAndDateShouldThrow () {
+        mtg = new FutureMeetingImpl(id, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void emptyContactsShouldThrow () {
+        mtg = new FutureMeetingImpl(id, date, new HashSet<>());
     }
 }
