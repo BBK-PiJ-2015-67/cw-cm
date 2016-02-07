@@ -1,5 +1,6 @@
 package test;
 
+import impl.MeetingImpl;
 import org.junit.Before;
 import org.junit.Test;
 import spec.Contact;
