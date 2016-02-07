@@ -1,6 +1,5 @@
 package test;
 
-import impl.MeetingImpl;
 import org.junit.Before;
 import org.junit.Test;
 import spec.Contact;
@@ -19,6 +18,28 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author lmignot
  */
 public class MeetingTest {
+
+    private class MeetingMock implements Meeting {
+
+        MeetingMock (int id, Calendar date, Set<Contact> contacts) {
+
+        }
+
+        @Override
+        public int getId() {
+            return 0;
+        }
+
+        @Override
+        public Calendar getDate() {
+            return null;
+        }
+
+        @Override
+        public Set<Contact> getContacts() {
+            return null;
+        }
+    }
 
     private Meeting mtg;
     private int id = 23;
@@ -43,7 +64,7 @@ public class MeetingTest {
 
     @Test
     public void createAMeeting () {
-        mtg = new MeetingImpl(id, date, meetingContacts);
+        mtg = new MeetingMock(id, date, meetingContacts);
 
         assertThat(mtg.getDate()).isEqualTo(date);
         assertThat(mtg.getId()).isEqualTo(id);
