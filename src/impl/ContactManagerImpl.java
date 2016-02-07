@@ -123,6 +123,9 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public Set<Contact> getContacts(int... ids) {
+        if (ids == null) {
+            throw new NullPointerException("null passed as argument for ids");
+        }
         return null;
     }
 
