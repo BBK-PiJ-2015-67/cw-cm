@@ -33,6 +33,9 @@ public class MeetingTest {
             if (id <= 0) {
                 throw new IllegalArgumentException("IDs must be greater than 0");
             }
+            if (date == null || contacts == null) {
+                throw new NullPointerException("null passed as argument to date, contacts, or both");
+            }
             this.meetingId = id;
             this.meetingDate = date;
             this.meetingContacts = contacts;
