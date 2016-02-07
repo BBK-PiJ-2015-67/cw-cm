@@ -127,11 +127,43 @@ public class ContactManagerImpl implements ContactManager {
             throw new NullPointerException("null or empty list passed as argument for ids");
         }
         return null;
+        if (!isValidIds(ids)) {
+            throw new NullPointerException("one or more of the specified ids does not exist");
+        }
     }
 
     @Override
     public void flush() {
 
+    }
+
+    /**
+     * Helper method to check if a list of Contact ids exist in the
+     * internal Contact list
+     *
+     * @param ids the list of 1 or more ids to search for
+     * @return True if ALL the ids are found, false if ANY are NOT found
+     */
+    private boolean isValidIds (int... ids) {
+        boolean result = false;
+        int found = 0;
+
+        if (ids.length == 0) {
+            return result;
+        }
+
+        for (Contact c : this.contacts) {
+            for (int i : ids) {
+                if (c.getId() == i) {
+                    found++;
+                }
+            }
+        }
+        if (found == ids.length) {
+            result = true;
+        }
+
+        return result;
     }
 
     /**
