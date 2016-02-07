@@ -36,6 +36,9 @@ public class MeetingTest {
             if (date == null || contacts == null) {
                 throw new NullPointerException("null passed as argument to date, contacts, or both");
             }
+            if (contacts.isEmpty()) {
+                throw new IllegalArgumentException("No contacts provided, cannot have a meeting without contacts.");
+            }
             this.meetingId = id;
             this.meetingDate = date;
             this.meetingContacts = contacts;
