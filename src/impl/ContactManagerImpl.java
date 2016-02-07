@@ -118,6 +118,9 @@ public class ContactManagerImpl implements ContactManager {
         return result;
     }
 
+    /**
+     * @see ContactManager#getContacts(int...)
+     */
     @Override
     public Set<Contact> getContacts(int... ids) {
         return null;
