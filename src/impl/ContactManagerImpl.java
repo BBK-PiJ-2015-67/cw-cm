@@ -62,10 +62,16 @@ public class ContactManagerImpl implements ContactManager {
 
     }
 
+    /**
+     * @see ContactManager#addNewContact(String, String)
+     */
     @Override
     public int addNewContact(String name, String notes) {
         if (name == null || notes == null) {
             throw new NullPointerException("null argument passed to name or notes");
+        }
+        if (name.equals("") || notes.equals("")) {
+            throw new IllegalArgumentException("A contact must have a name and notes");
         }
         return 0;
     }
