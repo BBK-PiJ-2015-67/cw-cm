@@ -16,11 +16,13 @@ public class ContactManagerImpl implements ContactManager {
     private Set<Contact> contacts;
     private List<Meeting> meetings;
     private Calendar now;
+    private int nextMeetingId;
 
     public ContactManagerImpl () {
         this.contacts = new HashSet<>();
         this.meetings = new ArrayList<>();
         this.now = new GregorianCalendar();
+        this.nextMeetingId = 1;
     }
 
     /**
@@ -37,7 +39,13 @@ public class ContactManagerImpl implements ContactManager {
         if (!this.isValidContacts(contacts)) {
             throw new IllegalArgumentException("one or more of the provided contacts do not exist");
         }
-        return 0;
+
+        int id = this.nextMeetingId;
+        this.nextMeetingId++;
+
+        this.meetings.add(new FutureMeetingImpl(id, date, contacts));
+
+        return id;
     }
 
     @Override
