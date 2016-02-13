@@ -86,7 +86,11 @@ public class ContactManagerImpl implements ContactManager {
      * then this would be a bad idea - if a contact was removed from the middle
      * of the set then the ID would be greater than the size of the set, hence we would have a
      * duplicate ID which is invalid.<br>
-     * However since contact removal has not been specified - have opted to use this for simplicity
+     * However since contact removal has not been specified - have opted to use this
+     * to avoid an additional loop
+     * Ideally we would use a UUID or GUID - I considered using a hash on the contacts but
+     * there is no guarantee a contact would not have the same name as another contact so hashing
+     * the name would not guarantee a unique ID
      *
      * @see ContactManager#addNewContact(String, String)
      */
