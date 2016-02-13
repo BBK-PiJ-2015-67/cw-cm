@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import spec.Contact;
 import spec.ContactManager;
+import spec.FutureMeeting;
 import spec.Meeting;
 
 import java.util.Calendar;
@@ -22,8 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ContactManagerTest {
 
     private ContactManager cMgr;
-    private int pastMeetingId = 1;
-    private int futureMeetingId = 0;
+    private ContactManager cMgrHasContacts;
 
     private Calendar futureDate;
     private Calendar pastDate;
@@ -32,17 +32,34 @@ public class ContactManagerTest {
     @Before
     public void setUp() {
         cMgr = new ContactManagerImpl();
+        cMgrHasContacts = new ContactManagerImpl();
+
         now = new GregorianCalendar();
         futureDate = new GregorianCalendar();
         pastDate = new GregorianCalendar();
 
         futureDate.set(Calendar.DATE, now.get(Calendar.DATE) + 2);
         pastDate.set(Calendar.DATE, now.get(Calendar.DATE) - 2);
+
+        cMgrHasContacts.addNewContact("Aaron Kamen", "Camen get it!");
+        cMgrHasContacts.addNewContact("Xenia Garand", "This one's xenophobic");
+        cMgrHasContacts.addNewContact("Sherlene Westrich", "From the west");
+        cMgrHasContacts.addNewContact("Emmaline Cupit", "Cupid's daughter");
+        cMgrHasContacts.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
+        cMgrHasContacts.addNewContact("Ellis Pollak", "Unfortunate naming...");
+        cMgrHasContacts.addNewContact("Carrol Sin", "Christmas is his favourite time");
+        cMgrHasContacts.addNewContact("Norman Wiedemann", "XXXXL");
+        cMgrHasContacts.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
+        cMgrHasContacts.addNewContact("Floyd Drager", "In France we say this man is popular with..");
     }
 
     @After
     public void tearDown() {
         cMgr = null;
+        cMgrHasContacts = null;
+        futureDate = null;
+        now = null;
+        pastDate = null;
     }
 
     @Test
@@ -63,8 +80,20 @@ public class ContactManagerTest {
 
     @Test
     public void testGetMeeting () {
-        Meeting mtg = cMgr.getMeeting(0);
+        Meeting mtg = cMgrHasContacts.getMeeting(1);
         assertThat(mtg).isNotNull();
+    }
+
+    @Test
+    public void testAddFutureMeeting () {
+        Set<Contact> meetingContacts = cMgrHasContacts.getContacts(1,3,5);
+        int futureMeetingId = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
+
+        assertThat(futureMeetingId).isEqualTo(1);
+        assertThat(cMgrHasContacts.getFutureMeeting(futureMeetingId)).isNotNull();
+        assertThat(cMgrHasContacts.getMeeting(futureMeetingId)).isNotNull();
+        assertThat(cMgrHasContacts.getFutureMeeting(futureMeetingId)).isInstanceOf(FutureMeeting.class);
+        assertThat(cMgrHasContacts.getMeeting(futureMeetingId)).isInstanceOf(FutureMeeting.class);
     }
 
     @Test
