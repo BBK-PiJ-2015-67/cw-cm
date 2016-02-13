@@ -24,6 +24,7 @@ public class ContactManagerTest {
 
     private ContactManager cMgr;
     private ContactManager cMgrHasContacts;
+    private Set<Contact> meetingContacts;
 
     private Calendar futureDate;
     private Calendar pastDate;
@@ -51,6 +52,8 @@ public class ContactManagerTest {
         cMgrHasContacts.addNewContact("Norman Wiedemann", "XXXXL");
         cMgrHasContacts.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
         cMgrHasContacts.addNewContact("Floyd Drager", "In France we say this man is popular with..");
+
+        meetingContacts = cMgrHasContacts.getContacts(1,2,5,6,9);
     }
 
     @After
@@ -86,7 +89,6 @@ public class ContactManagerTest {
 
     @Test
     public void testAddFutureMeeting () {
-        Set<Contact> meetingContacts = cMgrHasContacts.getContacts(1,3,5);
         int futureMeetingId = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
 
         assertThat(futureMeetingId).isEqualTo(1);
@@ -94,6 +96,36 @@ public class ContactManagerTest {
         assertThat(cMgrHasContacts.getMeeting(futureMeetingId)).isNotNull();
         assertThat(cMgrHasContacts.getFutureMeeting(futureMeetingId)).isInstanceOf(FutureMeeting.class);
         assertThat(cMgrHasContacts.getMeeting(futureMeetingId)).isInstanceOf(FutureMeeting.class);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddFutureMeetingWithNullContacts () {
+        cMgrHasContacts.addFutureMeeting(null, futureDate);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddFutureMeetingWithNullDate () {
+        cMgrHasContacts.addFutureMeeting(meetingContacts, null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddFutureMeetingWithNullDateAndContacts () {
+        cMgrHasContacts.addFutureMeeting(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddFutureMeetingWithPastDate () {
+        cMgrHasContacts.addFutureMeeting(meetingContacts, pastDate);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddFutureMeetingWithCurrentDate () {
+        cMgrHasContacts.addFutureMeeting(meetingContacts, now);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddFutureMeetingWithInvalidContacts () {
+        cMgr.addFutureMeeting(meetingContacts, now);
     }
 
     @Test
