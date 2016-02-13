@@ -31,7 +31,7 @@ public class ContactManagerImpl implements ContactManager {
         if (contacts == null || date == null) {
             throw new NullPointerException("null argument passed to contacts and/or date");
         }
-        if (this.now.compareTo(date) <= 0) {
+        if (date.compareTo(this.now) <= 0) {
             throw new IllegalArgumentException("a future meeting must be set in the future");
         }
         if (!this.isValidContacts(contacts)) {
