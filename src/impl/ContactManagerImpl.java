@@ -2,10 +2,7 @@ package impl;
 
 import spec.*;
 
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A Contact Manager implementation
@@ -17,13 +14,29 @@ import java.util.Set;
 public class ContactManagerImpl implements ContactManager {
 
     private Set<Contact> contacts;
+    private List<Meeting> meetings;
+    private Calendar now;
 
     public ContactManagerImpl () {
         this.contacts = new HashSet<>();
+        this.meetings = new ArrayList<>();
+        this.now = new GregorianCalendar();
     }
 
+    /**
+     * @see ContactManager#addFutureMeeting(Set, Calendar)
+     */
     @Override
     public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
+        if (contacts == null || date == null) {
+            throw new NullPointerException("null argument passed to contacts and/or date");
+        }
+        if (this.now.compareTo(date) <= 0) {
+            throw new IllegalArgumentException("a future meeting must be set in the future");
+        }
+        if (!this.isValidContacts(contacts)) {
+            throw new IllegalArgumentException("one or more of the provided contacts do not exist");
+        }
         return 0;
     }
 
@@ -156,11 +169,10 @@ public class ContactManagerImpl implements ContactManager {
      * @return True if ALL the ids are found, false if ANY are NOT found
      */
     private boolean isValidIds (int... ids) {
-        boolean result = false;
         int found = 0;
 
         if (ids.length == 0) {
-            return result;
+            return false;
         }
 
         for (Contact c : this.contacts) {
@@ -170,11 +182,22 @@ public class ContactManagerImpl implements ContactManager {
                 }
             }
         }
-        if (found == ids.length) {
-            result = true;
+
+        return (found == ids.length);
+    }
+
+    private boolean isValidContacts(Set<Contact> contacts) {
+        if (contacts.isEmpty()) {
+            return false;
+        }
+        int[] ids = new int[contacts.size()];
+        int i = 0;
+        for (Contact c: contacts) {
+            ids[i] = c.getId();
+            i++;
         }
 
-        return result;
+        return this.isValidIds(ids);
     }
 
     /**
