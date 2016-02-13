@@ -178,9 +178,9 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     /**
-     * Return a clone of the internal contacts list
+     * Returns a clone of the internal contacts list
      *
-     * @return A copied Set containing all the internal contacts
+     * @return A copy of the Set containing all internal contacts
      */
     private Set<Contact> cloneContacts() {
         Set<Contact> clone = new HashSet<>();
