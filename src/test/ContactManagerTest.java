@@ -60,8 +60,9 @@ public class ContactManagerTest {
     public void tearDown() {
         cMgr = null;
         cMgrHasContacts = null;
-        futureDate = null;
+        meetingContacts = null;
         now = null;
+        futureDate = null;
         pastDate = null;
     }
 
@@ -82,20 +83,29 @@ public class ContactManagerTest {
     }
 
     @Test
+    public void testAddFutureMeeting () {
+        int futureMeetingId = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
+
+        assertThat(futureMeetingId).isEqualTo(1);
+    }
+
+    @Test
     public void testGetMeeting () {
         Meeting mtg = cMgrHasContacts.getMeeting(1);
         assertThat(mtg).isNotNull();
     }
 
     @Test
-    public void testAddFutureMeeting () {
+    public void testGetFutureMeeting () {
         int futureMeetingId = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
 
-        assertThat(futureMeetingId).isEqualTo(1);
-        assertThat(cMgrHasContacts.getFutureMeeting(futureMeetingId)).isNotNull();
-        assertThat(cMgrHasContacts.getMeeting(futureMeetingId)).isNotNull();
-        assertThat(cMgrHasContacts.getFutureMeeting(futureMeetingId)).isInstanceOf(FutureMeeting.class);
-        assertThat(cMgrHasContacts.getMeeting(futureMeetingId)).isInstanceOf(FutureMeeting.class);
+        Meeting fMtg = cMgrHasContacts.getFutureMeeting(futureMeetingId);
+        Meeting mtg = cMgrHasContacts.getMeeting(futureMeetingId);
+
+        assertThat(fMtg).isNotNull();
+        assertThat(mtg).isNotNull();
+        assertThat(fMtg).isInstanceOf(FutureMeeting.class);
+        assertThat(mtg).isInstanceOf(FutureMeeting.class);
     }
 
     @Test(expected = NullPointerException.class)
