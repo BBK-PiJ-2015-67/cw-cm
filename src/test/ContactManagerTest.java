@@ -6,7 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 import spec.Contact;
 import spec.ContactManager;
+import spec.Meeting;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,10 +22,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ContactManagerTest {
 
     private ContactManager cMgr;
+    private int pastMeetingId = 1;
+    private int futureMeetingId = 0;
+
+    private Calendar futureDate;
+    private Calendar pastDate;
+    private Calendar now;
 
     @Before
     public void setUp() {
         cMgr = new ContactManagerImpl();
+        now = new GregorianCalendar();
+        futureDate = new GregorianCalendar();
+        pastDate = new GregorianCalendar();
+
+        futureDate.set(Calendar.DATE, now.get(Calendar.DATE) + 2);
+        pastDate.set(Calendar.DATE, now.get(Calendar.DATE) - 2);
     }
 
     @After
@@ -44,6 +59,12 @@ public class ContactManagerTest {
 
         assertThat(cMgr).isNotNull();
         assertThat(cMgr).isNotEqualTo(cm);
+    }
+
+    @Test
+    public void testGetMeeting () {
+        Meeting mtg = cMgr.getMeeting(0);
+        assertThat(mtg).isNotNull();
     }
 
     @Test
