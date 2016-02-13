@@ -133,16 +133,16 @@ public class ContactManagerTest {
 
     @Test
     public void testGetContactsByIds () {
-        int c0 = cMgr.addNewContact("Aaron Kamen", "Camen get it!");
-        int c1 = cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
-        int c2 = cMgr.addNewContact("Sherlene Westrich", "From the west");
-        int c3 = cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
-        int c4 = cMgr.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
-        int c5 = cMgr.addNewContact("Ellis Pollak", "Unfortunate naming...");
-        int c6 = cMgr.addNewContact("Carrol Sin", "Christmas is his favourite time");
-        int c7 = cMgr.addNewContact("Norman Wiedemann", "XXXXL");
-        int c8 = cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
-        int c9 = cMgr.addNewContact("Floyd Drager", "In France we say this man is popular with..");
+        cMgr.addNewContact("Aaron Kamen", "Camen get it!");
+        cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
+        cMgr.addNewContact("Sherlene Westrich", "From the west");
+        cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
+        cMgr.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
+        cMgr.addNewContact("Ellis Pollak", "Unfortunate naming...");
+        cMgr.addNewContact("Carrol Sin", "Christmas is his favourite time");
+        cMgr.addNewContact("Norman Wiedemann", "XXXXL");
+        cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
+        cMgr.addNewContact("Floyd Drager", "In France we say this man is popular with..");
 
         Set<Contact> testContacts = cMgr.getContacts(1, 2, 3);
 
@@ -150,12 +150,16 @@ public class ContactManagerTest {
         assertThat(testContacts).isNotNull();
         assertThat(testContacts.size()).isEqualTo(3);
 
-        int check = 1;
+        boolean testPassed = false;
         for(Contact c : testContacts) {
             System.out.println(c.getId() + ": " + c.getName());
-            assertThat(c.getId()).isEqualTo(check);
-            check++;
+            if (c.getName().equals("Aaron Kamen") ||
+                    c.getName().equals("Xenia Garand") ||
+                    c.getName().equals("Sherlene Westrich")) {
+                testPassed = true;
+            }
         }
+        assertThat(testPassed).isTrue();
     }
 
     @Test(expected = NullPointerException.class)
