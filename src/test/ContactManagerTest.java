@@ -4,10 +4,7 @@ import impl.ContactManagerImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import spec.Contact;
-import spec.ContactManager;
-import spec.FutureMeeting;
-import spec.Meeting;
+import spec.*;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -30,6 +27,8 @@ public class ContactManagerTest {
     private Calendar pastDate;
     private Calendar now;
 
+    private String testMeetingNotes;
+
     @Before
     public void setUp() {
         cMgr = new ContactManagerImpl();
@@ -41,6 +40,8 @@ public class ContactManagerTest {
 
         futureDate.set(Calendar.DATE, now.get(Calendar.DATE) + 2);
         pastDate.set(Calendar.DATE, now.get(Calendar.DATE) - 2);
+
+        testMeetingNotes = "These are some notes that we took in our past meeting";
 
         cMgrHasContacts.addNewContact("Aaron Kamen", "Camen get it!");
         cMgrHasContacts.addNewContact("Xenia Garand", "This one's xenophobic");
@@ -105,16 +106,39 @@ public class ContactManagerTest {
     public void testGetFutureMeeting () {
         int futureMeetingId = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
 
-        Meeting fMtg = cMgrHasContacts.getFutureMeeting(futureMeetingId);
-        Meeting mtg = cMgrHasContacts.getMeeting(futureMeetingId);
+        FutureMeeting fMtg = cMgrHasContacts.getFutureMeeting(futureMeetingId);
+        Meeting mtg = cMgrHasContacts.getFutureMeeting(futureMeetingId);
+
+        assertThat(mtg).isNotNull();
+        assertThat(mtg).isInstanceOf(FutureMeeting.class);
+        assertThat(mtg).isNotInstanceOf(PastMeeting.class);
 
         assertThat(fMtg).isNotNull();
-        assertThat(mtg).isNotNull();
         assertThat(fMtg).isInstanceOf(FutureMeeting.class);
-        assertThat(mtg).isInstanceOf(FutureMeeting.class);
-        assertThat(fMtg.getId()).isEqualTo(1);
+        assertThat(fMtg).isNotInstanceOf(PastMeeting.class);
+        assertThat(fMtg.getId()).isEqualTo(futureMeetingId);
         assertThat(fMtg.getDate()).isEqualTo(futureDate);
         assertThat(fMtg.getContacts()).isEqualTo(meetingContacts);
+    }
+
+    @Test
+    public void testGetPastMeeting () {
+        cMgrHasContacts.addNewPastMeeting(meetingContacts, pastDate, testMeetingNotes);
+
+        PastMeeting pMtg = cMgrHasContacts.getPastMeeting(1);
+        Meeting mtg = cMgrHasContacts.getPastMeeting(1);
+
+        assertThat(mtg).isNotNull();
+        assertThat(mtg).isInstanceOf(PastMeeting.class);
+        assertThat(mtg).isNotInstanceOf(FutureMeeting.class);
+
+        assertThat(pMtg).isNotNull();
+        assertThat(pMtg).isInstanceOf(PastMeeting.class);
+        assertThat(pMtg).isNotInstanceOf(FutureMeeting.class);
+        assertThat(pMtg.getId()).isEqualTo(1);
+        assertThat(pMtg.getDate()).isEqualTo(pastDate);
+        assertThat(pMtg.getContacts()).isEqualTo(meetingContacts);
+        assertThat(pMtg.getNotes()).isEqualTo(testMeetingNotes);
     }
 
     @Test(expected = NullPointerException.class)
