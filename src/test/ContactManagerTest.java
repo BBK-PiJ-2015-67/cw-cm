@@ -168,7 +168,7 @@ public class ContactManagerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddFutureMeetingWithInvalidContacts () {
-        cMgr.addFutureMeeting(meetingContacts, now);
+        cMgr.addFutureMeeting(meetingContacts, pastDate);
     }
 
     @Test
