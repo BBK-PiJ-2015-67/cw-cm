@@ -91,8 +91,14 @@ public class ContactManagerTest {
 
     @Test
     public void testGetMeeting () {
-        Meeting mtg = cMgrHasContacts.getMeeting(1);
+        int id = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
+        Meeting mtg = cMgrHasContacts.getMeeting(id);
+
         assertThat(mtg).isNotNull();
+        assertThat(mtg.getId()).isEqualTo(id);
+        assertThat(mtg.getDate()).isEqualTo(futureDate);
+        assertThat(mtg.getContacts()).isEqualTo(meetingContacts);
+        assertThat(mtg).isInstanceOf(Meeting.class);
     }
 
     @Test
@@ -106,6 +112,9 @@ public class ContactManagerTest {
         assertThat(mtg).isNotNull();
         assertThat(fMtg).isInstanceOf(FutureMeeting.class);
         assertThat(mtg).isInstanceOf(FutureMeeting.class);
+        assertThat(fMtg.getId()).isEqualTo(1);
+        assertThat(fMtg.getDate()).isEqualTo(futureDate);
+        assertThat(fMtg.getContacts()).isEqualTo(meetingContacts);
     }
 
     @Test(expected = NullPointerException.class)
