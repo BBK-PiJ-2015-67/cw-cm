@@ -58,8 +58,16 @@ public class ContactManagerImpl implements ContactManager {
         return null;
     }
 
+    /**
+     * @see ContactManager#getMeeting(int)
+     */
     @Override
     public Meeting getMeeting(int id) {
+        for (Meeting m: this.meetings) {
+            if (m.getId() == id) {
+                return m;
+            }
+        }
         return null;
     }
 
