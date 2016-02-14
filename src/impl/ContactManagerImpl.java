@@ -48,9 +48,21 @@ public class ContactManagerImpl implements ContactManager {
         return id;
     }
 
+    /**
+     * @see ContactManager#getPastMeeting(int)
+     */
     @Override
     public PastMeeting getPastMeeting(int id) {
-        return null;
+        Meeting mtg = this.getMeeting(id);
+        if (mtg == null) {
+            return null;
+        } else {
+            if (mtg instanceof PastMeeting) {
+                return (PastMeeting) mtg;
+            } else {
+                throw new IllegalStateException("id specifies a meeting that is a future meeting");
+            }
+        }
     }
 
     /**
