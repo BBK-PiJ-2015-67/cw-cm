@@ -121,6 +121,13 @@ public class ContactManagerTest {
         assertThat(fMtg.getContacts()).isEqualTo(meetingContacts);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetFutureMeetingWithPastMeetingId () {
+        cMgrHasContacts.addNewPastMeeting(meetingContacts, pastDate, testMeetingNotes);
+
+        cMgrHasContacts.getFutureMeeting(1);
+    }
+
     @Test
     public void testGetPastMeeting () {
         cMgrHasContacts.addNewPastMeeting(meetingContacts, pastDate, testMeetingNotes);
