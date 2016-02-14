@@ -141,6 +141,13 @@ public class ContactManagerTest {
         assertThat(pMtg.getNotes()).isEqualTo(testMeetingNotes);
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testGetPastMeetingWithFutureMeetingId () {
+        int id = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
+
+        cMgrHasContacts.getPastMeeting(id);
+    }
+
     @Test(expected = NullPointerException.class)
     public void testAddFutureMeetingWithNullContacts () {
         cMgrHasContacts.addFutureMeeting(null, futureDate);
