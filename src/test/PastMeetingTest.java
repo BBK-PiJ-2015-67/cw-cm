@@ -14,7 +14,8 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * PastMeeting tests
@@ -57,15 +58,13 @@ public class PastMeetingTest {
                 new GregorianCalendar(2015, 11, 12, 9, 30, 0), 
                 meetingContacts, "Some notes about this other meeting.");
 
-        assertThat(mMtg).isNotNull();
-        assertThat(mMtg.getId()).isEqualTo(99);
-        assertThat(mMtg.getDate()).isEqualTo(new GregorianCalendar(2015, 11, 12, 9, 30, 0));
-        assertThat(mMtg.getContacts()).isNotEmpty();
-        assertThat(mMtg.getContacts().size()).isEqualTo(3);
-        assertThat(mMtg.getContacts()).isEqualTo(meetingContacts);
-        assertThat(((PastMeeting) mMtg).getNotes()).isNotEmpty();
-        assertThat(((PastMeeting) mMtg).getNotes()).isNotNull();
-        assertThat(((PastMeeting) mMtg).getNotes()).isEqualTo("Some notes about this other meeting.");
+        assertNotNull(mMtg);
+        assertEquals(mMtg.getId(),99);
+        assertEquals(mMtg.getDate(),new GregorianCalendar(2015, 11, 12, 9, 30, 0));
+        assertEquals(mMtg.getContacts().size(),3);
+        assertEquals(mMtg.getContacts(),meetingContacts);
+        assertNotNull(((PastMeeting) mMtg).getNotes());
+        assertEquals(((PastMeeting) mMtg).getNotes(),"Some notes about this other meeting.");
     }
 
     @Test
@@ -74,15 +73,13 @@ public class PastMeetingTest {
                 new GregorianCalendar(2015, 11, 12, 9, 30, 0),
                 meetingContacts, "");
 
-        assertThat(pMtg).isNotNull();
-        assertThat(pMtg.getId()).isEqualTo(99);
-        assertThat(pMtg.getDate()).isEqualTo(new GregorianCalendar(2015, 11, 12, 9, 30, 0));
-        assertThat(pMtg.getContacts()).isNotEmpty();
-        assertThat(pMtg.getContacts().size()).isEqualTo(3);
-        assertThat(pMtg.getContacts()).isEqualTo(meetingContacts);
-        assertThat(pMtg.getNotes()).isNotNull();
-        assertThat(pMtg.getNotes()).isEmpty();
-        assertThat(pMtg.getNotes()).isEqualTo("");
+        assertNotNull(pMtg);
+        assertEquals(pMtg.getId(),99);
+        assertEquals(pMtg.getDate(),new GregorianCalendar(2015, 11, 12, 9, 30, 0));
+        assertEquals(pMtg.getContacts().size(),3);
+        assertEquals(pMtg.getContacts(),meetingContacts);
+        assertNotNull(pMtg.getNotes());
+        assertEquals(pMtg.getNotes(),"");
     }
 
     @Test(expected = IllegalArgumentException.class)
