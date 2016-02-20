@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import spec.Contact;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Testing a Contact
@@ -31,17 +31,17 @@ public class ContactTest {
     public void testNewContactWithNotes () {
         Contact testContact = new ContactImpl(stubID, stubName, notesA);
 
-        assertThat(testContact.getId()).isEqualTo(stubID);
-        assertThat(testContact.getName()).isEqualTo(stubName);
-        assertThat(testContact.getNotes()).isEqualTo(notesA);
+        assertEquals(testContact.getId(),stubID);
+        assertEquals(testContact.getName(),stubName);
+        assertEquals(testContact.getNotes(),notesA);
     }
 
     @Test
     public void testNewContactWithNoNotes () {
         Contact testContact = new ContactImpl(stubID, stubName);
 
-        assertThat(testContact.getId()).isEqualTo(stubID);
-        assertThat(testContact.getName()).isEqualTo(stubName);
+        assertEquals(testContact.getId(),stubID);
+        assertEquals(testContact.getName(),stubName);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ContactTest {
 
         testContact.addNotes(notesA);
 
-        assertThat(testContact.getNotes()).isEqualTo(notesA);
+        assertEquals(testContact.getNotes(),notesA);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class ContactTest {
 
         testContact.addNotes("");
 
-        assertThat(testContact.getNotes()).isEqualTo("");
+        assertEquals(testContact.getNotes(),"");
     }
 
     @Test
@@ -69,7 +69,7 @@ public class ContactTest {
         testContact.addNotes(notesA);
         testContact.addNotes(notesB);
 
-        assertThat(testContact.getNotes()).isEqualTo(notesA + notesB);
+        assertEquals(testContact.getNotes(),notesA + notesB);
     }
 
     @Test
@@ -78,32 +78,32 @@ public class ContactTest {
 
         testContact.addNotes(notesB);
 
-        assertThat(testContact.getNotes()).isEqualTo(notesA + notesB);
+        assertEquals(testContact.getNotes(),notesA + notesB);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNewContactWithNegativeID () {
-        Contact testContact = new ContactImpl(-2, stubName);
+        new ContactImpl(-2, stubName);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNewContactWithZeroID () {
-        Contact testContact = new ContactImpl(0, stubName);
+        new ContactImpl(0, stubName);
     }
 
     @Test(expected = NullPointerException.class)
     public void testNewContactWithNullName() {
-        Contact testContact = new ContactImpl(1, null);
+        new ContactImpl(1, null);
     }
 
     @Test(expected = NullPointerException.class)
     public void testNewContactWithNullNameAndNotes () {
-        Contact testContact = new ContactImpl(1, null, null);
+        new ContactImpl(1, null, null);
     }
 
     @Test(expected = NullPointerException.class)
     public void testNewContactWithNullNotes () {
-        Contact testContact = new ContactImpl(1, stubName, null);
+        new ContactImpl(1, stubName, null);
     }
 
     @Test(expected = NullPointerException.class)
