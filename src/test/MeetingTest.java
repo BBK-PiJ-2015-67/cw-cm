@@ -11,7 +11,8 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Meeting tests
@@ -79,11 +80,10 @@ public class MeetingTest {
     public void createAMeeting () {
         mtg = new MeetingMock(id, new GregorianCalendar(1979, 7, 10), meetingContacts);
 
-        assertThat(mtg.getDate()).isEqualTo(new GregorianCalendar(1979, 7, 10));
-        assertThat(mtg.getId()).isEqualTo(23);
-        assertThat(mtg.getContacts()).isEqualTo(meetingContacts);
-        assertThat(mtg.getContacts()).isNotEmpty();
-        assertThat(mtg).isNotNull();
+        assertEquals(mtg.getDate(),new GregorianCalendar(1979, 7, 10));
+        assertEquals(mtg.getId(),23);
+        assertEquals(mtg.getContacts(),meetingContacts);
+        assertNotNull(mtg);
     }
 
     @Test(expected = IllegalArgumentException.class)
