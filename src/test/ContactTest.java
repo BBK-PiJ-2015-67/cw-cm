@@ -91,6 +91,11 @@ public class ContactTest {
         new ContactImpl(0, stubName);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testNewContactWithEmptyName () {
+        new ContactImpl(1, "");
+    }
+
     @Test(expected = NullPointerException.class)
     public void testNewContactWithNullName() {
         new ContactImpl(1, null);
@@ -99,6 +104,11 @@ public class ContactTest {
     @Test(expected = NullPointerException.class)
     public void testNewContactWithNullNameAndNotes () {
         new ContactImpl(1, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNewContactWithEmptyNameAndNotes () {
+        new ContactImpl(1, "", null);
     }
 
     @Test(expected = NullPointerException.class)
