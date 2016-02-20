@@ -14,7 +14,8 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * FutureMeeting tests
@@ -52,24 +53,22 @@ public class FutureMeetingTest {
     public void createAFutureMeeting() {
         Meeting mMtg = new FutureMeetingImpl(48, new GregorianCalendar(2020, 2, 29, 6, 59, 0), meetingContacts);
 
-        assertThat(mMtg).isNotNull();
-        assertThat(mMtg.getId()).isEqualTo(48);
-        assertThat(mMtg.getDate()).isEqualTo(new GregorianCalendar(2020, 2, 29, 6, 59, 0));
-        assertThat(mMtg.getContacts()).isNotEmpty();
-        assertThat(mMtg.getContacts().size()).isEqualTo(4);
-        assertThat(mMtg.getContacts()).isEqualTo(meetingContacts);
+        assertNotNull(mMtg);
+        assertEquals(mMtg.getId(),48);
+        assertEquals(mMtg.getDate(),new GregorianCalendar(2020, 2, 29, 6, 59, 0));
+        assertEquals(mMtg.getContacts().size(),4);
+        assertEquals(mMtg.getContacts(),meetingContacts);
     }
 
     @Test
     public void createAFutureMeetingOfTypeFutureMeeting() {
         FutureMeeting fMtg = new FutureMeetingImpl(48, new GregorianCalendar(2020, 2, 29, 6, 59, 0), meetingContacts);
 
-        assertThat(fMtg).isNotNull();
-        assertThat(fMtg.getId()).isEqualTo(48);
-        assertThat(fMtg.getDate()).isEqualTo(new GregorianCalendar(2020, 2, 29, 6, 59, 0));
-        assertThat(fMtg.getContacts()).isNotEmpty();
-        assertThat(fMtg.getContacts().size()).isEqualTo(4);
-        assertThat(fMtg.getContacts()).isEqualTo(meetingContacts);
+        assertNotNull(fMtg);
+        assertEquals(fMtg.getId(),48);
+        assertEquals(fMtg.getDate(),new GregorianCalendar(2020, 2, 29, 6, 59, 0));
+        assertEquals(fMtg.getContacts().size(),4);
+        assertEquals(fMtg.getContacts(),meetingContacts);
     }
 
     @Test(expected = IllegalArgumentException.class)
