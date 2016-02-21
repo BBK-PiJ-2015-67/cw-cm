@@ -54,6 +54,8 @@ public class ContactImpl implements Contact {
             this.addNotes(notes);
         } catch(NullPointerException e) {
             throw new NullPointerException(e.getMessage());
+        } catch(IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
@@ -95,16 +97,17 @@ public class ContactImpl implements Contact {
 
     /**
      * @see Contact#addNotes(String)
-     * @throws NullPointerException if the argument is null
+     * @throws NullPointerException if the notes are null
+     * @throws IllegalArgumentException if the notes are empty
      */
     @Override
     public void addNotes(String note) {
         if (note == null) {
             throw new NullPointerException("Notes cannot be null");
         }
-        // No point adding an empty string as a note.
-        if (!note.equals("")) {
-            this.notes.add(note);
+        if (note.equals("")) {
+            throw new IllegalArgumentException("Notes cannot be empty");
         }
+        this.notes.add(note);
     }
 }
