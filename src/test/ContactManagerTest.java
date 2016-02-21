@@ -129,6 +129,18 @@ public class ContactManagerTest {
     }
 
     @Test
+    public void testAddPastMeeting () {
+        cMgrHasContacts.addNewPastMeeting(meetingContacts, pastDate, testMeetingNotes);
+        PastMeeting pMtg = cMgrHasContacts.getPastMeeting(1);
+
+        assertNotNull(pMtg);
+        assertEquals(pMtg.getId(), 1);
+        assertEquals(pMtg.getContacts(), meetingContacts);
+        assertEquals(pMtg.getDate(), pastDate);
+        assertEquals(pMtg.getNotes(), testMeetingNotes);
+    }
+
+    @Test
     public void testGetPastMeeting () {
         cMgrHasContacts.addNewPastMeeting(meetingContacts, pastDate, testMeetingNotes);
 
@@ -155,12 +167,12 @@ public class ContactManagerTest {
         cMgrHasContacts.getPastMeeting(id);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testAddPastMeetingWithCurrentDate () {
         cMgrHasContacts.addNewPastMeeting(meetingContacts, now, testMeetingNotes);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testAddPastMeetingWithFutureDate () {
         cMgrHasContacts.addNewPastMeeting(meetingContacts, futureDate, testMeetingNotes);
     }
