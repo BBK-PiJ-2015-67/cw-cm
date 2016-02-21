@@ -258,10 +258,8 @@ public class ContactManagerTest {
         Set<Contact> meetingSet = cMgrHasContacts.getContacts(1,3,4,6,7,8);
         Contact testContact = null;
 
-        // seems odd that we're using a set - there's no "get()" method!!!
-        // so we have to loop... to get ONE contact!
         for (Contact c: contactSet) {
-            testContact = new ContactImpl(c.getId(), c.getName(), c.getNotes());
+            testContact = c;
         }
 
         // PAST
