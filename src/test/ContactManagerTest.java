@@ -251,7 +251,7 @@ public class ContactManagerTest {
         assertEquals(futureMeetingList.size(), 0);
         assertTrue(futureMeetingList.isEmpty());
     }
-    
+
     @Test
     public void testGetFutureMeetingListIsNotEmptyAndSorted() {
         Set<Contact> contactSet = cMgrHasContacts.getContacts(1);
