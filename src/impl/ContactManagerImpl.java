@@ -95,13 +95,25 @@ public class ContactManagerImpl implements ContactManager {
         return null;
     }
 
+    /**
+     * @see ContactManager#getFutureMeetingList(Contact)
+     */
     @Override
     public List<Meeting> getFutureMeetingList(Contact contact) {
-        // TODO: argument validation
+        if (contact == null) {
+            throw new NullPointerException("contact should not be null");
+        }
+        // use getContacts to check if the contact exists
+        Set<Contact> c = this.getContacts(contact.getName());
+        if (c.isEmpty()) {
+            throw new IllegalArgumentException("specified contact does not exist");
+        }
+
         // Use a set so we have no duplicates
         Set<Meeting> uniqueResult = new HashSet<>();
 
-        System.out.println(this.meetings.size());
+        // Really want to use streams but we haven't had them in class yet so
+        // not sure it's permitted
         for(Meeting m: this.meetings) {
             if (m.getContacts().contains(contact) && m instanceof FutureMeeting) {
                 uniqueResult.add(m);
@@ -111,7 +123,9 @@ public class ContactManagerImpl implements ContactManager {
         List<Meeting> result = new ArrayList<>();
         result.addAll(uniqueResult);
 
-        // TODO: sort the results
+        // Sort using a lambda here
+        // saves on writing a comparison method
+        Collections.sort(result, (m1, m2) -> (m1.getDate().compareTo(m2.getDate())));
         return result;
     }
 
