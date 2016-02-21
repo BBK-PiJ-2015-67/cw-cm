@@ -146,7 +146,8 @@ public class ContactManagerImpl implements ContactManager {
      * to avoid an additional loop
      * Ideally we would use a UUID or GUID - I considered using a hash on the contacts but
      * there is no guarantee a contact would not have the same name as another contact so hashing
-     * the name would not guarantee a unique ID
+     * the name would not guarantee a unique ID - we would require a further identifier to ensure
+     * a unique hash
      *
      * @see ContactManager#addNewContact(String, String)
      */
