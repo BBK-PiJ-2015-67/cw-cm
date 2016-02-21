@@ -155,6 +155,36 @@ public class ContactManagerTest {
         cMgrHasContacts.getPastMeeting(id);
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testAddPastMeetingWithCurrentDate () {
+        cMgrHasContacts.addNewPastMeeting(meetingContacts, now, testMeetingNotes);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testAddPastMeetingWithFutureDate () {
+        cMgrHasContacts.addNewPastMeeting(meetingContacts, futureDate, testMeetingNotes);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddPastMeetingWithNullContacts () {
+        cMgrHasContacts.addNewPastMeeting(null, pastDate, testMeetingNotes);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddPastMeetingWithNullDate () {
+        cMgrHasContacts.addNewPastMeeting(meetingContacts, null, testMeetingNotes);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddPastMeetingWithNullNotes () {
+        cMgrHasContacts.addNewPastMeeting(meetingContacts, pastDate, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddPastMeetingWithEmptyNotes () {
+        cMgrHasContacts.addNewPastMeeting(meetingContacts, pastDate, "");
+    }
+
     @Test(expected = NullPointerException.class)
     public void testAddFutureMeetingWithNullContacts () {
         cMgrHasContacts.addFutureMeeting(null, futureDate);
