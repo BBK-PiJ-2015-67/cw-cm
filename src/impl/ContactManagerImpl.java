@@ -205,7 +205,7 @@ public class ContactManagerImpl implements ContactManager {
         if (ids == null || ids.length == 0) {
             throw new NullPointerException("null or empty list passed as argument for ids");
         }
-        if (!isValidIds(ids)) {
+        if (!this.isValidIds(ids)) {
             throw new NullPointerException("one or more of the specified ids does not exist");
         }
 
@@ -252,6 +252,12 @@ public class ContactManagerImpl implements ContactManager {
         return (found == ids.length);
     }
 
+    /**
+     * Helper method to check if all contacts passed as arguments
+     * exist in the ContactManager
+     * @param contacts The Set of contacts to check
+     * @return true if all contacts exist, false if any contacts do not exist
+     */
     private boolean isValidContacts(Set<Contact> contacts) {
         if (contacts.isEmpty()) {
             return false;
