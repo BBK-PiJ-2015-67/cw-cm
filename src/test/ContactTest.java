@@ -54,15 +54,6 @@ public class ContactTest {
     }
 
     @Test
-    public void testAddEmptyNoteToContact () {
-        Contact testContact = new ContactImpl(stubID, stubName);
-
-        testContact.addNotes("");
-
-        assertEquals(testContact.getNotes(),"");
-    }
-
-    @Test
     public void testAddNotesToContactWithExistingNotes () {
         Contact testContact = new ContactImpl(stubID, stubName);
 
@@ -79,6 +70,12 @@ public class ContactTest {
         testContact.addNotes(notesB);
 
         assertEquals(testContact.getNotes(),notesA + notesB);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddEmptyNoteToContact () {
+        Contact testContact = new ContactImpl(stubID, stubName);
+        testContact.addNotes("");
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -107,13 +104,18 @@ public class ContactTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNewContactWithEmptyNameAndNotes () {
+    public void testNewContactWithEmptyNameAndNullNotes () {
         new ContactImpl(1, "", null);
     }
 
     @Test(expected = NullPointerException.class)
     public void testNewContactWithNullNotes () {
         new ContactImpl(1, stubName, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNewContactWithEmptyNotes () {
+        new ContactImpl(1, stubName, "");
     }
 
     @Test(expected = NullPointerException.class)
