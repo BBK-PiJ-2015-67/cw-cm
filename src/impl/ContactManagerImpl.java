@@ -129,6 +129,11 @@ public class ContactManagerImpl implements ContactManager {
         if (!this.isValidContacts(contacts)) {
             throw new IllegalArgumentException("one or more of the provided contacts do not exist");
         }
+
+        int id = this.nextMeetingId;
+        this.nextMeetingId++;
+
+        this.meetings.add(new PastMeetingImpl(id, date, contacts, text));
     }
 
     @Override
