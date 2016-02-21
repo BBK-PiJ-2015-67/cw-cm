@@ -265,10 +265,6 @@ public class ContactManagerMeetingsTest {
         assertEquals(futureMeetingList.size(), 3);
         assertFalse(futureMeetingList.isEmpty());
 
-        for(Meeting m : futureMeetingList) {
-            System.out.println(m.getId());
-        }
-
         Meeting mtg4 = futureMeetingList.get(0);
         Meeting mtg1 = futureMeetingList.get(1);
         Meeting mtg3 = futureMeetingList.get(2);
