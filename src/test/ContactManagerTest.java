@@ -44,16 +44,16 @@ public class ContactManagerTest {
 
         testMeetingNotes = "These are some notes that we took in our past meeting";
 
-        cMgrHasContacts.addNewContact("Aaron Kamen", "Camen get it!");
+        cMgrHasContacts.addNewContact("Aaron Kamen", "Come in... get it?");
         cMgrHasContacts.addNewContact("Xenia Garand", "This one's xenophobic");
         cMgrHasContacts.addNewContact("Sherlene Westrich", "From the west");
         cMgrHasContacts.addNewContact("Emmaline Cupit", "Cupid's daughter");
         cMgrHasContacts.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
-        cMgrHasContacts.addNewContact("Ellis Pollak", "Unfortunate naming...");
+        cMgrHasContacts.addNewContact("Ellis Pollak", "Probably a genius come to think of it");
         cMgrHasContacts.addNewContact("Carrol Sin", "Christmas is his favourite time");
-        cMgrHasContacts.addNewContact("Norman Wiedemann", "XXXXL");
+        cMgrHasContacts.addNewContact("Norman Wiedemann", "AKA the weed slayer");
         cMgrHasContacts.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
-        cMgrHasContacts.addNewContact("Floyd Drager", "In France we say this man is popular with..");
+        cMgrHasContacts.addNewContact("Errol Flynn", "The ultimate swashbuckler");
 
         meetingContacts = cMgrHasContacts.getContacts(1,2,5,6,9);
     }
@@ -233,6 +233,13 @@ public class ContactManagerTest {
     public void testAddPastMeetingWithEmptyNotes () {
         cMgrHasContacts.addNewPastMeeting(meetingContacts, pastDate, "");
     }
+    
+    /* =================== MEETING LISTS =================== */
+    
+    @Test
+    public void getFutureMeetingList() {
+        
+    }
 
     /* =================== CONTACTS =================== */
 
@@ -242,12 +249,12 @@ public class ContactManagerTest {
         int contact2 = cMgr.addNewContact("Sherlene Westrich", "From the west");
         int contact3 = cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
         int contact4 = cMgr.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
-        int contact5 = cMgr.addNewContact("Aaron Kamen", "Camen get it!");
-        int contact6 = cMgr.addNewContact("Ellis Pollak", "Unfortunate naming...");
+        int contact5 = cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
+        int contact6 = cMgr.addNewContact("Ellis Pollak", "Probably a genius come to think of it");
         int contact7 = cMgr.addNewContact("Carrol Sin", "Christmas is his favourite time");
-        int contact8 = cMgr.addNewContact("Norman Wiedemann", "XXXXL");
+        int contact8 = cMgr.addNewContact("Norman Wiedemann", "AKA the weed slayer");
         int contact9 = cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
-        int contact10 = cMgr.addNewContact("Floyd Drager", "In France we say this man is popular with..");
+        int contact10 = cMgr.addNewContact("Errol Flynn", "The ultimate swashbuckler");
 
         assertNotEquals(cMgr.getContacts(""), new HashSet<Contact>());
         assertNotNull(cMgr.getContacts(""));
@@ -263,18 +270,18 @@ public class ContactManagerTest {
 
     @Test
     public void testGetSpecificContactsFromCM () {
-        int a = cMgr.addNewContact("Aaron Kamen", "Camen get it!");
-        int b = cMgr.addNewContact("Aaron Kamen", "Camen get it!");
+        int a = cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
+        int b = cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
         int c = cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
         int d = cMgr.addNewContact("Sherlene Westrich", "From the west");
         int e = cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
         int f = cMgr.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
-        int g = cMgr.addNewContact("Aaron Kamen", "Camen get it!");
-        int h = cMgr.addNewContact("Ellis Pollak", "Unfortunate naming...");
+        int g = cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
+        int h = cMgr.addNewContact("Ellis Pollak", "Probably a genius come to think of it");
         int i = cMgr.addNewContact("Carrol Sin", "Christmas is his favourite time");
-        int j = cMgr.addNewContact("Norman Wiedemann", "XXXXL");
+        int j = cMgr.addNewContact("Norman Wiedemann", "AKA the weed slayer");
         int k = cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
-        int l = cMgr.addNewContact("Floyd Drager", "In France we say this man is popular with..");
+        int l = cMgr.addNewContact("Errol Flynn", "The ultimate swashbuckler");
 
         Set<Contact> testContacts = cMgr.getContacts("Aaron Kamen");
 
@@ -310,16 +317,16 @@ public class ContactManagerTest {
 
     @Test
     public void testGetContactsByIds () {
-        cMgr.addNewContact("Aaron Kamen", "Camen get it!");
+        cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
         cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
         cMgr.addNewContact("Sherlene Westrich", "From the west");
         cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
         cMgr.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
-        cMgr.addNewContact("Ellis Pollak", "Unfortunate naming...");
+        cMgr.addNewContact("Ellis Pollak", "Probably a genius come to think of it");
         cMgr.addNewContact("Carrol Sin", "Christmas is his favourite time");
-        cMgr.addNewContact("Norman Wiedemann", "XXXXL");
+        cMgr.addNewContact("Norman Wiedemann", "AKA the weed slayer");
         cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
-        cMgr.addNewContact("Floyd Drager", "In France we say this man is popular with..");
+        cMgr.addNewContact("Errol Flynn", "The ultimate swashbuckler");
 
         Set<Contact> testContacts = cMgr.getContacts(1, 2, 3);
 
@@ -340,7 +347,7 @@ public class ContactManagerTest {
 
     @Test(expected = NullPointerException.class)
     public void testGetContactsIdsWithInvalidIds () {
-        cMgr.addNewContact("Aaron Kamen", "Camen get it!");
+        cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
         cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
         cMgr.addNewContact("Sherlene Westrich", "From the west");
         cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
