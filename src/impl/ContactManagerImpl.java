@@ -97,7 +97,22 @@ public class ContactManagerImpl implements ContactManager {
 
     @Override
     public List<Meeting> getFutureMeetingList(Contact contact) {
-        return null;
+        // TODO: argument validation
+        // Use a set so we have no duplicates
+        Set<Meeting> uniqueResult = new HashSet<>();
+
+        System.out.println(this.meetings.size());
+        for(Meeting m: this.meetings) {
+            if (m.getContacts().contains(contact) && m instanceof FutureMeeting) {
+                uniqueResult.add(m);
+            }
+        }
+
+        List<Meeting> result = new ArrayList<>();
+        result.addAll(uniqueResult);
+
+        // TODO: sort the results
+        return result;
     }
 
     @Override
