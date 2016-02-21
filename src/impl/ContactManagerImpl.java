@@ -214,7 +214,7 @@ public class ContactManagerImpl implements ContactManager {
         for (Contact c : this.contacts) {
             for(int i : ids) {
                 if(c.getId() == i) {
-                    result.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
+                    result.add(c);
                 }
             }
         }
