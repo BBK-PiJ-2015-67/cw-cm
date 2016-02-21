@@ -110,9 +110,25 @@ public class ContactManagerImpl implements ContactManager {
         return null;
     }
 
+    /**
+     * @see ContactManager#addNewPastMeeting(Set, Calendar, String)
+     * @throws IllegalArgumentException if the messages are empty or the date
+     *                                  provided is NOT in the past
+     */
     @Override
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text) {
-
+        if (contacts == null || date == null || text == null) {
+            throw new NullPointerException("null argument passed to contacts, date, or notes");
+        }
+        if (date.compareTo(this.now) >= 0) {
+            throw new IllegalArgumentException("a past meeting must have occurred in the past");
+        }
+        if (text.equals("")) {
+            throw new IllegalArgumentException("messages should not be empty");
+        }
+        if (!this.isValidContacts(contacts)) {
+            throw new IllegalArgumentException("one or more of the provided contacts do not exist");
+        }
     }
 
     @Override
