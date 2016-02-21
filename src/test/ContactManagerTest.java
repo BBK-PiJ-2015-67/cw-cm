@@ -68,6 +68,8 @@ public class ContactManagerTest {
         pastDate = null;
     }
 
+    /* =================== CONSTRUCTOR, FLUSH, ETC... =================== */
+
     @Test
     public void testConstructAContactManager () {
         cMgr = new ContactManagerImpl();
@@ -84,12 +86,7 @@ public class ContactManagerTest {
         assertNotEquals(cMgr,cm);
     }
 
-    @Test
-    public void testAddFutureMeeting () {
-        int futureMeetingId = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
-
-        assertEquals(futureMeetingId,1);
-    }
+    /* =================== MEETINGS =================== */
 
     @Test
     public void testGetMeeting () {
@@ -101,6 +98,15 @@ public class ContactManagerTest {
         assertEquals(mtg.getDate(),futureDate);
         assertEquals(mtg.getContacts(),meetingContacts);
         assertTrue(mtg instanceof Meeting);
+    }
+
+    /* =================== FUTURE MEETINGS =================== */
+
+    @Test
+    public void testAddFutureMeeting () {
+        int futureMeetingId = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
+
+        assertEquals(futureMeetingId,1);
     }
 
     @Test
@@ -128,6 +134,37 @@ public class ContactManagerTest {
         cMgrHasContacts.getFutureMeeting(1);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testAddFutureMeetingWithNullContacts () {
+        cMgrHasContacts.addFutureMeeting(null, futureDate);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddFutureMeetingWithNullDate () {
+        cMgrHasContacts.addFutureMeeting(meetingContacts, null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddFutureMeetingWithNullDateAndContacts () {
+        cMgrHasContacts.addFutureMeeting(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddFutureMeetingWithPastDate () {
+        cMgrHasContacts.addFutureMeeting(meetingContacts, pastDate);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddFutureMeetingWithCurrentDate () {
+        cMgrHasContacts.addFutureMeeting(meetingContacts, now);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddFutureMeetingWithInvalidContacts () {
+        cMgr.addFutureMeeting(meetingContacts, pastDate);
+    }
+
+    /* =================== PAST MEETINGS =================== */
     @Test
     public void testAddPastMeeting () {
         cMgrHasContacts.addNewPastMeeting(meetingContacts, pastDate, testMeetingNotes);
@@ -197,35 +234,7 @@ public class ContactManagerTest {
         cMgrHasContacts.addNewPastMeeting(meetingContacts, pastDate, "");
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testAddFutureMeetingWithNullContacts () {
-        cMgrHasContacts.addFutureMeeting(null, futureDate);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testAddFutureMeetingWithNullDate () {
-        cMgrHasContacts.addFutureMeeting(meetingContacts, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testAddFutureMeetingWithNullDateAndContacts () {
-        cMgrHasContacts.addFutureMeeting(null, null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddFutureMeetingWithPastDate () {
-        cMgrHasContacts.addFutureMeeting(meetingContacts, pastDate);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddFutureMeetingWithCurrentDate () {
-        cMgrHasContacts.addFutureMeeting(meetingContacts, now);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddFutureMeetingWithInvalidContacts () {
-        cMgr.addFutureMeeting(meetingContacts, pastDate);
-    }
+    /* =================== CONTACTS =================== */
 
     @Test
     public void testAddContactsToCM () {
