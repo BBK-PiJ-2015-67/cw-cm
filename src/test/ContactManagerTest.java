@@ -8,9 +8,10 @@ import spec.*;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 /**
  * ContactManager tests
@@ -70,24 +71,24 @@ public class ContactManagerTest {
     @Test
     public void testConstructAContactManager () {
         cMgr = new ContactManagerImpl();
-        assertThat(cMgr).isNotNull();
+        assertNotNull(cMgr);
     }
 
     @Test
     public void testConstructAUniqueContactManager () {
         ContactManager cm = new ContactManagerImpl();
 
-        assertThat(cm).isNotNull();
+        assertNotNull(cm);
 
-        assertThat(cMgr).isNotNull();
-        assertThat(cMgr).isNotEqualTo(cm);
+        assertNotNull(cMgr);
+        assertNotEquals(cMgr,cm);
     }
 
     @Test
     public void testAddFutureMeeting () {
         int futureMeetingId = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
 
-        assertThat(futureMeetingId).isEqualTo(1);
+        assertEquals(futureMeetingId,1);
     }
 
     @Test
@@ -95,11 +96,11 @@ public class ContactManagerTest {
         int id = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
         Meeting mtg = cMgrHasContacts.getMeeting(id);
 
-        assertThat(mtg).isNotNull();
-        assertThat(mtg.getId()).isEqualTo(id);
-        assertThat(mtg.getDate()).isEqualTo(futureDate);
-        assertThat(mtg.getContacts()).isEqualTo(meetingContacts);
-        assertThat(mtg).isInstanceOf(Meeting.class);
+        assertNotNull(mtg);
+        assertEquals(mtg.getId(),id);
+        assertEquals(mtg.getDate(),futureDate);
+        assertEquals(mtg.getContacts(),meetingContacts);
+        assertTrue(mtg instanceof Meeting);
     }
 
     @Test
@@ -109,16 +110,15 @@ public class ContactManagerTest {
         FutureMeeting fMtg = cMgrHasContacts.getFutureMeeting(futureMeetingId);
         Meeting mtg = cMgrHasContacts.getFutureMeeting(futureMeetingId);
 
-        assertThat(mtg).isNotNull();
-        assertThat(mtg).isInstanceOf(FutureMeeting.class);
-        assertThat(mtg).isNotInstanceOf(PastMeeting.class);
+        assertNotNull(mtg);
+        assertTrue(mtg instanceof FutureMeeting);
+        assertFalse(mtg instanceof PastMeeting);
 
-        assertThat(fMtg).isNotNull();
-        assertThat(fMtg).isInstanceOf(FutureMeeting.class);
-        assertThat(fMtg).isNotInstanceOf(PastMeeting.class);
-        assertThat(fMtg.getId()).isEqualTo(futureMeetingId);
-        assertThat(fMtg.getDate()).isEqualTo(futureDate);
-        assertThat(fMtg.getContacts()).isEqualTo(meetingContacts);
+        assertNotNull(fMtg);
+        assertFalse(fMtg instanceof PastMeeting);
+        assertEquals(fMtg.getId(),futureMeetingId);
+        assertEquals(fMtg.getDate(),futureDate);
+        assertEquals(fMtg.getContacts(),meetingContacts);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -135,17 +135,17 @@ public class ContactManagerTest {
         PastMeeting pMtg = cMgrHasContacts.getPastMeeting(1);
         Meeting mtg = cMgrHasContacts.getPastMeeting(1);
 
-        assertThat(mtg).isNotNull();
-        assertThat(mtg).isInstanceOf(PastMeeting.class);
-        assertThat(mtg).isNotInstanceOf(FutureMeeting.class);
+        assertNotNull(mtg);
 
-        assertThat(pMtg).isNotNull();
-        assertThat(pMtg).isInstanceOf(PastMeeting.class);
-        assertThat(pMtg).isNotInstanceOf(FutureMeeting.class);
-        assertThat(pMtg.getId()).isEqualTo(1);
-        assertThat(pMtg.getDate()).isEqualTo(pastDate);
-        assertThat(pMtg.getContacts()).isEqualTo(meetingContacts);
-        assertThat(pMtg.getNotes()).isEqualTo(testMeetingNotes);
+        assertTrue(mtg instanceof PastMeeting);
+        assertFalse(mtg instanceof FutureMeeting);
+
+        assertNotNull(pMtg);
+        assertFalse(pMtg instanceof FutureMeeting);
+        assertEquals(pMtg.getId(),1);
+        assertEquals(pMtg.getDate(),pastDate);
+        assertEquals(pMtg.getContacts(),meetingContacts);
+        assertEquals(pMtg.getNotes(),testMeetingNotes);
     }
 
     @Test(expected = IllegalStateException.class)
@@ -198,16 +198,16 @@ public class ContactManagerTest {
         int contact9 = cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
         int contact10 = cMgr.addNewContact("Floyd Drager", "In France we say this man is popular with..");
 
-        assertThat(cMgr.getContacts("")).isNotEmpty();
-        assertThat(cMgr.getContacts("")).isNotNull();
-        assertThat(cMgr.getContacts("").size()).isEqualTo(10);
+        assertNotEquals(cMgr.getContacts(""), new HashSet<Contact>());
+        assertNotNull(cMgr.getContacts(""));
+        assertEquals(cMgr.getContacts("").size(),10);
     }
 
     @Test
     public void testThatNewCMHasEmptyContacts () {
-        assertThat(cMgr.getContacts("")).isEmpty();
-        assertThat(cMgr.getContacts("")).isNotNull();
-        assertThat(cMgr.getContacts("").size()).isEqualTo(0);
+        assertEquals(cMgr.getContacts(""),new HashSet<Contact>());
+        assertNotNull(cMgr.getContacts(""));
+        assertEquals(cMgr.getContacts("").size(),0);
     }
 
     @Test
@@ -227,12 +227,13 @@ public class ContactManagerTest {
 
         Set<Contact> testContacts = cMgr.getContacts("Aaron Kamen");
 
-        assertThat(testContacts).isNotEmpty();
-        assertThat(testContacts).isNotNull();
-        assertThat(testContacts.size()).isEqualTo(3);
+        assertNotEquals(testContacts, new HashSet<Contact>());
+        assertNotNull(testContacts);
+        assertEquals(testContacts.size(),3);
 
-        assertThat(a).isNotEqualTo(b).isNotEqualTo(g);
-        assertThat(b).isNotEqualTo(g);
+        assertNotEquals(a, b);
+        assertNotEquals(a, g);
+        assertNotEquals(b, g);
     }
 
     @Test
@@ -244,16 +245,16 @@ public class ContactManagerTest {
 
         Set<Contact> testContacts = cMgr.getContacts("Sherlene Westrich");
 
-        assertThat(testContacts).isNotEmpty();
-        assertThat(testContacts).isNotNull();
-        assertThat(testContacts.size()).isEqualTo(2);
+        assertNotEquals(testContacts, new HashSet<Contact>());
+        assertNotNull(testContacts);
+        assertEquals(testContacts.size(),2);
     }
 
     @Test
     public void testGetContactsStringWhenCMHasNoContacts () {
         Set<Contact> testContacts = cMgr.getContacts("Floyd Drager");
 
-        assertThat(testContacts).isNullOrEmpty();
+        assertEquals(testContacts, new HashSet<Contact>());
     }
 
     @Test
@@ -271,9 +272,8 @@ public class ContactManagerTest {
 
         Set<Contact> testContacts = cMgr.getContacts(1, 2, 3);
 
-        assertThat(testContacts).isNotEmpty();
-        assertThat(testContacts).isNotNull();
-        assertThat(testContacts.size()).isEqualTo(3);
+        assertNotNull(testContacts);
+        assertEquals(testContacts.size(),3);
 
         boolean testPassed = false;
         for(Contact c : testContacts) {
@@ -284,7 +284,7 @@ public class ContactManagerTest {
                 testPassed = true;
             }
         }
-        assertThat(testPassed).isTrue();
+        assertTrue(testPassed);
     }
 
     @Test(expected = NullPointerException.class)
