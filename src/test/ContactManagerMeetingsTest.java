@@ -389,4 +389,84 @@ public class ContactManagerMeetingsTest {
     public void testGetMeetingListOnShouldThrowForNullDate() {
         cMgrHasContacts.getMeetingListOn(null);
     }
+
+    @Test
+    public void testGetEmptyPastMeetingListForIsEmpty() {
+        Set<Contact> contactSet = cMgrHasContacts.getContacts(1);
+        Contact testContact = null;
+
+        for (Contact c: contactSet) {
+            testContact = c;
+        }
+
+        List<PastMeeting> pastMeetingList = cMgrHasContacts.getPastMeetingListFor(testContact);
+
+        assertNotNull(pastMeetingList);
+        assertEquals(pastMeetingList.size(), 0);
+        assertTrue(pastMeetingList.isEmpty());
+    }
+
+    @Test
+    public void testGetPastMeetingListForIsNotEmptyAndSorted() {
+        Set<Contact> contactSet = cMgrHasContacts.getContacts(1);
+        Set<Contact> meetingSet = cMgrHasContacts.getContacts(1,2,3);
+        Contact testContact = null;
+
+        for (Contact c: contactSet) {
+            testContact = c;
+        }
+
+        // PAST expected output order: 2, 3, 4, 1
+        Calendar date1 = new GregorianCalendar(2015, 11, 22);
+        Calendar date2 = new GregorianCalendar(2013, 9, 2);
+        Calendar date3 = new GregorianCalendar(2014, 4, 14);
+        Calendar date4 = new GregorianCalendar(2014, 10, 30);
+        // FUTURE
+        Calendar futureDate2 = new GregorianCalendar(2017, 4, 20);
+        Calendar futureDate3 = new GregorianCalendar(2017, 3, 20);
+
+        cMgrHasContacts.addFutureMeeting(meetingSet, futureDate); // ID: 1
+        cMgrHasContacts.addNewPastMeeting(meetingSet, date1, "Notes"); // ID: 2
+        cMgrHasContacts.addFutureMeeting(meetingSet, futureDate2); // ID: 3
+        cMgrHasContacts.addNewPastMeeting(meetingSet, date2, "Notes"); // ID: 4
+        cMgrHasContacts.addFutureMeeting(meetingSet, futureDate3); // ID: 5
+        cMgrHasContacts.addNewPastMeeting(meetingSet, date3, "Notes"); // ID: 6
+        cMgrHasContacts.addNewPastMeeting(meetingSet, date4, "Notes"); // ID: 7
+        List<PastMeeting> pastMeetings = cMgrHasContacts.getPastMeetingListFor(testContact);
+
+        assertNotNull(pastMeetings);
+        assertEquals(pastMeetings.size(), 4);
+        assertFalse(pastMeetings.isEmpty());
+
+        // expected meeting ID order 4, 6, 7, 2
+        Meeting mtg4 = pastMeetings.get(0);
+        Meeting mtg6 = pastMeetings.get(1);
+        Meeting mtg7 = pastMeetings.get(2);
+        Meeting mtg2 = pastMeetings.get(3);
+
+        assertEquals(mtg4.getId(), 4);
+        assertEquals(mtg6.getId(), 6);
+        assertEquals(mtg7.getId(), 7);
+        assertEquals(mtg2.getId(), 2);
+
+        assertEquals(mtg4.getContacts(), meetingSet);
+        assertEquals(mtg6.getContacts(), meetingSet);
+        assertEquals(mtg7.getContacts(), meetingSet);
+        assertEquals(mtg2.getContacts(), meetingSet);
+
+        assertEquals(mtg4.getDate(), date2);
+        assertEquals(mtg6.getDate(), date3);
+        assertEquals(mtg7.getDate(), date4);
+        assertEquals(mtg2.getDate(), date1);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetPastMeetingListForWithNullContactShouldThrow () {
+        cMgrHasContacts.getPastMeetingListFor(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetPastMeetingListForWithInvalidContactShouldThrow () {
+        cMgrHasContacts.getPastMeetingListFor(new ContactImpl(99,"Jack Daniels"));
+    }
 }
