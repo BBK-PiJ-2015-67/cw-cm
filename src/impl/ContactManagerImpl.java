@@ -205,7 +205,24 @@ public class ContactManagerImpl implements ContactManager {
             throw new IllegalArgumentException("specified contact does not exist");
         }
 
-        return null;
+        // Use a set so we have no duplicates
+        Set<PastMeeting> uniqueResult = new HashSet<>();
+
+        // Really want to use streams but we haven't had them in class yet so
+        // not sure it's permitted
+        for(Meeting m: this.meetings) {
+            if (m.getContacts().contains(contact) && m instanceof PastMeeting) {
+                uniqueResult.add((PastMeeting) m);
+            }
+        }
+
+        List<PastMeeting> result = new ArrayList<>();
+        result.addAll(uniqueResult);
+
+        // Sort using a lambda here
+        // saves on writing a comparison method
+        Collections.sort(result, (m1, m2) -> (m1.getDate().compareTo(m2.getDate())));
+        return result;
     }
 
     /**
