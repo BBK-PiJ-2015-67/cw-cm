@@ -7,10 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import spec.*;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
@@ -88,8 +85,12 @@ public class ContactManagerMeetingsTest {
     @Test
     public void testAddFutureMeeting () {
         int futureMeetingId = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
+        Calendar veryNearFuture = new GregorianCalendar();
+        veryNearFuture.add(Calendar.SECOND, 30);
+        int futureMeetingId2 = cMgrHasContacts.addFutureMeeting(meetingContacts,veryNearFuture);
 
         assertEquals(futureMeetingId,1);
+        assertEquals(futureMeetingId2,2);
     }
 
     @Test
@@ -120,6 +121,11 @@ public class ContactManagerMeetingsTest {
     @Test(expected = NullPointerException.class)
     public void testAddFutureMeetingWithNullContacts () {
         cMgrHasContacts.addFutureMeeting(null, futureDate);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddFutureMeetingWithEmptyContacts () {
+        cMgrHasContacts.addFutureMeeting(new HashSet<>(), futureDate);
     }
 
     @Test(expected = NullPointerException.class)
@@ -200,6 +206,11 @@ public class ContactManagerMeetingsTest {
     @Test(expected = NullPointerException.class)
     public void testAddPastMeetingWithNullContacts () {
         cMgrHasContacts.addNewPastMeeting(null, pastDate, testMeetingNotes);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddPastMeetingWithEmptyContacts () {
+        cMgrHasContacts.addNewPastMeeting(new HashSet<>(), pastDate, testMeetingNotes);
     }
 
     @Test(expected = NullPointerException.class)
