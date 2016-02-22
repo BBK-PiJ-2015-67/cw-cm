@@ -8,12 +8,9 @@ import spec.Contact;
 import spec.ContactManager;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * ContactManager tests
@@ -39,12 +36,6 @@ public class ContactManagerContactsTest {
         cMgr = new ContactManagerImpl();
         cMgrHasContacts = new ContactManagerImpl();
 
-        now = new GregorianCalendar();
-        futureDate = new GregorianCalendar(2017, 3, 27);
-        pastDate = new GregorianCalendar(2014, 4, 20);
-
-        testMeetingNotes = "These are some notes that we took in our past meeting";
-
         cMgrHasContacts.addNewContact("Aaron Kamen", "Come in... get it?");
         cMgrHasContacts.addNewContact("Xenia Garand", "This one's xenophobic");
         cMgrHasContacts.addNewContact("Sherlene Westrich", "From the west");
@@ -55,34 +46,28 @@ public class ContactManagerContactsTest {
         cMgrHasContacts.addNewContact("Norman Wiedemann", "AKA the weed slayer");
         cMgrHasContacts.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
         cMgrHasContacts.addNewContact("Errol Flynn", "The ultimate swashbuckler");
-
-        meetingContacts = cMgrHasContacts.getContacts(1,2,5,6,9);
     }
 
     @After
     public void tearDown() {
         cMgr = null;
         cMgrHasContacts = null;
-        meetingContacts = null;
-        now = null;
-        futureDate = null;
-        pastDate = null;
     }
 
     /* =================== CONTACTS =================== */
 
     @Test
     public void testAddContactsToCM () {
-        int contact1 = cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
-        int contact2 = cMgr.addNewContact("Sherlene Westrich", "From the west");
-        int contact3 = cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
-        int contact4 = cMgr.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
-        int contact5 = cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
-        int contact6 = cMgr.addNewContact("Ellis Pollak", "Probably a genius come to think of it");
-        int contact7 = cMgr.addNewContact("Carrol Sin", "Christmas is his favourite time");
-        int contact8 = cMgr.addNewContact("Norman Wiedemann", "AKA the weed slayer");
-        int contact9 = cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
-        int contact10 = cMgr.addNewContact("Errol Flynn", "The ultimate swashbuckler");
+        cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
+        cMgr.addNewContact("Sherlene Westrich", "From the west");
+        cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
+        cMgr.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
+        cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
+        cMgr.addNewContact("Ellis Pollak", "Probably a genius come to think of it");
+        cMgr.addNewContact("Carrol Sin", "Christmas is his favourite time");
+        cMgr.addNewContact("Norman Wiedemann", "AKA the weed slayer");
+        cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
+        cMgr.addNewContact("Errol Flynn", "The ultimate swashbuckler");
 
         assertFalse(cMgr.getContacts("").isEmpty());
         assertNotNull(cMgr.getContacts(""));
@@ -154,18 +139,25 @@ public class ContactManagerContactsTest {
 
     @Test
     public void testGetContactsByIds () {
-        cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
-        cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
-        cMgr.addNewContact("Sherlene Westrich", "From the west");
-        cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
-        cMgr.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
-        cMgr.addNewContact("Ellis Pollak", "Probably a genius come to think of it");
-        cMgr.addNewContact("Carrol Sin", "Christmas is his favourite time");
-        cMgr.addNewContact("Norman Wiedemann", "AKA the weed slayer");
-        cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
-        cMgr.addNewContact("Errol Flynn", "The ultimate swashbuckler");
+        Set<Contact> testContacts = cMgrHasContacts.getContacts(1, 2, 3);
 
-        Set<Contact> testContacts = cMgr.getContacts(1, 2, 3);
+        assertNotNull(testContacts);
+        assertEquals(testContacts.size(),3);
+
+        boolean testPassed = false;
+        for(Contact c : testContacts) {
+            if (c.getName().equals("Aaron Kamen") ||
+                    c.getName().equals("Xenia Garand") ||
+                    c.getName().equals("Sherlene Westrich")) {
+                testPassed = true;
+            }
+        }
+        assertTrue(testPassed);
+    }
+
+    @Test
+    public void testGetContactsByIdsWithDuplicates () {
+        Set<Contact> testContacts = cMgrHasContacts.getContacts(1, 2, 3, 1);
 
         assertNotNull(testContacts);
         assertEquals(testContacts.size(),3);
