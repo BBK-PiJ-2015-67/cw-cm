@@ -7,6 +7,27 @@ import java.util.*;
 /**
  * A Contact Manager implementation
  *
+ * I've made a few assumptions:
+ *
+ * <ul>
+ *     <li><strong>Date/Time:</strong> As per the Java documentation, calling getTime() on a Date/Calendar
+ *     object triggers a time update on the object &ndash; I've implemented adding Past/Future Meetings with
+ *     this in mind.
+ *     A side-effect is that calling addFutureMeeting() with a newly instantiated Calendar object
+ *     with no specific future time will result in failure as the time elapsed between the method
+ *     being called and its execution *may* mean that the meeting is no longer in the future.</li>
+ *     <li><strong>Contact IDs, Meeting IDs:</strong>
+ *     If there was a method to remove contacts or meetings from this application
+ *     then using the size of the data structures would be a bad idea &ndash; if a contact was removed
+ *     from the middle of the set then the ID would be greater than the size of the set, hence we could
+ *     provide a non-unique ID which would be invalid.<br>
+ *     Contact removal has not been specified however so I have opted to use this to avoid an additional loop.<br>
+ *     Ideally we would use a UUID or GUID or some other mechanism but the return type has been specified as
+ *     int &ndash; I considered using a hash on the contacts but there is no guarantee a contact would not
+ *     have the same name as another contact so hashing the name would not guarantee a unique ID &ndash;
+ *     we would require a further identifier to ensure a unique hash</li>
+ * </ul>
+ *
  * @see spec.ContactManager
  *
  * @author lmignot
@@ -33,7 +54,11 @@ public class ContactManagerImpl implements ContactManager {
         if (contacts == null || date == null) {
             throw new NullPointerException("null argument passed to contacts and/or date");
         }
-        if (date.compareTo(this.now) <= 0) {
+
+        // update the internal clock before any date comparison
+        this.now.getTime();
+
+        if (!date.after(this.now)) {
             throw new IllegalArgumentException("a future meeting must be set in the future");
         }
         if (!this.isValidContacts(contacts)) {
@@ -129,8 +154,18 @@ public class ContactManagerImpl implements ContactManager {
         return result;
     }
 
+    /**
+     * @see ContactManager#getMeetingListOn(Calendar)
+     */
     @Override
     public List<Meeting> getMeetingListOn(Calendar date) {
+        if (date == null) {
+            throw new NullPointerException("no date provided.");
+        }
+
+        // update the internal clock before any date comparison
+        this.now.getTime();
+
         return null;
     }
 
@@ -149,7 +184,11 @@ public class ContactManagerImpl implements ContactManager {
         if (contacts == null || date == null || text == null) {
             throw new NullPointerException("null argument passed to contacts, date, or notes");
         }
-        if (date.compareTo(this.now) >= 0) {
+
+        // update the internal clock before any date comparison
+        this.now.getTime();
+
+        if (!date.before(this.now)) {
             throw new IllegalArgumentException("a past meeting must have occurred in the past");
         }
         if (text.equals("")) {
@@ -171,18 +210,6 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     /**
-     * Regarding using the size of the Set of Contacts as the ID for the new Contact.<br>
-     * If there was a method to remove contacts from this ContactManager
-     * then this would be a bad idea - if a contact was removed from the middle
-     * of the set then the ID would be greater than the size of the set, hence we would have a
-     * duplicate ID which is invalid.<br>
-     * However since contact removal has not been specified - have opted to use this
-     * to avoid an additional loop
-     * Ideally we would use a UUID or GUID - I considered using a hash on the contacts but
-     * there is no guarantee a contact would not have the same name as another contact so hashing
-     * the name would not guarantee a unique ID - we would require a further identifier to ensure
-     * a unique hash
-     *
      * @see ContactManager#addNewContact(String, String)
      */
     @Override
@@ -299,6 +326,24 @@ public class ContactManagerImpl implements ContactManager {
         }
 
         return this.isValidIds(ids);
+    }
+
+    /**
+     * Helper method to check if an array of int has duplicates
+     * @param ids the array to check for unique values
+     * @return false if all the ids are unique, true if any duplicates are found
+     */
+    private boolean hasDuplicateIds (int... ids) {
+        // store the ids in a set - if this set is smaller
+        // than the array of ids passed in the arguments
+        // then a duplicate id is in the list
+        Set<Integer> uniqueIds = new HashSet<>();
+
+        for (int i: ids) {
+            uniqueIds.add(i);
+        }
+
+        return (uniqueIds.size() != ids.length);
     }
 
     /**
