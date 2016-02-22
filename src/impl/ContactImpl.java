@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Implementation of Contact interface
  *
- * @see spec.Contact;
+ * @see Contact;
  * @author lmignot
  */
 public class ContactImpl implements Contact {
@@ -43,10 +43,11 @@ public class ContactImpl implements Contact {
 
     /**
      * Create a new Contact with some notes
-     *
-     * @param notes Some notes about this contact
-     *
      * @see ContactImpl#ContactImpl(int, String)
+     * @param notes Some notes about this contact
+     * @throws NullPointerException if the name is null or the notes are null
+     * @throws IllegalArgumentException if the ID is 0 or negative,
+     *                                  or the name or notes are empty strings
      */
     public ContactImpl (int id, String name, String notes) {
         this(id, name);

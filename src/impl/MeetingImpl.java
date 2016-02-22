@@ -23,7 +23,7 @@ public abstract class MeetingImpl implements Meeting {
      *
      * Extending classes should implement the same argument checks
      *
-     * @param id A unique positive ID - this class does not check for uniqueness
+     * @param id A unique positive ID &ndash; this class does not check for uniqueness
      * @param date The meeting's date
      * @param contacts The contacts attending this meeting. Should not be empty
      *

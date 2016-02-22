@@ -12,10 +12,10 @@ import java.util.*;
  * <ul>
  *     <li><strong>Date/Time:</strong> As per the Java documentation, calling getTime() on a Date/Calendar
  *     object triggers a time update on the object &ndash; I've implemented adding Past/Future Meetings with
- *     this in mind.
+ *     this in mind.<br>
  *     A side-effect is that calling addFutureMeeting() with a newly instantiated Calendar object
  *     with no specific future time will result in failure as the time elapsed between the method
- *     being called and its execution *may* mean that the meeting is no longer in the future.</li>
+ *     being called and its execution <em>may</em> mean that the meeting is no longer in the future.</li>
  *     <li><strong>Contact IDs, Meeting IDs:</strong>
  *     If there was a method to remove contacts or meetings from this application
  *     then using the size of the data structures would be a bad idea &ndash; if a contact was removed
@@ -48,6 +48,9 @@ public class ContactManagerImpl implements ContactManager {
 
     /**
      * @see ContactManager#addFutureMeeting(Set, Calendar)
+     * @throws IllegalArgumentException if the meeting is set for a time in the past,
+     *                                  or if any contact is unknown / non-existent
+     * @throws NullPointerException if the meeting or the date are null;
      */
     @Override
     public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
@@ -75,6 +78,7 @@ public class ContactManagerImpl implements ContactManager {
 
     /**
      * @see ContactManager#getPastMeeting(int)
+     * @throws IllegalStateException if there is a meeting with that ID happening in the future
      */
     @Override
     public PastMeeting getPastMeeting(int id) {
@@ -92,6 +96,7 @@ public class ContactManagerImpl implements ContactManager {
 
     /**
      * @see ContactManager#getFutureMeeting(int)
+     * @throws IllegalArgumentException if there is a meeting with that ID happening in the past
      */
     @Override
     public FutureMeeting getFutureMeeting(int id) {
@@ -122,6 +127,8 @@ public class ContactManagerImpl implements ContactManager {
 
     /**
      * @see ContactManager#getFutureMeetingList(Contact)
+     * @throws IllegalArgumentException if the contact does not exist
+     * @throws NullPointerException if the contact is null
      */
     @Override
     public List<Meeting> getFutureMeetingList(Contact contact) {
@@ -156,6 +163,7 @@ public class ContactManagerImpl implements ContactManager {
 
     /**
      * @see ContactManager#getMeetingListOn(Calendar)
+     * @throws NullPointerException if the date is null
      */
     @Override
     public List<Meeting> getMeetingListOn(Calendar date) {
@@ -211,6 +219,8 @@ public class ContactManagerImpl implements ContactManager {
 
     /**
      * @see ContactManager#addNewContact(String, String)
+     * @throws IllegalArgumentException if the name or the notes are empty strings
+     * @throws NullPointerException if the name or the notes are null
      */
     @Override
     public int addNewContact(String name, String notes) {
@@ -229,6 +239,7 @@ public class ContactManagerImpl implements ContactManager {
 
     /**
      * @see ContactManager#getContacts(String)
+     * @throws NullPointerException if the parameter is null
      */
     @Override
     public Set<Contact> getContacts(String name) {
