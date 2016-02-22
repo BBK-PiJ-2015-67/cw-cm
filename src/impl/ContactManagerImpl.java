@@ -191,8 +191,20 @@ public class ContactManagerImpl implements ContactManager {
         return result;
     }
 
+    /**
+     * @see ContactManager#getPastMeetingListFor(Contact)
+     * @throws IllegalArgumentException if the contact does not exist
+     * @throws NullPointerException if the contact is null
+     */
     @Override
     public List<PastMeeting> getPastMeetingListFor(Contact contact) {
+        if (contact == null) {
+            throw new NullPointerException("contact should not be null");
+        }
+        if (!this.isValidContact(contact)) {
+            throw new IllegalArgumentException("specified contact does not exist");
+        }
+
         return null;
     }
 
