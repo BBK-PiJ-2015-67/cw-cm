@@ -182,7 +182,7 @@ public class ContactManagerContactsTest {
         assertTrue(testPassed);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetContactsIdsWithInvalidIds () {
         cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
         cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
@@ -198,7 +198,7 @@ public class ContactManagerContactsTest {
         cMgr.getContacts(l);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetContactsIdsWhenCMHasNoContacts () {
         cMgr.getContacts(2, 9, 23, 1, 3);
     }
