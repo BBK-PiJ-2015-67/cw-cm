@@ -171,10 +171,26 @@ public class ContactManagerImpl implements ContactManager {
             throw new NullPointerException("no date provided.");
         }
 
-        // update the internal clock before any date comparison
-        this.now.getTime();
+        // Use a set so we have no duplicates
+        Set<Meeting> uniqueResult = new HashSet<>();
 
-        return null;
+        // since the method is "getMeetingListOn" it
+        // seems sensible to assume we're talking about
+        // a day as opposed to a specific time
+        for(Meeting m: this.meetings) {
+            if (m.getDate().get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
+                    m.getDate().get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
+                    m.getDate().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)) {
+                uniqueResult.add(m);
+            }
+        }
+        List<Meeting> result = new ArrayList<>();
+        result.addAll(uniqueResult);
+
+        // Sort using a lambda here
+        // saves on writing a comparison method
+        Collections.sort(result, (m1, m2) -> (m1.getDate().compareTo(m2.getDate())));
+        return result;
     }
 
     @Override
