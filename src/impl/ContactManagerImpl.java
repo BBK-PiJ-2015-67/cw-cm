@@ -187,6 +187,7 @@ public class ContactManagerImpl implements ContactManager {
 
         // Sort using a lambda here
         // saves on writing a comparison method
+        // TODO: implement this with streams maybe?
         Collections.sort(result, (m1, m2) -> (m1.getDate().compareTo(m2.getDate())));
         return result;
     }
