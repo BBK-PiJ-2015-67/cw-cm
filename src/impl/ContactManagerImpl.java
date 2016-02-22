@@ -266,14 +266,17 @@ public class ContactManagerImpl implements ContactManager {
 
     /**
      * @see ContactManager#getContacts(int...)
+     * @throws IllegalArgumentException if no IDs are provided or if any of the provided
+     *                                  IDs does not correspond to a real contact
+     * @throws NullPointerException if the argument is null
      */
     @Override
     public Set<Contact> getContacts(int... ids) {
-        if (ids == null || ids.length == 0) {
-            throw new NullPointerException("null or empty list passed as argument for ids");
+        if (ids == null) {
+            throw new NullPointerException("null argument passed for ids");
         }
-        if (!this.isValidIds(ids)) {
-            throw new NullPointerException("one or more of the specified ids does not exist");
+        if (ids.length == 0 || !this.isValidIds(ids)) {
+            throw new IllegalArgumentException("one or more of the specified ids does not exist");
         }
 
         Set<Contact> result = new HashSet<>();
