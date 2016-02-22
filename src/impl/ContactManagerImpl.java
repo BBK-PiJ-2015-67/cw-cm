@@ -402,24 +402,6 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     /**
-     * Helper method to check if an array of int has duplicates
-     * @param ids the array to check for unique values
-     * @return false if all the ids are unique, true if any duplicates are found
-     */
-    private boolean hasDuplicateIds (int... ids) {
-        // store the ids in a set - if this set is smaller
-        // than the array of ids passed in the arguments
-        // then a duplicate id is in the list
-        Set<Integer> uniqueIds = new HashSet<>();
-
-        for (int i: ids) {
-            uniqueIds.add(i);
-        }
-
-        return (uniqueIds.size() != ids.length);
-    }
-
-    /**
      * Returns a clone of the internal contacts list
      *
      * @return A copy of the Set containing all internal contacts
