@@ -135,9 +135,7 @@ public class ContactManagerImpl implements ContactManager {
         if (contact == null) {
             throw new NullPointerException("contact should not be null");
         }
-        // use getContacts to check if the contact exists
-        Set<Contact> c = this.getContacts(contact.getName());
-        if (c.isEmpty()) {
+        if (!this.isValidContact(contact)) {
             throw new IllegalArgumentException("specified contact does not exist");
         }
 
@@ -291,7 +289,7 @@ public class ContactManagerImpl implements ContactManager {
         if (ids == null) {
             throw new NullPointerException("null argument passed for ids");
         }
-        if (ids.length == 0 || !this.isValidIds(ids)) {
+        if (ids.length == 0 || !this.isValidContactIds(ids)) {
             throw new IllegalArgumentException("one or more of the specified ids does not exist");
         }
 
@@ -314,13 +312,29 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     /**
+     * Helper method to check if a single Contact exists in the system
+     * @param contact the Contact to check
+     * @return true if the Contact exists, false if not
+     */
+    private boolean isValidContact(Contact contact) {
+        boolean result = false;
+        for (Contact c : this.contacts) {
+            if (c.getId() == contact.getId() && c.getName().equals(contact.getName())) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
      * Helper method to check if a list of Contact ids exist in the
      * internal Contact list
      *
      * @param ids the list of 1 or more ids to search for
      * @return True if ALL the ids are found, false if ANY are NOT found
      */
-    private boolean isValidIds (int... ids) {
+    private boolean isValidContactIds(int... ids) {
         int found = 0;
 
         if (ids.length == 0) {
@@ -355,7 +369,7 @@ public class ContactManagerImpl implements ContactManager {
             i++;
         }
 
-        return this.isValidIds(ids);
+        return this.isValidContactIds(ids);
     }
 
     /**
