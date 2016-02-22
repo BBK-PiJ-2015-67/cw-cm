@@ -238,7 +238,7 @@ public class ContactManagerMeetingsTest {
         // seems odd that we're using a set - there's no "get()" method!!!
         // so we have to loop!
         for (Contact c: contactSet) {
-            testContact = new ContactImpl(c.getId(), c.getName(), c.getNotes());
+            testContact = c;
         }
 
         List<Meeting> futureMeetingList = cMgrHasContacts.getFutureMeetingList(testContact);
