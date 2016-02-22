@@ -12,15 +12,14 @@ import java.util.Set;
  * A Past Meeting is a meeting that has happened in the past
  * It contains notes.
  *
- * @see spec.PastMeeting
+ * @see PastMeeting
  * @see spec.Meeting
  *
  * @author lmignot
  */
 public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
 
-
-    private List<String> notes = null;
+    private List<String> meetingNotes = null;
 
     /**
      * @see MeetingImpl
@@ -34,8 +33,8 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
         if(notes == null) {
             throw new NullPointerException("null passed as argument to notes");
         }
-        this.notes = new ArrayList<>();
-        this.notes.add(notes);
+        meetingNotes = new ArrayList<>();
+        meetingNotes.add(notes);
     }
 
     /**
@@ -45,7 +44,7 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
     public String getNotes() {
         String result = "";
 
-        for(String s : this.notes) {
+        for(String s : meetingNotes) {
             result += s;
         }
         return result;

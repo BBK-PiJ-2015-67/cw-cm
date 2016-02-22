@@ -8,15 +8,15 @@ import java.util.Set;
 
 /**
  * Implementation of a Meeting
- * @see spec.Meeting
+ * @see Meeting
  *
  * @author lmignot
  */
 public abstract class MeetingImpl implements Meeting {
 
-    private Calendar meetingDate;
-    private int meetingId;
-    private Set<Contact> meetingContacts;
+    private final Calendar meetingDate;
+    private final int meetingId;
+    private final Set<Contact> meetingContacts;
 
     /**
      * Creates a Meeting
@@ -42,9 +42,9 @@ public abstract class MeetingImpl implements Meeting {
             throw new IllegalArgumentException("No contacts provided, cannot have a meeting without contacts.");
         }
 
-        this.meetingId = id;
-        this.meetingDate = date;
-        this.meetingContacts = contacts;
+        meetingId = id;
+        meetingDate = date;
+        meetingContacts = contacts;
     }
 
     /**
@@ -52,7 +52,7 @@ public abstract class MeetingImpl implements Meeting {
      */
     @Override
     public int getId() {
-        return this.meetingId;
+        return meetingId;
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class MeetingImpl implements Meeting {
      */
     @Override
     public Calendar getDate() {
-        return this.meetingDate;
+        return meetingDate;
     }
 
     /**
@@ -68,6 +68,6 @@ public abstract class MeetingImpl implements Meeting {
      */
     @Override
     public Set<Contact> getContacts() {
-        return this.meetingContacts;
+        return meetingContacts;
     }
 }

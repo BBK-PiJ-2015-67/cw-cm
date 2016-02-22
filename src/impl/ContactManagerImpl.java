@@ -7,43 +7,34 @@ import java.util.*;
 /**
  * A Contact Manager implementation
  *
- * I've made a few assumptions:
- *
+ * <strong>Assumptions</strong>
  * <ul>
- *     <li><strong>Date/Time:</strong> As per the Java documentation, calling getTime() on a Date/Calendar
- *     object triggers a time update on the object &ndash; I've implemented adding Past/Future Meetings with
+ *     <li><strong>Date/Time:</strong> As per Java docs, calling getTime() on a Date/Calendar
+ *     object triggers a time update &ndash; I've implemented adding Past/Future Meetings with
  *     this in mind.<br>
  *     A side-effect is that calling addFutureMeeting() with a newly instantiated Calendar object
  *     with no specific future time will result in failure as the time elapsed between the method
  *     being called and its execution <em>may</em> mean that the meeting is no longer in the future.</li>
- *     <li><strong>Contact IDs, Meeting IDs:</strong>
- *     If there was a method to remove contacts or meetings from this application
- *     then using the size of the data structures would be a bad idea &ndash; if a contact was removed
- *     from the middle of the set then the ID would be greater than the size of the set, hence we could
- *     provide a non-unique ID which would be invalid.<br>
- *     Contact removal has not been specified however so I have opted to use this to avoid an additional loop.<br>
- *     Ideally we would use a UUID or GUID or some other mechanism but the return type has been specified as
- *     int &ndash; I considered using a hash on the contacts but there is no guarantee a contact would not
- *     have the same name as another contact so hashing the name would not guarantee a unique ID &ndash;
- *     we would require a further identifier to ensure a unique hash</li>
  * </ul>
  *
- * @see spec.ContactManager
+ * @see ContactManager
  *
  * @author lmignot
  */
 public class ContactManagerImpl implements ContactManager {
 
-    private Set<Contact> contacts;
-    private List<Meeting> meetings;
-    private Calendar now;
+    private Set<Contact> cmContacts = null;
+    private List<Meeting> meetings = null;
+    private Calendar cmDate = null;
     private int nextMeetingId;
+    private int nextUserId;
 
     public ContactManagerImpl () {
-        this.contacts = new HashSet<>();
-        this.meetings = new ArrayList<>();
-        this.now = new GregorianCalendar();
-        this.nextMeetingId = 1;
+        cmContacts = new HashSet<>();
+        meetings = new ArrayList<>();
+        cmDate = new GregorianCalendar();
+        nextMeetingId = 1;
+        nextUserId = 1;
     }
 
     /**
@@ -59,19 +50,19 @@ public class ContactManagerImpl implements ContactManager {
         }
 
         // update the internal clock before any date comparison
-        this.now.getTime();
+        cmDate.getTime();
 
-        if (!date.after(this.now)) {
+        if (!date.after(cmDate)) {
             throw new IllegalArgumentException("a future meeting must be set in the future");
         }
-        if (!this.isValidContacts(contacts)) {
+        if (!isValidContacts(contacts)) {
             throw new IllegalArgumentException("one or more of the provided contacts do not exist");
         }
 
-        int id = this.nextMeetingId;
-        this.nextMeetingId++;
+        int id = nextMeetingId;
+        nextMeetingId++;
 
-        this.meetings.add(new FutureMeetingImpl(id, date, contacts));
+        meetings.add(new FutureMeetingImpl(id, date, contacts));
 
         return id;
     }
@@ -82,7 +73,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public PastMeeting getPastMeeting(int id) {
-        Meeting mtg = this.getMeeting(id);
+        Meeting mtg = getMeeting(id);
         if (mtg == null) {
             return null;
         } else {
@@ -100,7 +91,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public FutureMeeting getFutureMeeting(int id) {
-        Meeting mtg = this.getMeeting(id);
+        Meeting mtg = getMeeting(id);
         if (mtg == null) {
             return null;
         } else {
@@ -117,7 +108,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public Meeting getMeeting(int id) {
-        for (Meeting m: this.meetings) {
+        for (Meeting m: meetings) {
             if (m.getId() == id) {
                 return m;
             }
@@ -135,7 +126,7 @@ public class ContactManagerImpl implements ContactManager {
         if (contact == null) {
             throw new NullPointerException("contact should not be null");
         }
-        if (!this.isValidContact(contact)) {
+        if (!isValidContact(contact)) {
             throw new IllegalArgumentException("specified contact does not exist");
         }
 
@@ -144,7 +135,7 @@ public class ContactManagerImpl implements ContactManager {
 
         // Really want to use streams but we haven't had them in class yet so
         // not sure it's permitted
-        for(Meeting m: this.meetings) {
+        for(Meeting m: meetings) {
             if (m.getContacts().contains(contact) && m instanceof FutureMeeting) {
                 uniqueResult.add(m);
             }
@@ -175,7 +166,7 @@ public class ContactManagerImpl implements ContactManager {
         // since the method is "getMeetingListOn" it
         // seems sensible to assume we're talking about
         // a day as opposed to a specific time
-        for(Meeting m: this.meetings) {
+        for(Meeting m : meetings) {
             if (m.getDate().get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
                     m.getDate().get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
                     m.getDate().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)) {
@@ -202,7 +193,7 @@ public class ContactManagerImpl implements ContactManager {
         if (contact == null) {
             throw new NullPointerException("contact should not be null");
         }
-        if (!this.isValidContact(contact)) {
+        if (!isValidContact(contact)) {
             throw new IllegalArgumentException("specified contact does not exist");
         }
 
@@ -211,7 +202,7 @@ public class ContactManagerImpl implements ContactManager {
 
         // Really want to use streams but we haven't had them in class yet so
         // not sure it's permitted
-        for(Meeting m: this.meetings) {
+        for(Meeting m: meetings) {
             if (m.getContacts().contains(contact) && m instanceof PastMeeting) {
                 uniqueResult.add((PastMeeting) m);
             }
@@ -238,22 +229,22 @@ public class ContactManagerImpl implements ContactManager {
         }
 
         // update the internal clock before any date comparison
-        this.now.getTime();
+        cmDate.getTime();
 
-        if (!date.before(this.now)) {
+        if (!date.before(cmDate)) {
             throw new IllegalArgumentException("a past meeting must have occurred in the past");
         }
         if (text.equals("")) {
             throw new IllegalArgumentException("messages should not be empty");
         }
-        if (!this.isValidContacts(contacts)) {
+        if (!isValidContacts(contacts)) {
             throw new IllegalArgumentException("one or more of the provided contacts do not exist");
         }
 
-        int id = this.nextMeetingId;
-        this.nextMeetingId++;
+        int id = nextMeetingId;
+        nextMeetingId++;
 
-        this.meetings.add(new PastMeetingImpl(id, date, contacts, text));
+        meetings.add(new PastMeetingImpl(id, date, contacts, text));
     }
 
     @Override
@@ -274,9 +265,11 @@ public class ContactManagerImpl implements ContactManager {
         if (name.equals("") || notes.equals("")) {
             throw new IllegalArgumentException("A contact must have a name and notes");
         }
-        int id = this.contacts.size() + 1;
+        int id = nextUserId;
 
-        this.contacts.add(new ContactImpl(id, name, notes));
+        cmContacts.add(new ContactImpl(id, name, notes));
+
+        nextUserId++;
 
         return id;
     }
@@ -299,7 +292,7 @@ public class ContactManagerImpl implements ContactManager {
 
         Set<Contact> result = new HashSet<>();
 
-        for(Contact c : this.contacts) {
+        for(Contact c : cmContacts) {
             if (c.getName().equals(name)) {
                 result.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
             }
@@ -319,13 +312,13 @@ public class ContactManagerImpl implements ContactManager {
         if (ids == null) {
             throw new NullPointerException("null argument passed for ids");
         }
-        if (ids.length == 0 || !this.isValidContactIds(ids)) {
+        if (ids.length == 0 || !isValidContactIds(ids)) {
             throw new IllegalArgumentException("one or more of the specified ids does not exist");
         }
 
         Set<Contact> result = new HashSet<>();
 
-        for (Contact c : this.contacts) {
+        for (Contact c : cmContacts) {
             for(int i : ids) {
                 if(c.getId() == i) {
                     result.add(c);
@@ -348,7 +341,8 @@ public class ContactManagerImpl implements ContactManager {
      */
     private boolean isValidContact(Contact contact) {
         boolean result = false;
-        for (Contact c : this.contacts) {
+
+        for (Contact c : cmContacts) {
             if (c.getId() == contact.getId() && c.getName().equals(contact.getName())) {
                 result = true;
                 break;
@@ -371,7 +365,7 @@ public class ContactManagerImpl implements ContactManager {
             return false;
         }
 
-        for (Contact c : this.contacts) {
+        for (Contact c : cmContacts) {
             for (int i : ids) {
                 if (c.getId() == i) {
                     found++;
@@ -392,14 +386,14 @@ public class ContactManagerImpl implements ContactManager {
         if (contacts.isEmpty()) {
             return false;
         }
-        int[] ids = new int[contacts.size()];
-        int i = 0;
-        for (Contact c: contacts) {
-            ids[i] = c.getId();
-            i++;
+        int found = 0;
+        for (Contact contact : contacts) {
+            if (isValidContact(contact)) {
+                found++;
+            }
         }
 
-        return this.isValidContactIds(ids);
+        return found == contacts.size();
     }
 
     /**
@@ -409,7 +403,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     private Set<Contact> cloneContacts() {
         Set<Contact> clone = new HashSet<>();
-        clone.addAll(this.contacts);
+        clone.addAll(cmContacts);
 
         return clone;
     }

@@ -8,13 +8,13 @@ import java.util.List;
 /**
  * Implementation of Contact interface
  *
- * @see Contact;
+ * @see Contact
  * @author lmignot
  */
 public class ContactImpl implements Contact {
 
-    private int id;
-    private String fullName;
+    private final int contactId;
+    private final String contactName;
     private List<String> notes = null;
 
     /**
@@ -36,9 +36,9 @@ public class ContactImpl implements Contact {
             throw new IllegalArgumentException("A contact's name cannot be empty");
         }
 
-        this.initNotes();
-        this.id = id;
-        this.fullName = name;
+        initNotes();
+        contactId = id;
+        contactName = name;
     }
 
     /**
@@ -52,7 +52,7 @@ public class ContactImpl implements Contact {
     public ContactImpl (int id, String name, String notes) {
         this(id, name);
         try {
-            this.addNotes(notes);
+            addNotes(notes);
         } catch(NullPointerException e) {
             throw new NullPointerException(e.getMessage());
         } catch(IllegalArgumentException e) {
@@ -62,26 +62,23 @@ public class ContactImpl implements Contact {
 
     /**
      * Initialises our list of Notes.
-     * Avoid duplicate code in each constructor
      */
     private void initNotes () {
-        if (this.notes == null) { this.notes = new ArrayList<>(); }
+        if (notes == null) { notes = new ArrayList<>(); }
     }
 
     /**
      * @see Contact#getId()
      */
-    @Override
     public int getId() {
-        return this.id;
+        return contactId;
     }
 
     /**
      * @see Contact#getName()
      */
-    @Override
     public String getName() {
-        return this.fullName;
+        return contactName;
     }
 
     /**
@@ -90,7 +87,7 @@ public class ContactImpl implements Contact {
     @Override
     public String getNotes() {
         String result = "";
-        for(String n : this.notes) {
+        for(String n : notes) {
             result += n;
         }
         return result;
@@ -109,6 +106,6 @@ public class ContactImpl implements Contact {
         if (note.equals("")) {
             throw new IllegalArgumentException("Notes cannot be empty");
         }
-        this.notes.add(note);
+        notes.add(note);
     }
 }
