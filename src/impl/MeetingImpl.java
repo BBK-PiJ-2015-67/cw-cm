@@ -3,6 +3,7 @@ package impl;
 import spec.Contact;
 import spec.Meeting;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import java.util.Set;
  *
  * @author lmignot
  */
-public abstract class MeetingImpl implements Meeting {
+public abstract class MeetingImpl implements Meeting, Serializable {
 
     private final Calendar meetingDate;
     private final int meetingId;

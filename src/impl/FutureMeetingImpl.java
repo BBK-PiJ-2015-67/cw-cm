@@ -3,6 +3,7 @@ package impl;
 import spec.Contact;
 import spec.FutureMeeting;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ import java.util.Set;
  *
  * @author lmignot
  */
-public class FutureMeetingImpl extends MeetingImpl implements FutureMeeting {
+public class FutureMeetingImpl extends MeetingImpl implements FutureMeeting, Serializable {
 
     /**
      * @see MeetingImpl

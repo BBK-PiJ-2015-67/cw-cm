@@ -2,6 +2,7 @@ package impl;
 
 import spec.Contact;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @see Contact
  * @author lmignot
  */
-public class ContactImpl implements Contact {
+public class ContactImpl implements Contact, Serializable {
 
     private final int contactId;
     private final String contactName;

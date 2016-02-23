@@ -3,6 +3,7 @@ package impl;
 import spec.Contact;
 import spec.PastMeeting;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.Set;
  *
  * @author lmignot
  */
-public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
+public class PastMeetingImpl extends MeetingImpl implements PastMeeting, Serializable {
 
     private final List<String> meetingNotes;
 
