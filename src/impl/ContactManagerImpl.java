@@ -23,9 +23,9 @@ import java.util.*;
  */
 public class ContactManagerImpl implements ContactManager {
 
-    private Set<Contact> cmContacts = null;
-    private List<Meeting> meetings = null;
-    private Calendar cmDate = null;
+    private final Set<Contact> cmContacts;
+    private final List<Meeting> meetings;
+    private final Calendar cmDate;
     private int nextMeetingId;
     private int nextUserId;
 
@@ -404,7 +404,6 @@ public class ContactManagerImpl implements ContactManager {
     private Set<Contact> cloneContacts() {
         Set<Contact> clone = new HashSet<>();
         clone.addAll(cmContacts);
-
         return clone;
     }
 }

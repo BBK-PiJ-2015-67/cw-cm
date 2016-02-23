@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
 
-    private List<String> meetingNotes = null;
+    private final List<String> meetingNotes;
 
     /**
      * @see MeetingImpl

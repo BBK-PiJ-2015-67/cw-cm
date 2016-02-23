@@ -15,7 +15,7 @@ public class ContactImpl implements Contact {
 
     private final int contactId;
     private final String contactName;
-    private List<String> notes = null;
+    private final List<String> notes;
 
     /**
      * Create a new Contact without notes
@@ -36,7 +36,7 @@ public class ContactImpl implements Contact {
             throw new IllegalArgumentException("A contact's name cannot be empty");
         }
 
-        initNotes();
+        notes = new ArrayList<>();
         contactId = id;
         contactName = name;
     }
@@ -58,13 +58,6 @@ public class ContactImpl implements Contact {
         } catch(IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
-    }
-
-    /**
-     * Initialises our list of Notes.
-     */
-    private void initNotes () {
-        if (notes == null) { notes = new ArrayList<>(); }
     }
 
     /**
