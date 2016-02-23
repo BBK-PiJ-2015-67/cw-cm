@@ -2,6 +2,9 @@ package impl;
 
 import spec.*;
 
+import java.io.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -23,15 +26,16 @@ import java.util.*;
  */
 public class ContactManagerImpl implements ContactManager {
 
+    private static final String FILENAME = "contacts.txt";
     private final Calendar cmDate;
+
     private Set<Contact> cmContacts;
     private List<Meeting> cmMeetings;
     private int nextMeetingId;
     private int nextUserId;
 
     public ContactManagerImpl () {
-        cmContacts = new HashSet<>();
-        meetings = new ArrayList<>();
+        readDataFromFile();
         cmDate = new GregorianCalendar();
         nextMeetingId = 1;
         nextUserId = 1;
@@ -329,9 +333,65 @@ public class ContactManagerImpl implements ContactManager {
         return result;
     }
 
+    /**
+     * @see ContactManager#flush()
+     */
     @Override
     public void flush() {
+        try {
+            Files.deleteIfExists(FileSystems.getDefault().getPath(FILENAME));
+        } catch(IOException ioEx) {
+            ioEx.printStackTrace();
+        }
 
+        try (ObjectOutputStream out = new ObjectOutputStream(
+            new BufferedOutputStream(
+                new FileOutputStream(FILENAME)
+            )
+        )) {
+            out.writeObject(cmContacts);
+            out.writeObject(cmMeetings);
+        } catch (SecurityException secEx) {
+            System.err.println("Insufficient permission to write to destination file.");
+            secEx.printStackTrace();
+        } catch (FileNotFoundException nfEx) {
+            System.err.println("Destination file disappeared...");
+            nfEx.printStackTrace();
+        } catch (IOException ioEx) {
+            ioEx.printStackTrace();
+        }
+    }
+
+    /**
+     * Reads ContactManager from a file if it exists
+     * The file is assumed to be in the same directory as the class
+     * and named "contacts.txt"
+     * If the file does not exist, initialises ContactManager with empty
+     * data structures
+     */
+    private void readDataFromFile() {
+        Set<Contact> tmpContacts = null;
+        List<Meeting> tmpMeetings = null;
+
+        if(Files.exists(FileSystems.getDefault().getPath(FILENAME))) {
+            try (ObjectInputStream in = new ObjectInputStream(
+                new BufferedInputStream(
+                    new FileInputStream(FILENAME)
+                )
+            )) {
+                try {
+                    tmpContacts = (Set<Contact>) in.readObject();
+                    tmpMeetings = (List<Meeting>) in.readObject();
+                } catch (ClassNotFoundException cnfEx) {
+                    cnfEx.printStackTrace();
+                }
+            } catch (IOException ioEx) {
+                ioEx.printStackTrace();
+            }
+        }
+
+        cmContacts = (tmpContacts == null) ? new HashSet<>() : tmpContacts;
+        cmMeetings = (tmpMeetings == null) ? new ArrayList<>() : tmpMeetings;
     }
 
     /**
