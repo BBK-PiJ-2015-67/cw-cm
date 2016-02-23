@@ -10,7 +10,6 @@ import spec.*;
 import java.util.*;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * ContactManager tests
@@ -33,6 +32,9 @@ public class ContactManagerMeetingsTest {
 
     @Before
     public void setUp() {
+        // delete any data file if present before running tests
+        TestUtils.deleteCMDataFile();
+
         cMgr = new ContactManagerImpl();
         cMgrHasContacts = new ContactManagerImpl();
 
@@ -58,6 +60,9 @@ public class ContactManagerMeetingsTest {
 
     @After
     public void tearDown() {
+        // delete any data file if present after running tests
+        TestUtils.deleteCMDataFile();
+
         cMgr = null;
         cMgrHasContacts = null;
         meetingContacts = null;
