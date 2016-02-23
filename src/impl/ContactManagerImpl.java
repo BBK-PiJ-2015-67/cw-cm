@@ -23,9 +23,9 @@ import java.util.*;
  */
 public class ContactManagerImpl implements ContactManager {
 
-    private final Set<Contact> cmContacts;
-    private final List<Meeting> meetings;
     private final Calendar cmDate;
+    private Set<Contact> cmContacts;
+    private List<Meeting> cmMeetings;
     private int nextMeetingId;
     private int nextUserId;
 
@@ -62,7 +62,7 @@ public class ContactManagerImpl implements ContactManager {
         int id = nextMeetingId;
         nextMeetingId++;
 
-        meetings.add(new FutureMeetingImpl(id, date, contacts));
+        cmMeetings.add(new FutureMeetingImpl(id, date, contacts));
 
         return id;
     }
@@ -108,7 +108,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public Meeting getMeeting(int id) {
-        for (Meeting m: meetings) {
+        for (Meeting m: cmMeetings) {
             if (m.getId() == id) {
                 return m;
             }
@@ -135,7 +135,7 @@ public class ContactManagerImpl implements ContactManager {
 
         // Really want to use streams but we haven't had them in class yet so
         // not sure it's permitted
-        for(Meeting m: meetings) {
+        for(Meeting m: cmMeetings) {
             if (m.getContacts().contains(contact) && m instanceof FutureMeeting) {
                 uniqueResult.add(m);
             }
@@ -166,7 +166,7 @@ public class ContactManagerImpl implements ContactManager {
         // since the method is "getMeetingListOn" it
         // seems sensible to assume we're talking about
         // a day as opposed to a specific time
-        for(Meeting m : meetings) {
+        for(Meeting m : cmMeetings) {
             if (m.getDate().get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
                     m.getDate().get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
                     m.getDate().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)) {
@@ -202,7 +202,7 @@ public class ContactManagerImpl implements ContactManager {
 
         // Really want to use streams but we haven't had them in class yet so
         // not sure it's permitted
-        for(Meeting m: meetings) {
+        for(Meeting m: cmMeetings) {
             if (m.getContacts().contains(contact) && m instanceof PastMeeting) {
                 uniqueResult.add((PastMeeting) m);
             }
@@ -244,7 +244,7 @@ public class ContactManagerImpl implements ContactManager {
         int id = nextMeetingId;
         nextMeetingId++;
 
-        meetings.add(new PastMeetingImpl(id, date, contacts, text));
+        cmMeetings.add(new PastMeetingImpl(id, date, contacts, text));
     }
 
     @Override
