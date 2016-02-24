@@ -193,12 +193,14 @@ public class ContactManagerMeetingsTest {
 
     @Test
     public void testAddPastMeetingWithCurrentDate () {
-        cMgrHasContacts.addNewPastMeeting(meetingContacts, now, testMeetingNotes);
+        Calendar currentDate = new GregorianCalendar();
+        currentDate.add(Calendar.MILLISECOND, -5);
+        cMgrHasContacts.addNewPastMeeting(meetingContacts, currentDate, testMeetingNotes);
         PastMeeting pMtg = cMgrHasContacts.getPastMeeting(1);
 
         assertNotNull(pMtg);
         assertEquals(pMtg.getId(), 1);
-        assertEquals(pMtg.getDate(), now);
+        assertEquals(pMtg.getDate(), currentDate);
         assertEquals(pMtg.getNotes(), testMeetingNotes);
     }
 
@@ -488,10 +490,10 @@ public class ContactManagerMeetingsTest {
         futureTime.add(Calendar.MILLISECOND, 1);
         cMgrHasContacts.addFutureMeeting(meetingSet, futureTime);
 
-        // pause for one millisecond to ensure the new Future meeting
+        // pause for 5 milliseconds to ensure the new Future meeting
         // is now in the past
         try {
-            Thread.sleep(1);
+            Thread.sleep(5);
         } catch (InterruptedException iEx) {
             iEx.printStackTrace();
         }
