@@ -474,4 +474,49 @@ public class ContactManagerMeetingsTest {
     public void testGetPastMeetingListForWithInvalidContactShouldThrow () {
         cMgrHasContacts.getPastMeetingListFor(new ContactImpl(99,"Jack Daniels"));
     }
+
+    @Test
+    public void testAddMeetingNotes () {
+        Set<Contact> meetingSet = cMgrHasContacts.getContacts(1,2,3);
+        Calendar futureTime = new GregorianCalendar();
+        futureTime.add(Calendar.MILLISECOND, 1);
+        cMgrHasContacts.addFutureMeeting(meetingSet, futureTime);
+
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException iEx) {
+            iEx.printStackTrace();
+        }
+
+        cMgrHasContacts.addMeetingNotes(1, "Notes");
+
+        assertEquals(cMgrHasContacts.getPastMeeting(1).getNotes(), "Notes");
+    }
+
+    @Test
+    public void testAppendMeetingNotes () {
+        Set<Contact> meetingSet = cMgrHasContacts.getContacts(1,2,3);
+        cMgrHasContacts.addNewPastMeeting(meetingSet, pastDate, "Notes");
+        cMgrHasContacts.addMeetingNotes(1, "Some more notes");
+        cMgrHasContacts.addMeetingNotes(1, "Even more notes");
+
+        assertEquals(cMgrHasContacts.getPastMeeting(1).getNotes(), "Notes" + "Some more notes" + "Even more notes");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddMeetingNotesWithNullNotes () {
+        cMgrHasContacts.addMeetingNotes(1, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddMeetingNotesWithInvalidId () {
+        cMgrHasContacts.addMeetingNotes(99, "Notes");
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testAddMeetingNotesToFutureMeeting () {
+        Set<Contact> meetingSet = cMgrHasContacts.getContacts(1,2,3);
+        cMgrHasContacts.addFutureMeeting(meetingSet, futureDate);
+        cMgrHasContacts.addMeetingNotes(1, "Notes");
+    }
 }
