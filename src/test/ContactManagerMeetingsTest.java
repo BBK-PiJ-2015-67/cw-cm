@@ -500,7 +500,7 @@ public class ContactManagerMeetingsTest {
         cMgrHasContacts.addMeetingNotes(1, "Some more notes");
         cMgrHasContacts.addMeetingNotes(1, "Even more notes");
 
-        assertEquals(cMgrHasContacts.getPastMeeting(1).getNotes(), "Notes" + "Some more notes" + "Even more notes");
+        assertEquals(cMgrHasContacts.getPastMeeting(1).getNotes(), "Notes\nSome more notes\nEven more notes");
     }
 
     @Test(expected = NullPointerException.class)
