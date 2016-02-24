@@ -4,9 +4,7 @@ import spec.Contact;
 import spec.PastMeeting;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,7 +18,7 @@ import java.util.Set;
  */
 public class PastMeetingImpl extends MeetingImpl implements PastMeeting, Serializable {
 
-    private final List<String> meetingNotes;
+    private String meetingNotes;
 
     /**
      * @see MeetingImpl
@@ -34,8 +32,7 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting, Seriali
         if(notes == null) {
             throw new NullPointerException("null passed as argument to notes");
         }
-        meetingNotes = new ArrayList<>();
-        meetingNotes.add(notes);
+        meetingNotes = notes;
     }
 
     /**
@@ -43,11 +40,6 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting, Seriali
      */
     @Override
     public String getNotes() {
-        String result = "";
-
-        for(String s : meetingNotes) {
-            result += s;
-        }
-        return result;
+        return meetingNotes;
     }
 }
