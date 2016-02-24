@@ -4,7 +4,6 @@ import impl.ContactImpl;
 import impl.ContactManagerImpl;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import spec.*;
 
@@ -192,17 +191,22 @@ public class ContactManagerMeetingsTest {
         assertEquals(pMtg.getNotes(),testMeetingNotes);
     }
 
+    @Test
+    public void testAddPastMeetingWithCurrentDate () {
+        cMgrHasContacts.addNewPastMeeting(meetingContacts, now, testMeetingNotes);
+        PastMeeting pMtg = cMgrHasContacts.getPastMeeting(1);
+
+        assertNotNull(pMtg);
+        assertEquals(pMtg.getId(), 1);
+        assertEquals(pMtg.getDate(), now);
+        assertEquals(pMtg.getNotes(), testMeetingNotes);
+    }
+
     @Test(expected = IllegalStateException.class)
     public void testGetPastMeetingWithFutureMeetingId () {
         int id = cMgrHasContacts.addFutureMeeting(meetingContacts, futureDate);
 
         cMgrHasContacts.getPastMeeting(id);
-    }
-
-    @Ignore("Need to clarify application behaviour regarding time.")
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddPastMeetingWithCurrentDate () {
-        cMgrHasContacts.addNewPastMeeting(meetingContacts, now, testMeetingNotes);
     }
 
     @Test(expected = IllegalArgumentException.class)
