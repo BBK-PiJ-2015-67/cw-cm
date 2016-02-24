@@ -29,7 +29,7 @@ public class ContactManagerTest {
     @Before
     public void setUp() {
         // delete any data file if present before running tests
-        TestUtils.deleteCMDataFile();
+        TestUtils.deleteDataFile();
 
         cMgr = new ContactManagerImpl();
     }
@@ -37,7 +37,7 @@ public class ContactManagerTest {
     @After
     public void tearDown() {
         // delete any data file if present after running tests
-        TestUtils.deleteCMDataFile();
+        TestUtils.deleteDataFile();
         cMgr = null;
     }
 

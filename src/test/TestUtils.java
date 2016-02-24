@@ -13,7 +13,13 @@ public class TestUtils {
 
     private static final String FILENAME = "contacts.txt";
 
-    public static void deleteCMDataFile () {
+    /**
+     * Deletes the ContactManager data file<br>
+     * The file is assumed to be named "contacts.txt"
+     *
+     * 
+     */
+    public static void deleteDataFile() {
         try {
             Path p = FileSystems.getDefault().getPath(FILENAME);
             if (Files.exists(p)) {

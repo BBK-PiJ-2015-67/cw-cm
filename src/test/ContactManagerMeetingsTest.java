@@ -33,7 +33,7 @@ public class ContactManagerMeetingsTest {
     @Before
     public void setUp() {
         // delete any data file if present before running tests
-        TestUtils.deleteCMDataFile();
+        TestUtils.deleteDataFile();
 
         cMgr = new ContactManagerImpl();
         cMgrHasContacts = new ContactManagerImpl();
@@ -61,7 +61,7 @@ public class ContactManagerMeetingsTest {
     @After
     public void tearDown() {
         // delete any data file if present after running tests
-        TestUtils.deleteCMDataFile();
+        TestUtils.deleteDataFile();
 
         cMgr = null;
         cMgrHasContacts = null;
@@ -488,14 +488,15 @@ public class ContactManagerMeetingsTest {
         futureTime.add(Calendar.MILLISECOND, 1);
         cMgrHasContacts.addFutureMeeting(meetingSet, futureTime);
 
+        // pause for one millisecond to ensure the new Future meeting
+        // is now in the past
         try {
-            Thread.sleep(5);
+            Thread.sleep(1);
         } catch (InterruptedException iEx) {
             iEx.printStackTrace();
         }
 
         cMgrHasContacts.addMeetingNotes(1, "Notes");
-
         assertEquals(cMgrHasContacts.getPastMeeting(1).getNotes(), "Notes");
     }
 

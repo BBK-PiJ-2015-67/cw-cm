@@ -40,8 +40,8 @@ public class ContactManagerImpl implements ContactManager {
 
     private Set<Contact> cmContacts;
     private List<Meeting> cmMeetings;
-    private int nextMeetingId;
-    private int nextUserId;
+    private int nextMeetingId = 1;
+    private int nextUserId = 1;
 
     // TODO ideas:
     // 1. split meetings into 2 lists
@@ -51,8 +51,6 @@ public class ContactManagerImpl implements ContactManager {
     public ContactManagerImpl () {
         readDataFromFile();
         cmDate = new GregorianCalendar();
-        nextMeetingId = 1;
-        nextUserId = 1;
     }
 
     /**
@@ -78,10 +76,8 @@ public class ContactManagerImpl implements ContactManager {
         }
 
         int id = nextMeetingId;
-        nextMeetingId++;
-
         cmMeetings.add(new FutureMeetingImpl(id, date, contacts));
-
+        nextMeetingId++;
         return id;
     }
 
@@ -260,9 +256,8 @@ public class ContactManagerImpl implements ContactManager {
         }
 
         int id = nextMeetingId;
-        nextMeetingId++;
-
         cmMeetings.add(new PastMeetingImpl(id, date, contacts, text));
+        nextMeetingId++;
     }
 
     /**
@@ -307,11 +302,8 @@ public class ContactManagerImpl implements ContactManager {
             throw new IllegalArgumentException("A contact must have a name and notes");
         }
         int id = nextUserId;
-
         cmContacts.add(new ContactImpl(id, name, notes));
-
         nextUserId++;
-
         return id;
     }
 
