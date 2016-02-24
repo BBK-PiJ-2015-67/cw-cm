@@ -10,14 +10,23 @@ import java.util.*;
 /**
  * A Contact Manager implementation
  *
- * <strong>Assumptions</strong>
+ * <h3>Assumptions</h3>
  * <ul>
- *     <li><strong>Date/Time:</strong> As per Java docs, calling getTime() on a Date/Calendar
- *     object triggers a time update &ndash; I've implemented adding Past/Future Meetings with
- *     this in mind.<br>
- *     A side-effect is that calling addFutureMeeting() with a newly instantiated Calendar object
- *     with no specific future time will result in failure as the time elapsed between the method
- *     being called and its execution <em>may</em> mean that the meeting is no longer in the future.</li>
+ *     <li>
+ *     <strong>Date/Time:</strong> I've opted to update the application's internal calendar object
+ *     whenever a date comparison is needed. eg. {@code addFutureMeeting()}, {@code addNewPastMeeting()},
+ *     {@code addMeetingNotes()}
+ *     This will only affect edge cases but it is worth noting.
+ *     <br>
+ *     For example, calling {@code addNewPastMeeting()} with a newly instantiated Calendar object
+ *     set to "now" will succeed as the time (micro/nano seconds) elapsed between the method
+ *     being called and its execution will mean that the meeting is now in the past.
+ *     </li>
+ *     <li>
+ *     <strong>Meeting/Contact IDs:</strong> The CM is limited to 2^31 - 1 meetings/contacts
+ *     due to the spec calling for int as the ID type.
+ *     Ideally should be a UUID &ndash; or really let the database handle it.
+ *     </li>
  * </ul>
  *
  * @see ContactManager
@@ -36,7 +45,7 @@ public class ContactManagerImpl implements ContactManager {
 
     // TODO ideas:
     // 1. split meetings into 2 lists
-    // 2. store nextUserId and nextMeetingId in file so they can be restored
+    // 2. retrieve meetingId/userId from max current id
     // 3. USE STREAMS!!!
 
     public ContactManagerImpl () {
@@ -391,9 +400,9 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     /**
-     * Reads ContactManager from a file if it exists
+     * Reads ContactManager data from a file if it exists.<br>
      * The file is assumed to be in the same directory as the class
-     * and named "contacts.txt"
+     * and named {@code contacts.txt}<br>
      * If the file does not exist, initialises ContactManager with empty
      * data structures
      */
