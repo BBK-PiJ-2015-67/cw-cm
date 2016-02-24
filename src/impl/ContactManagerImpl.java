@@ -34,6 +34,11 @@ public class ContactManagerImpl implements ContactManager {
     private int nextMeetingId;
     private int nextUserId;
 
+    // TODO ideas:
+    // 1. split meetings into 2 lists
+    // 2. store nextUserId and nextMeetingId in file so they can be restored
+    // 3. USE STREAMS!!!
+
     public ContactManagerImpl () {
         readDataFromFile();
         cmDate = new GregorianCalendar();
