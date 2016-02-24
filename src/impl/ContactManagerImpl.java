@@ -27,7 +27,7 @@ import java.util.*;
 public class ContactManagerImpl implements ContactManager {
 
     private static final String FILENAME = "contacts.txt";
-    private final Calendar cmDate;
+    private Calendar cmDate;
 
     private Set<Contact> cmContacts;
     private List<Meeting> cmMeetings;
@@ -54,7 +54,7 @@ public class ContactManagerImpl implements ContactManager {
         }
 
         // update the internal clock before any date comparison
-        cmDate.getTime();
+        cmDate = new GregorianCalendar();
 
         if (!date.after(cmDate)) {
             throw new IllegalArgumentException("a future meeting must be set in the future");
@@ -233,7 +233,7 @@ public class ContactManagerImpl implements ContactManager {
         }
 
         // update the internal clock before any date comparison
-        cmDate.getTime();
+        cmDate = new GregorianCalendar();
 
         if (!date.before(cmDate)) {
             throw new IllegalArgumentException("a past meeting must have occurred in the past");
@@ -251,9 +251,32 @@ public class ContactManagerImpl implements ContactManager {
         cmMeetings.add(new PastMeetingImpl(id, date, contacts, text));
     }
 
+    /**
+     * @see ContactManager#addMeetingNotes(int, String)
+     * @throws IllegalArgumentException if the meeting does not exist
+     * @throws IllegalStateException if the meeting is set for a date in the future
+     * @throws NullPointerException if the notes are null
+     */
     @Override
     public void addMeetingNotes(int id, String text) {
+        if (text == null) throw new NullPointerException("Notes cannot be null");
 
+        // update the internal clock before any date comparison
+        cmDate = new GregorianCalendar();
+
+        Meeting mtg = getMeeting(id);
+        if (mtg == null) throw new IllegalArgumentException("Meeting does not exist");
+        if (mtg.getDate().compareTo(cmDate) > 0) throw new IllegalStateException("Meeting is a future meeting");
+
+        String newNotes = null;
+        if (mtg instanceof PastMeeting && !((PastMeeting) mtg).getNotes().equals("")) {
+            newNotes = ((PastMeeting) mtg).getNotes() + "\n" + text;
+        }
+        newNotes = (newNotes == null) ? text : newNotes;
+
+        PastMeeting newMeeting = new PastMeetingImpl(id, mtg.getDate(), mtg.getContacts(), newNotes);
+        cmMeetings.remove(mtg);
+        cmMeetings.add(newMeeting);
     }
 
     /**
