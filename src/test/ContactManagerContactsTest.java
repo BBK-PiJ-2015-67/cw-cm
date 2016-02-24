@@ -7,7 +7,6 @@ import org.junit.Test;
 import spec.Contact;
 import spec.ContactManager;
 
-import java.util.Calendar;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -23,13 +22,6 @@ public class ContactManagerContactsTest {
 
     private ContactManager cMgr;
     private ContactManager cMgrHasContacts;
-    private Set<Contact> meetingContacts;
-
-    private Calendar futureDate;
-    private Calendar pastDate;
-    private Calendar now;
-
-    private String testMeetingNotes;
 
     @Before
     public void setUp() {
@@ -170,7 +162,6 @@ public class ContactManagerContactsTest {
 
         boolean testPassed = false;
         for(Contact c : testContacts) {
-            System.out.println(c.getId() + ": " + c.getName());
             if (c.getName().equals("Aaron Kamen") ||
                     c.getName().equals("Xenia Garand") ||
                     c.getName().equals("Sherlene Westrich")) {
