@@ -24,111 +24,126 @@ import static org.junit.Assert.assertNotNull;
  */
 public class PastMeetingTest {
 
-    private Meeting mtg;
-    private int id = 99;
+    private static final int CONTACT_1_ID = 1;
+    private static final int CONTACT_2_ID = 2;
+    private static final int CONTACT_3_ID = 3;
+    private static final int CONTACT_4_ID = 4;
+    private static final String CONTACT_1_NAME = "James Spader";
+    private static final String CONTACT_2_NAME = "Quentin Tarantino";
+    private static final String CONTACT_3_NAME = "Kevin Spacey";
+    private static final String CONTACT_4_NAME = "Christopher Nolan";
+
+    private static final int EXPECTED_CONTACT_SET_SIZE = 4;
+
+    private static final int YEAR = 2007;
+    private static final int MONTH = 8;
+    private static final int DAY = 2;
+    private static final int MEETING_ID = 458;
+    private static final int MEETING_ID_NEG = -2;
+    private static final int MEETING_ID_ZERO = 0;
+
+    private static final String MEETING_NOTES = "Notes";
+
+    private static final String NULL_NOTES = null;
+    private static final Calendar NULL_CAL = null;
+    private static final Set<Contact> NULL_CONTACTS = null;
+    private static final Set<Contact> EMPTY_CONTACTS = new HashSet<>();
+
+    private Meeting meeting;
     private Set<Contact> meetingContacts;
-    private Calendar date;
-    private String mtgNotes;
+    private Calendar meetingDate;
 
     @Before
     public void setUp () {
-        mtgNotes = "1. We've decided to create a movie starring James and Susan.\n" +
-                "2. Quentin has agreed to direct this movie.\n" +
-                "3. The movie is to commence filming in the 2nd half of next year.";
+        meetingDate = new GregorianCalendar(YEAR, MONTH, DAY);
         meetingContacts = new HashSet<>();
-        date = new GregorianCalendar(2015, 11, 12, 9, 30, 0);
 
-        meetingContacts.add(new ContactImpl(2, "James Spader"));
-        meetingContacts.add(new ContactImpl(98, "Susan Sarandon"));
-        meetingContacts.add(new ContactImpl(289, "Quentin Tarantino"));
-        
-        mtg = new PastMeetingImpl(id, date, meetingContacts, mtgNotes);
+        meetingContacts.add(new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME));
+        meetingContacts.add(new ContactImpl(CONTACT_2_ID, CONTACT_2_NAME));
+        meetingContacts.add(new ContactImpl(CONTACT_3_ID, CONTACT_3_NAME));
+        meetingContacts.add(new ContactImpl(CONTACT_4_ID, CONTACT_4_NAME));
     }
     
     @After
     public void tearDown () {
+        meeting = null;
         meetingContacts = null;
-        mtg = null;
-        date = null;
+        meetingDate = null;
     }
 
     @Test
     public void createAPastMeeting() {
-        Meeting mMtg = new PastMeetingImpl(99,
-                new GregorianCalendar(2015, 11, 12, 9, 30, 0), 
-                meetingContacts, "Some notes about this other meeting.");
+        Meeting mMtg = new PastMeetingImpl(MEETING_ID, meetingDate, meetingContacts, MEETING_NOTES);
 
         assertNotNull(mMtg);
-        assertEquals(mMtg.getId(),99);
-        assertEquals(mMtg.getDate(),new GregorianCalendar(2015, 11, 12, 9, 30, 0));
-        assertEquals(mMtg.getContacts().size(),3);
+        assertEquals(mMtg.getId(), MEETING_ID);
+        assertEquals(mMtg.getDate(), meetingDate);
         assertEquals(mMtg.getContacts(),meetingContacts);
+        assertEquals(mMtg.getContacts().size(), EXPECTED_CONTACT_SET_SIZE);
         assertNotNull(((PastMeeting) mMtg).getNotes());
-        assertEquals(((PastMeeting) mMtg).getNotes(),"Some notes about this other meeting.");
+        assertEquals(((PastMeeting) mMtg).getNotes(), MEETING_NOTES);
     }
 
     @Test
     public void createAPastMeetingOfTypePastMeeting() {
-        PastMeeting pMtg = new PastMeetingImpl(99,
-                new GregorianCalendar(2015, 11, 12, 9, 30, 0),
-                meetingContacts, "");
+        PastMeeting pMtg = new PastMeetingImpl(MEETING_ID, meetingDate, meetingContacts, MEETING_NOTES);
 
         assertNotNull(pMtg);
-        assertEquals(pMtg.getId(),99);
-        assertEquals(pMtg.getDate(),new GregorianCalendar(2015, 11, 12, 9, 30, 0));
-        assertEquals(pMtg.getContacts().size(),3);
+        assertEquals(pMtg.getId(), MEETING_ID);
+        assertEquals(pMtg.getDate(), meetingDate);
+        assertEquals(pMtg.getContacts().size(), EXPECTED_CONTACT_SET_SIZE);
         assertEquals(pMtg.getContacts(),meetingContacts);
         assertNotNull(pMtg.getNotes());
-        assertEquals(pMtg.getNotes(),"");
+        assertEquals(pMtg.getNotes(), MEETING_NOTES);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void negativeIdShouldThrow () {
-        mtg = new PastMeetingImpl(-2, date, meetingContacts, "Notes");
+        meeting = new PastMeetingImpl(MEETING_ID_NEG, meetingDate, meetingContacts, MEETING_NOTES);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void zeroIdShouldThrow () {
-        mtg = new PastMeetingImpl(0, date, meetingContacts, "Notes");
+        meeting = new PastMeetingImpl(MEETING_ID_ZERO, meetingDate, meetingContacts, MEETING_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullDateShouldThrow () {
-        mtg = new PastMeetingImpl(id, null, meetingContacts, "Notes");
+        meeting = new PastMeetingImpl(MEETING_ID, NULL_CAL, meetingContacts, MEETING_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullContactsShouldThrow () {
-        mtg = new PastMeetingImpl(id, date, null, "Notes");
+        meeting = new PastMeetingImpl(MEETING_ID, meetingDate, NULL_CONTACTS, MEETING_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullContactsAndDateShouldThrow () {
-        mtg = new PastMeetingImpl(id, null, null, "Notes");
+        meeting = new PastMeetingImpl(MEETING_ID, NULL_CAL, NULL_CONTACTS, MEETING_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullNotesShouldThrow () {
-        mtg = new PastMeetingImpl(id, date, meetingContacts, null);
+        meeting = new PastMeetingImpl(MEETING_ID, meetingDate, meetingContacts, NULL_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullNotesAndDateShouldThrow () {
-        mtg = new PastMeetingImpl(id, null, meetingContacts, null);
+        meeting = new PastMeetingImpl(MEETING_ID, NULL_CAL, meetingContacts, NULL_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullNotesAndContactsShouldThrow () {
-        mtg = new PastMeetingImpl(id, date, null, null);
+        meeting = new PastMeetingImpl(MEETING_ID, meetingDate, NULL_CONTACTS, NULL_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullContactsAndDateAndNotesShouldThrow () {
-        mtg = new PastMeetingImpl(id, null, null, null);
+        meeting = new PastMeetingImpl(MEETING_ID, NULL_CAL, NULL_CONTACTS, NULL_NOTES);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void emptyContactsShouldThrow () {
-        mtg = new PastMeetingImpl(id, date, new HashSet<>(), "Notes");
+        meeting = new PastMeetingImpl(MEETING_ID, meetingDate, EMPTY_CONTACTS, MEETING_NOTES);
     }
 }

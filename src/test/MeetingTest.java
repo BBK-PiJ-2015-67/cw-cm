@@ -38,7 +38,6 @@ public class MeetingTest {
     private static final int MEETING_ID = 23;
     private static final int MEETING_ID_NEG = -98;
     private static final int MEETING_ID_ZERO = 0;
-    private static final int EXPECTED_CONTACT_SET_SIZE = 4;
 
     // for error checking
     private static final Calendar NULL_CAL = null;
