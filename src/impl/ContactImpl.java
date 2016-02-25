@@ -5,6 +5,7 @@ import spec.Contact;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of Contact interface
@@ -80,11 +81,8 @@ public class ContactImpl implements Contact, Serializable {
      */
     @Override
     public String getNotes() {
-        String result = "";
-        for(String n : notes) {
-            result += n;
-        }
-        return result;
+        // my first use of Java streams! :)
+        return notes.stream().collect(Collectors.joining("\n"));
     }
 
     /**
