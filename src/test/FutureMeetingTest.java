@@ -32,10 +32,10 @@ public class FutureMeetingTest {
     private static final int CONTACT_2_ID = 2;
     private static final int CONTACT_3_ID = 3;
     private static final int CONTACT_4_ID = 4;
-    private static final String CONTACT_1_NAME = "Han Solo";
-    private static final String CONTACT_2_NAME = "Luke Skywalker";
-    private static final String CONTACT_3_NAME = "Princess Leia";
-    private static final String CONTACT_4_NAME = "Darth Vader";
+    private static final String CONTACT_1_NAME = "Wade Wilson";
+    private static final String CONTACT_2_NAME = "Peter Quill";
+    private static final String CONTACT_3_NAME = "Jessica Jones";
+    private static final String CONTACT_4_NAME = "Bruce Wayne";
 
     private static final int EXPECTED_CONTACT_SET_SIZE = 4;
 
