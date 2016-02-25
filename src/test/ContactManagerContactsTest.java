@@ -20,27 +20,54 @@ import static org.junit.Assert.*;
  */
 public class ContactManagerContactsTest {
 
-    private ContactManager cMgr;
-    private ContactManager cMgrHasContacts;
+    // some data to work with
+    private static final String CONTACT_1_NAME = "Han Solo";
+    private static final String CONTACT_1_NOTES = "Shoots first.";
+    private static final int CONTACT_1_ID = 1;
+
+    private static final String CONTACT_2_NAME = "Luke Skywalker";
+    private static final String CONTACT_2_NOTES = "Daddy Issues. Short-handed.";
+    private static final int CONTACT_2_ID = 2;
+
+    private static final String CONTACT_3_NAME = "Princess Leia";
+    private static final String CONTACT_3_NAME_WHITESPACE = "Princess  Leia";
+    private static final String CONTACT_3_NAME_PREFIX = " Princess Leia";
+    private static final String CONTACT_3_NAME_SUFFIX = "Princess Leia ";
+    private static final String CONTACT_3_NOTES = "Hair needs help.";
+    private static final int CONTACT_3_ID = 3;
+
+    private static final String CONTACT_4_NAME = "Darth Vader";
+    private static final String CONTACT_4_NOTES = "Short-handed redux.";
+    private static final int CONTACT_4_ID = 4;
+
+    private static final int EXPECTED_CONTACT_SET_SIZE = 4;
+
+    // for error checking
+    private static final String NON_EXISTENT_CONTACT_NAME = "Obi Wan Kenobi";
+    private static final String EMPTY_STRING = "";
+    private static final String NULL_STRING = null;
+    private static final int[] NULL_ARRAY = null;
+    private static final int EMPTY_SIZE = 0;
+    private static final int ILLEGAL_ID_1 = 6;
+    private static final int ILLEGAL_ID_2 = 90;
+    private static final int ILLEGAL_ID_3 = 43;
+    private static final int ILLEGAL_ID_4 = 987;
+
+    private ContactManager emptyContactManager;
+    private ContactManager contactManagerWithContacts;
 
     @Before
     public void setUp() {
         // delete any data file if present before running tests
         TestUtils.deleteDataFile();
 
-        cMgr = new ContactManagerImpl();
-        cMgrHasContacts = new ContactManagerImpl();
+        emptyContactManager = new ContactManagerImpl();
+        contactManagerWithContacts = new ContactManagerImpl();
 
-        cMgrHasContacts.addNewContact("Aaron Kamen", "Come in... get it?");
-        cMgrHasContacts.addNewContact("Xenia Garand", "This one's xenophobic");
-        cMgrHasContacts.addNewContact("Sherlene Westrich", "From the west");
-        cMgrHasContacts.addNewContact("Emmaline Cupit", "Cupid's daughter");
-        cMgrHasContacts.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
-        cMgrHasContacts.addNewContact("Ellis Pollak", "Probably a genius come to think of it");
-        cMgrHasContacts.addNewContact("Carrol Sin", "Christmas is his favourite time");
-        cMgrHasContacts.addNewContact("Norman Wiedemann", "AKA the weed slayer");
-        cMgrHasContacts.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
-        cMgrHasContacts.addNewContact("Errol Flynn", "The ultimate swashbuckler");
+        contactManagerWithContacts.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
+        contactManagerWithContacts.addNewContact(CONTACT_2_NAME, CONTACT_2_NOTES);
+        contactManagerWithContacts.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
+        contactManagerWithContacts.addNewContact(CONTACT_4_NAME, CONTACT_4_NOTES);
     }
 
     @After
@@ -48,80 +75,66 @@ public class ContactManagerContactsTest {
         // delete any data file if present after running tests
         TestUtils.deleteDataFile();
 
-        cMgr = null;
-        cMgrHasContacts = null;
+        emptyContactManager = null;
+        contactManagerWithContacts = null;
     }
 
     /* =================== CONTACTS =================== */
 
     @Test
-    public void testAddContactsToCM () {
-        cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
-        cMgr.addNewContact("Sherlene Westrich", "From the west");
-        cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
-        cMgr.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
-        cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
-        cMgr.addNewContact("Ellis Pollak", "Probably a genius come to think of it");
-        cMgr.addNewContact("Carrol Sin", "Christmas is his favourite time");
-        cMgr.addNewContact("Norman Wiedemann", "AKA the weed slayer");
-        cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
-        cMgr.addNewContact("Errol Flynn", "The ultimate swashbuckler");
+    public void testAddContactsToEmptyCM () {
+        emptyContactManager.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
+        emptyContactManager.addNewContact(CONTACT_2_NAME, CONTACT_2_NOTES);
+        emptyContactManager.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
+        emptyContactManager.addNewContact(CONTACT_4_NAME, CONTACT_4_NOTES);
 
-        assertFalse(cMgr.getContacts("").isEmpty());
-        assertNotNull(cMgr.getContacts(""));
-        assertEquals(cMgr.getContacts("").size(),10);
+        assertNotNull(emptyContactManager.getContacts(EMPTY_STRING));
+        assertFalse(emptyContactManager.getContacts(EMPTY_STRING).isEmpty());
+        assertEquals(emptyContactManager.getContacts(EMPTY_STRING).size(), EXPECTED_CONTACT_SET_SIZE);
     }
 
     @Test
     public void testThatNewCMHasEmptyContacts () {
-        assertTrue(cMgr.getContacts("").isEmpty());
-        assertNotNull(cMgr.getContacts(""));
-        assertEquals(cMgr.getContacts("").size(),0);
+        assertNotNull(emptyContactManager.getContacts(EMPTY_STRING));
+        assertTrue(emptyContactManager.getContacts(EMPTY_STRING).isEmpty());
+        assertEquals(emptyContactManager.getContacts(EMPTY_STRING).size(), EMPTY_SIZE);
     }
 
     @Test
-    public void testGetSpecificContactsFromCM () {
-        int a = cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
-        int b = cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
-        int c = cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
-        int d = cMgr.addNewContact("Sherlene Westrich", "From the west");
-        int e = cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
-        int f = cMgr.addNewContact("Kendra Kinghorn", "Said to hold the secret to the legendary horn");
-        int g = cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
-        int h = cMgr.addNewContact("Ellis Pollak", "Probably a genius come to think of it");
-        int i = cMgr.addNewContact("Carrol Sin", "Christmas is his favourite time");
-        int j = cMgr.addNewContact("Norman Wiedemann", "AKA the weed slayer");
-        int k = cMgr.addNewContact("Efren Apodaca", "There's a pharmacist in his future...");
-        int l = cMgr.addNewContact("Errol Flynn", "The ultimate swashbuckler");
+    public void testGetSpecificContactsByNameFromCM () {
+        int dupContact1Id = emptyContactManager.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
+        int dupContact2Id = emptyContactManager.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
+        int dupContact3Id = emptyContactManager.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
 
-        Set<Contact> testContacts = cMgr.getContacts("Aaron Kamen");
+        Set<Contact> testContacts = emptyContactManager.getContacts(CONTACT_1_NAME);
 
-        assertFalse(testContacts.isEmpty());
         assertNotNull(testContacts);
-        assertEquals(testContacts.size(),3);
+        assertFalse(testContacts.isEmpty());
+        assertEquals(testContacts.size(), 3);
 
-        assertNotEquals(a, b);
-        assertNotEquals(a, g);
-        assertNotEquals(b, g);
+        assertNotEquals(dupContact1Id, dupContact2Id);
+        assertNotEquals(dupContact1Id, dupContact3Id);
+        assertNotEquals(dupContact2Id, dupContact3Id);
     }
 
     @Test
     public void testGetContactsByNameDoesNotIgnoreWhitespace () {
-        cMgr.addNewContact("Sherlene Westrich", "From the west");
-        // This one below has an extra space at the end
-        cMgr.addNewContact("Sherlene Westrich ", "From the west");
-        cMgr.addNewContact("Sherlene Westrich", "From the west");
+        emptyContactManager.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
+        emptyContactManager.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
+        emptyContactManager.addNewContact(CONTACT_3_NAME_WHITESPACE, CONTACT_3_NOTES);
+        emptyContactManager.addNewContact(CONTACT_3_NAME_PREFIX, CONTACT_3_NOTES);
+        emptyContactManager.addNewContact(CONTACT_3_NAME_SUFFIX, CONTACT_3_NOTES);
 
-        Set<Contact> testContacts = cMgr.getContacts("Sherlene Westrich");
+        Set<Contact> testContacts = emptyContactManager.getContacts(CONTACT_3_NAME);
 
-        assertFalse(testContacts.isEmpty());
         assertNotNull(testContacts);
-        assertEquals(testContacts.size(),2);
+        assertFalse(testContacts.isEmpty());
+        assertEquals(testContacts.size(), 2);
     }
 
     @Test
     public void testGetContactsStringWhenCMHasNoContacts () {
-        Set<Contact> testContacts = cMgr.getContacts("Floyd Drager");
+        Set<Contact> testContacts = emptyContactManager.getContacts(CONTACT_1_NAME);
 
         assertTrue(testContacts.isEmpty());
         assertEquals(testContacts.size(),0);
@@ -129,103 +142,116 @@ public class ContactManagerContactsTest {
 
     @Test
     public void testGetContactsStringWithNonExistentContact () {
-        Set<Contact> testContacts = cMgrHasContacts.getContacts("John Doe");
+        Set<Contact> testContacts = contactManagerWithContacts.getContacts(NON_EXISTENT_CONTACT_NAME);
 
         assertTrue(testContacts.isEmpty());
-        assertEquals(testContacts.size(),0);
+        assertEquals(testContacts.size(), EMPTY_SIZE);
     }
 
     @Test
     public void testGetContactsByIds () {
-        Set<Contact> testContacts = cMgrHasContacts.getContacts(1, 2, 3);
+        Set<Contact> testContacts = contactManagerWithContacts.getContacts(
+                CONTACT_1_ID,
+                CONTACT_2_ID,
+                CONTACT_3_ID,
+                CONTACT_4_ID
+        );
 
         assertNotNull(testContacts);
-        assertEquals(testContacts.size(),3);
+        assertEquals(testContacts.size(), EXPECTED_CONTACT_SET_SIZE);
 
         boolean testPassed = false;
         for(Contact c : testContacts) {
-            if (c.getName().equals("Aaron Kamen") ||
-                    c.getName().equals("Xenia Garand") ||
-                    c.getName().equals("Sherlene Westrich")) {
-                testPassed = true;
-            }
+            testPassed = (c.getName().equals(CONTACT_1_NAME) ||
+                          c.getName().equals(CONTACT_2_NAME) ||
+                          c.getName().equals(CONTACT_3_NAME) ||
+                          c.getName().equals(CONTACT_4_NAME));
         }
         assertTrue(testPassed);
     }
 
     @Test
     public void testGetContactsByIdsWithDuplicates () {
-        Set<Contact> testContacts = cMgrHasContacts.getContacts(1, 2, 3, 1);
+        Set<Contact> testContacts = contactManagerWithContacts.getContacts(
+            CONTACT_1_ID,
+            CONTACT_2_ID,
+            CONTACT_3_ID,
+            CONTACT_4_ID,
+            CONTACT_3_ID,
+            CONTACT_1_ID
+        );
 
         assertNotNull(testContacts);
-        assertEquals(testContacts.size(),3);
+        assertEquals(testContacts.size(), EXPECTED_CONTACT_SET_SIZE);
 
         boolean testPassed = false;
         for(Contact c : testContacts) {
-            if (c.getName().equals("Aaron Kamen") ||
-                    c.getName().equals("Xenia Garand") ||
-                    c.getName().equals("Sherlene Westrich")) {
-                testPassed = true;
-            }
+            testPassed = (c.getName().equals(CONTACT_1_NAME) ||
+                          c.getName().equals(CONTACT_2_NAME) ||
+                          c.getName().equals(CONTACT_3_NAME) ||
+                          c.getName().equals(CONTACT_4_NAME));
         }
         assertTrue(testPassed);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetContactsIdsWithInvalidIds () {
-        cMgr.addNewContact("Aaron Kamen", "Come in... get it?");
-        cMgr.addNewContact("Xenia Garand", "This one's xenophobic");
-        cMgr.addNewContact("Sherlene Westrich", "From the west");
-        cMgr.addNewContact("Emmaline Cupit", "Cupid's daughter");
-
-        cMgr.getContacts(2, 9, 23, 1, 3);
+        contactManagerWithContacts.getContacts(
+            ILLEGAL_ID_1,
+            ILLEGAL_ID_2,
+            ILLEGAL_ID_3,
+            ILLEGAL_ID_4
+        );
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetContactsIdsWithNull () {
-        int[] l = null;
-        cMgr.getContacts(l);
+        emptyContactManager.getContacts(NULL_ARRAY);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetContactsIdsWhenCMHasNoContacts () {
-        cMgr.getContacts(2, 9, 23, 1, 3);
+        emptyContactManager.getContacts(
+            CONTACT_1_ID,
+            CONTACT_2_ID,
+            CONTACT_3_ID,
+            CONTACT_4_ID
+        );
     }
 
     @Test(expected = NullPointerException.class)
-    public void testGetContactsStringWithNull () {
-        String s = null;
-        cMgr.getContacts(s);
+    public void testGetContactsByNameWithNull () {
+        emptyContactManager.getContacts(NULL_STRING);
     }
 
     @Test(expected = NullPointerException.class)
     public void testAddContactsWithNullName () {
-        cMgr.addNewContact(null, "This one's xenophobic");
+        emptyContactManager.addNewContact(NULL_STRING, CONTACT_1_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
     public void testAddContactsWithNullNotes () {
-        cMgr.addNewContact("Floyd Drager", null);
+        emptyContactManager.addNewContact(CONTACT_1_NAME, NULL_STRING);
     }
 
     @Test(expected = NullPointerException.class)
     public void testAddContactsWithNullNameAndNotes () {
-        cMgr.addNewContact(null, null);
+        emptyContactManager.addNewContact(NULL_STRING, NULL_STRING);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddContactsWithEmptyName () {
-        cMgr.addNewContact("", "This one's xenophobic");
+        emptyContactManager.addNewContact(EMPTY_STRING, CONTACT_1_NOTES);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddContactsWithEmptyNotes () {
-        cMgr.addNewContact("Floyd Drager", "");
+        emptyContactManager.addNewContact(CONTACT_1_NAME, EMPTY_STRING);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddContactsWithEmptyNameAndNotes () {
-        cMgr.addNewContact("", "");
+        emptyContactManager.addNewContact(EMPTY_STRING, EMPTY_STRING);
     }
 
 }
