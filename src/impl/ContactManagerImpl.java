@@ -3,6 +3,7 @@ package impl;
 import spec.*;
 
 import java.io.*;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.*;
@@ -40,13 +41,13 @@ public class ContactManagerImpl implements ContactManager {
 
     private Set<Contact> cmContacts;
     private List<Meeting> cmMeetings;
-    private int nextMeetingId = 1;
-    private int nextUserId = 1;
+    private int nextMeetingId;
+    private int nextContactId;
 
     // TODO ideas:
-    // 1. split meetings into 2 lists
-    // 2. retrieve meetingId/userId from max current id
-    // 3. USE STREAMS!!!
+    // 1. split meetings into 2 lists - not sure
+    // 2. retrieve meetingId/userId from max current id - DONE
+    // 3. USE STREAMS - WIP
 
     public ContactManagerImpl () {
         readDataFromFile();
@@ -301,9 +302,9 @@ public class ContactManagerImpl implements ContactManager {
         if (name.equals("") || notes.equals("")) {
             throw new IllegalArgumentException("A contact must have a name and notes");
         }
-        int id = nextUserId;
+        int id = nextContactId;
         cmContacts.add(new ContactImpl(id, name, notes));
-        nextUserId++;
+        nextContactId++;
         return id;
     }
 
@@ -380,12 +381,17 @@ public class ContactManagerImpl implements ContactManager {
         )) {
             out.writeObject(cmContacts);
             out.writeObject(cmMeetings);
-        } catch (SecurityException secEx) {
-            System.err.println("Insufficient permission to write to destination file.");
-            secEx.printStackTrace();
+            out.writeObject(nextMeetingId);
+            out.writeObject(nextContactId);
+
+            System.out.println("Meeting ID out: " + nextMeetingId);
+            System.out.println("Contact ID out: " + nextContactId);
         } catch (FileNotFoundException nfEx) {
             System.err.println("Destination file disappeared...");
             nfEx.printStackTrace();
+        } catch (AccessDeniedException secEx) {
+            System.err.println("Insufficient permission to write to destination file.");
+            secEx.printStackTrace();
         } catch (IOException ioEx) {
             ioEx.printStackTrace();
         }
@@ -401,6 +407,8 @@ public class ContactManagerImpl implements ContactManager {
     private void readDataFromFile() {
         Set<Contact> tmpContacts = null;
         List<Meeting> tmpMeetings = null;
+        int tmpNextMeetingId = -1;
+        int tmpNextContactId = -1;
 
         if(Files.exists(FileSystems.getDefault().getPath(FILENAME))) {
             try (ObjectInputStream in = new ObjectInputStream(
@@ -408,19 +416,21 @@ public class ContactManagerImpl implements ContactManager {
                     new FileInputStream(FILENAME)
                 )
             )) {
-                try {
-                    tmpContacts = (Set<Contact>) in.readObject();
-                    tmpMeetings = (List<Meeting>) in.readObject();
-                } catch (ClassNotFoundException cnfEx) {
-                    cnfEx.printStackTrace();
-                }
-            } catch (IOException ioEx) {
-                ioEx.printStackTrace();
+                tmpContacts = (Set<Contact>) in.readObject();
+                tmpMeetings = (List<Meeting>) in.readObject();
+                tmpNextMeetingId = (int) in.readObject();
+                tmpNextContactId = (int) in.readObject();
+            } catch (ClassNotFoundException | IOException ex) {
+                ex.printStackTrace();
             }
         }
 
         cmContacts = (tmpContacts == null) ? new HashSet<>() : tmpContacts;
         cmMeetings = (tmpMeetings == null) ? new ArrayList<>() : tmpMeetings;
+        nextMeetingId = (tmpNextMeetingId == -1) ? 1 : tmpNextMeetingId;
+        nextContactId = (tmpNextContactId == -1) ? 1 : tmpNextContactId;
+        System.out.println("Meeting ID in: " + nextMeetingId);
+        System.out.println("Contact ID in: " + nextContactId);
     }
 
     /**
