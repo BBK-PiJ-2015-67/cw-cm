@@ -15,7 +15,7 @@ import java.util.*;
  *     <li>
  *     <strong>Date/Time:</strong> I've opted to update the application's internal calendar object
  *     whenever a date comparison is needed. eg. {@code addFutureMeeting()}, {@code addNewPastMeeting()},
- *     {@code addMeetingNotes()}
+ *     {@code addMeetingNotes()}<br>
  *     This will only affect edge cases but it is worth noting.
  *     <br>
  *     For example, calling {@code addNewPastMeeting()} with a newly instantiated Calendar object
@@ -24,8 +24,8 @@ import java.util.*;
  *     </li>
  *     <li>
  *     <strong>Meeting/Contact IDs:</strong> The CM is limited to 2^31 - 1 meetings/contacts
- *     due to the spec calling for int as the ID type.
- *     Ideally should be a UUID &ndash; or really let the database handle it.
+ *     due to the spec calling for int as the ID type.<br>
+ *     Ideally we should use a UUID &ndash; or we should let a database handle it.
  *     </li>
  * </ul>
  *
@@ -487,6 +487,7 @@ public class ContactManagerImpl implements ContactManager {
 
     /**
      * Returns a clone of the internal contacts list
+     * I might have to give you my contacts, but you CANNOT have my list!
      *
      * @return A copy of the Set containing all internal contacts
      */
