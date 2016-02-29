@@ -118,18 +118,18 @@ public class ContactManagerContactsTest {
     }
 
     @Test
-    public void testGetContactsByNameDoesNotIgnoreWhitespace () {
+    public void testGetContactsByNameDoesIgnoreWhitespace () {
         emptyContactManager.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
         emptyContactManager.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
-        emptyContactManager.addNewContact(CONTACT_3_NAME_WHITESPACE, CONTACT_3_NOTES);
         emptyContactManager.addNewContact(CONTACT_3_NAME_PREFIX, CONTACT_3_NOTES);
         emptyContactManager.addNewContact(CONTACT_3_NAME_SUFFIX, CONTACT_3_NOTES);
+        emptyContactManager.addNewContact(CONTACT_3_NAME_WHITESPACE, CONTACT_3_NOTES);
 
         Set<Contact> testContacts = emptyContactManager.getContacts(CONTACT_3_NAME);
 
         assertNotNull(testContacts);
         assertFalse(testContacts.isEmpty());
-        assertEquals(testContacts.size(), 2);
+        assertEquals(testContacts.size(), 4);
     }
 
     @Test
