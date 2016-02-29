@@ -10,6 +10,7 @@ import spec.ContactManager;
 import java.util.Set;
 
 import static org.junit.Assert.*;
+import static test.TestCommon.*;
 
 /**
  * ContactManager tests
@@ -20,46 +21,13 @@ import static org.junit.Assert.*;
  */
 public class ContactManagerContactsTest {
 
-    // some data to work with
-    private static final String CONTACT_1_NAME = "Han Solo";
-    private static final String CONTACT_1_NOTES = "Shoots first.";
-    private static final int CONTACT_1_ID = 1;
-
-    private static final String CONTACT_2_NAME = "Luke Skywalker";
-    private static final String CONTACT_2_NOTES = "Daddy Issues. Short-handed.";
-    private static final int CONTACT_2_ID = 2;
-
-    private static final String CONTACT_3_NAME = "Princess Leia";
-    private static final String CONTACT_3_NAME_WHITESPACE = "Princess  Leia";
-    private static final String CONTACT_3_NAME_PREFIX = " Princess Leia";
-    private static final String CONTACT_3_NAME_SUFFIX = "Princess Leia ";
-    private static final String CONTACT_3_NOTES = "Hair needs help.";
-    private static final int CONTACT_3_ID = 3;
-
-    private static final String CONTACT_4_NAME = "Darth Vader";
-    private static final String CONTACT_4_NOTES = "Short-handed redux.";
-    private static final int CONTACT_4_ID = 4;
-
-    private static final int EXPECTED_CONTACT_SET_SIZE = 4;
-
-    // for error checking
-    private static final String NON_EXISTENT_CONTACT_NAME = "Obi Wan Kenobi";
-    private static final String EMPTY_STRING = "";
-    private static final String NULL_STRING = null;
-    private static final int[] NULL_ARRAY = null;
-    private static final int EMPTY_SIZE = 0;
-    private static final int ILLEGAL_ID_1 = 6;
-    private static final int ILLEGAL_ID_2 = 90;
-    private static final int ILLEGAL_ID_3 = 43;
-    private static final int ILLEGAL_ID_4 = 987;
-
     private ContactManager emptyContactManager;
     private ContactManager contactManagerWithContacts;
 
     @Before
     public void setUp() {
         // delete any data file if present before running tests
-        TestUtils.deleteDataFile();
+        TestCommon.deleteDataFile();
 
         emptyContactManager = new ContactManagerImpl();
         contactManagerWithContacts = new ContactManagerImpl();
@@ -73,7 +41,7 @@ public class ContactManagerContactsTest {
     @After
     public void tearDown() {
         // delete any data file if present after running tests
-        TestUtils.deleteDataFile();
+        TestCommon.deleteDataFile();
 
         emptyContactManager = null;
         contactManagerWithContacts = null;
@@ -151,23 +119,28 @@ public class ContactManagerContactsTest {
     @Test
     public void testGetContactsByIds () {
         Set<Contact> testContacts = contactManagerWithContacts.getContacts(
-                CONTACT_1_ID,
-                CONTACT_2_ID,
-                CONTACT_3_ID,
-                CONTACT_4_ID
+            CONTACT_1_ID,
+            CONTACT_2_ID,
+            CONTACT_3_ID,
+            CONTACT_4_ID
         );
 
         assertNotNull(testContacts);
         assertEquals(testContacts.size(), EXPECTED_CONTACT_SET_SIZE);
 
-        boolean testPassed = false;
-        for(Contact c : testContacts) {
-            testPassed = (c.getName().equals(CONTACT_1_NAME) ||
-                          c.getName().equals(CONTACT_2_NAME) ||
-                          c.getName().equals(CONTACT_3_NAME) ||
-                          c.getName().equals(CONTACT_4_NAME));
-        }
-        assertTrue(testPassed);
+        Contact c1 = testContacts.stream().filter(c -> c.getId() == CONTACT_1_ID).findFirst().get();
+        Contact c2 = testContacts.stream().filter(c -> c.getId() == CONTACT_2_ID).findFirst().get();
+        Contact c3 = testContacts.stream().filter(c -> c.getId() == CONTACT_3_ID).findFirst().get();
+        Contact c4 = testContacts.stream().filter(c -> c.getId() == CONTACT_4_ID).findFirst().get();
+
+        assertEquals(c1.getName(), CONTACT_1_NAME);
+        assertEquals(c1.getNotes(), CONTACT_1_NOTES);
+        assertEquals(c2.getName(), CONTACT_2_NAME);
+        assertEquals(c2.getNotes(), CONTACT_2_NOTES);
+        assertEquals(c3.getName(), CONTACT_3_NAME);
+        assertEquals(c3.getNotes(), CONTACT_3_NOTES);
+        assertEquals(c4.getName(), CONTACT_4_NAME);
+        assertEquals(c4.getNotes(), CONTACT_4_NOTES);
     }
 
     @Test
@@ -206,7 +179,7 @@ public class ContactManagerContactsTest {
 
     @Test(expected = NullPointerException.class)
     public void testGetContactsIdsWithNull () {
-        emptyContactManager.getContacts(NULL_ARRAY);
+        emptyContactManager.getContacts(NULL_INT_ARRAY);
     }
 
     @Test(expected = IllegalArgumentException.class)
