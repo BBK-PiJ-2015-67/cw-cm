@@ -16,6 +16,7 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static test.TestCommon.*;
 
 /**
  * FutureMeeting tests
@@ -23,30 +24,6 @@ import static org.junit.Assert.assertNotNull;
  * @author lmignot
  */
 public class FutureMeetingTest {
-
-    // some data to work with
-    private static final int MEETING_ID = 458;
-    private static final int MEETING_ID_NEG = -98;
-    private static final int MEETING_ID_ZERO = 0;
-    private static final int CONTACT_1_ID = 1;
-    private static final int CONTACT_2_ID = 2;
-    private static final int CONTACT_3_ID = 3;
-    private static final int CONTACT_4_ID = 4;
-    private static final String CONTACT_1_NAME = "Wade Wilson";
-    private static final String CONTACT_2_NAME = "Peter Quill";
-    private static final String CONTACT_3_NAME = "Jessica Jones";
-    private static final String CONTACT_4_NAME = "Bruce Wayne";
-
-    private static final int EXPECTED_CONTACT_SET_SIZE = 4;
-
-    // for error checking
-    private static final Calendar NULL_CAL = null;
-    private static final Set<Contact> NULL_CONTACTS = null;
-    private static final Set<Contact> EMPTY_CONTACTS = new HashSet<>();
-
-    private static final int FUTURE_YEAR = 2020;
-    private static final int FUTURE_MONTH = 5;
-    private static final int FUTURE_DAY = 16;
 
     private Set<Contact> meetingContacts;
     private Calendar futureDate;
@@ -94,12 +71,12 @@ public class FutureMeetingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void negativeIdShouldThrow () {
-        futureMeeting = new FutureMeetingImpl(MEETING_ID_NEG, futureDate, meetingContacts);
+        futureMeeting = new FutureMeetingImpl(ID_NEG, futureDate, meetingContacts);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void zeroIdShouldThrow () {
-        futureMeeting = new FutureMeetingImpl(MEETING_ID_ZERO, futureDate, meetingContacts);
+        futureMeeting = new FutureMeetingImpl(ID_ZERO, futureDate, meetingContacts);
     }
 
     @Test(expected = NullPointerException.class)

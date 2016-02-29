@@ -13,6 +13,7 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static test.TestCommon.*;
 
 /**
  * Meeting tests<br>
@@ -22,27 +23,6 @@ import static org.junit.Assert.assertNotNull;
  * @author lmignot
  */
 public class MeetingTest {
-
-    private static final int CONTACT_1_ID = 1;
-    private static final int CONTACT_2_ID = 2;
-    private static final int CONTACT_3_ID = 3;
-    private static final int CONTACT_4_ID = 4;
-    private static final String CONTACT_1_NAME = "Wade Wilson";
-    private static final String CONTACT_2_NAME = "Peter Quill";
-    private static final String CONTACT_3_NAME = "Jessica Jones";
-    private static final String CONTACT_4_NAME = "Bruce Wayne";
-
-    private static final int YEAR = 1967;
-    private static final int MONTH = 4;
-    private static final int DAY = 11;
-    private static final int MEETING_ID = 23;
-    private static final int MEETING_ID_NEG = -98;
-    private static final int MEETING_ID_ZERO = 0;
-
-    // for error checking
-    private static final Calendar NULL_CAL = null;
-    private static final Set<Contact> NULL_CONTACTS = null;
-    private static final Set<Contact> EMPTY_CONTACTS = new HashSet<>();
 
     private Meeting meeting;
     private Set<Contact> meetingContacts;
@@ -71,12 +51,12 @@ public class MeetingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void negativeIdShouldThrow () {
-        meeting = new MeetingMock(MEETING_ID_NEG, meetingDate, meetingContacts);
+        meeting = new MeetingMock(ID_NEG, meetingDate, meetingContacts);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void zeroIdShouldThrow () {
-        meeting = new MeetingMock(MEETING_ID_ZERO, meetingDate, meetingContacts);
+        meeting = new MeetingMock(ID_ZERO, meetingDate, meetingContacts);
     }
 
     @Test(expected = NullPointerException.class)
