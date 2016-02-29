@@ -39,7 +39,6 @@ public class ContactManagerImpl implements ContactManager {
 
     private static final String FILENAME = "contacts.txt";
     private Calendar cmDate;
-
     private Set<Contact> cmContacts;
     private List<Meeting> cmMeetings;
     private int nextMeetingId;
@@ -337,9 +336,6 @@ public class ContactManagerImpl implements ContactManager {
             out.writeObject(cmMeetings);
             out.writeObject(nextMeetingId);
             out.writeObject(nextContactId);
-
-            System.out.println("Meeting ID out: " + nextMeetingId);
-            System.out.println("Contact ID out: " + nextContactId);
         } catch (FileNotFoundException nfEx) {
             System.err.println("Destination file disappeared...");
             nfEx.printStackTrace();
@@ -356,7 +352,7 @@ public class ContactManagerImpl implements ContactManager {
      * The file is assumed to be in the same directory as the class
      * and named {@code contacts.txt}<br>
      * If the file does not exist, initialises ContactManager with empty
-     * data structures
+     * data structures and starting Contact/Meeting ids of 1
      */
     private void readDataFromFile() {
         Set<Contact> tmpContacts = null;
@@ -383,8 +379,6 @@ public class ContactManagerImpl implements ContactManager {
         cmMeetings = (tmpMeetings == null) ? new ArrayList<>() : tmpMeetings;
         nextMeetingId = (tmpNextMeetingId == -1) ? 1 : tmpNextMeetingId;
         nextContactId = (tmpNextContactId == -1) ? 1 : tmpNextContactId;
-        System.out.println("Meeting ID in: " + nextMeetingId);
-        System.out.println("Contact ID in: " + nextContactId);
     }
 
     /**
