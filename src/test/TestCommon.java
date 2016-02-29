@@ -32,9 +32,14 @@ final class TestCommon {
     static final String CONTACT_3_NOTES = "No nickname";
     static final String CONTACT_4_NOTES = "Batman";
 
+    static final String CONTACT_3_NAME_WHITESPACE = "Jessica  Jones";
+    static final String CONTACT_3_NAME_PREFIX = " Jessica Jones";
+    static final String CONTACT_3_NAME_SUFFIX = "Jessica Jones ";
+
     static final int MEETING_ID = 458;
 
     static final int EXPECTED_CONTACT_SET_SIZE = 4;
+    static final String NON_EXISTENT_CONTACT_NAME = "Matt Murdock";
 
     static final int FUTURE_YEAR = 2020;
     static final int FUTURE_MONTH = 5;
@@ -55,14 +60,21 @@ final class TestCommon {
     static final int ID_NEG = -2;
     static final int ID_ZERO = 0;
 
+    static final int ILLEGAL_ID_1 = 6;
+    static final int ILLEGAL_ID_2 = 90;
+    static final int ILLEGAL_ID_3 = 43;
+    static final int ILLEGAL_ID_4 = 987;
+
     static final String NOTES_1 = "Notes";
     static final String NOTES_2 = "Some more notes.";
     static final String CONTACT_NOTES_DELIMITER = "\n";
 
+    static final int EMPTY_SIZE = 0;
     static final String EMPTY_STRING = "";
     static final String NULL_STRING = null;
     static final String NULL_NOTES = null;
     static final Calendar NULL_CAL = null;
+    static final int[] NULL_INT_ARRAY = null;
     static final Set<Contact> NULL_CONTACTS = null;
     static final Set<Contact> EMPTY_CONTACTS = new HashSet<>();
 
