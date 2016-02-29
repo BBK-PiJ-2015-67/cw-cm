@@ -327,8 +327,8 @@ public class ContactManagerImpl implements ContactManager {
         Set<Contact> result = new HashSet<>();
 
         for(Contact c : cmContacts) {
-            if (c.getName().equals(name)) {
-                result.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
+            if (c.getName().contains(name)) {
+                result.add(c);
             }
         }
 
