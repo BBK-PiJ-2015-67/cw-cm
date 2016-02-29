@@ -16,11 +16,11 @@ public class ContactTest {
 
     @Test
     public void testNewContactWithNotes () {
-        Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME, NOTES_1);
+        Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME, MEETING_NOTES_1);
 
         assertEquals(testContact.getId(), CONTACT_1_ID);
         assertEquals(testContact.getName(), CONTACT_1_NAME);
-        assertEquals(testContact.getNotes(), NOTES_1);
+        assertEquals(testContact.getNotes(), MEETING_NOTES_1);
     }
 
     @Test
@@ -35,28 +35,28 @@ public class ContactTest {
     public void testAddNotesToContact () {
         Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME);
 
-        testContact.addNotes(NOTES_1);
+        testContact.addNotes(MEETING_NOTES_1);
 
-        assertEquals(testContact.getNotes(), NOTES_1);
+        assertEquals(testContact.getNotes(), MEETING_NOTES_1);
     }
 
     @Test
     public void testAddNotesToContactWithExistingNotes () {
         Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME);
 
-        testContact.addNotes(NOTES_1);
-        testContact.addNotes(NOTES_2);
+        testContact.addNotes(MEETING_NOTES_1);
+        testContact.addNotes(MEETING_NOTES_2);
 
-        assertEquals(testContact.getNotes(), NOTES_1 + CONTACT_NOTES_DELIMITER + NOTES_2);
+        assertEquals(testContact.getNotes(), MEETING_NOTES_1 + NOTES_DELIMITER + MEETING_NOTES_2);
     }
 
     @Test
     public void testAddNotesToContactWithNotesInConstructor () {
-        Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME, NOTES_1);
+        Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME, MEETING_NOTES_1);
 
-        testContact.addNotes(NOTES_2);
+        testContact.addNotes(MEETING_NOTES_2);
 
-        assertEquals(testContact.getNotes(), NOTES_1 + CONTACT_NOTES_DELIMITER + NOTES_2);
+        assertEquals(testContact.getNotes(), MEETING_NOTES_1 + NOTES_DELIMITER + MEETING_NOTES_2);
     }
 
     @Test(expected = IllegalArgumentException.class)

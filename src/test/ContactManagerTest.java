@@ -66,7 +66,7 @@ public class ContactManagerTest {
         Set<Contact> contacts = cm.getContacts(CONTACT_1_ID, CONTACT_2_ID);
 
         cm.addFutureMeeting(contacts, new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY));
-        cm.addNewPastMeeting(contacts, new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY), NOTES_1);
+        cm.addNewPastMeeting(contacts, new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY), MEETING_NOTES_1);
 
         Meeting m1 = cm.getFutureMeeting(1);
         PastMeeting m2 = cm.getPastMeeting(2);
