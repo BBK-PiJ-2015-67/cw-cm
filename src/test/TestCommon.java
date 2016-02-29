@@ -12,12 +12,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Methods for handling common functionality within package {@code test}
- * Common declared constants to avoid repetition and ensure consistency in tests
+ * This class contains:<br>
+ * <ul>
+ * <li>Constants to avoid repetition and ensure consistency in tests</li>
+ * <li>Methods for handling common functionality in tests</li>
+ * </ul>
  */
 final class TestCommon {
 
-    private static final String FILENAME = "contacts.txt";
+    static final String FILENAME = "contacts.txt";
 
     static final int CONTACT_1_ID = 1;
     static final int CONTACT_2_ID = 2;

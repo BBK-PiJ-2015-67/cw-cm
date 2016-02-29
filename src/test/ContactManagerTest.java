@@ -9,10 +9,14 @@ import spec.ContactManager;
 import spec.Meeting;
 import spec.PastMeeting;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static test.TestCommon.*;
 
 /**
@@ -45,6 +49,13 @@ public class ContactManagerTest {
     /* =================== FLUSH, ETC... =================== */
 
     @Test
+    public void testContactManagerShouldHaveFileAfterFlush () {
+        cm.flush();
+        Path p = FileSystems.getDefault().getPath(FILENAME);
+        assertTrue(Files.exists(p));
+    }
+
+    @Test
     public void testContactManagerShouldHaveAddedContactsAfterFlush () {
         cm.flush();
 
@@ -68,15 +79,15 @@ public class ContactManagerTest {
         cm.addFutureMeeting(contacts, new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY));
         cm.addNewPastMeeting(contacts, new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY), MEETING_NOTES_1);
 
-        Meeting m1 = cm.getFutureMeeting(1);
-        PastMeeting m2 = cm.getPastMeeting(2);
+        Meeting m1 = cm.getFutureMeeting(FIRST_MEETING_ID);
+        PastMeeting m2 = cm.getPastMeeting(SECOND_MEETING_ID);
 
         cm.flush();
 
         ContactManager cm2 = new ContactManagerImpl();
 
-        Meeting m1b = cm2.getFutureMeeting(1);
-        PastMeeting m2b = cm2.getPastMeeting(2);
+        Meeting m1b = cm2.getFutureMeeting(FIRST_MEETING_ID);
+        PastMeeting m2b = cm2.getPastMeeting(SECOND_MEETING_ID);
 
         assertEquals(m1.getId(), m1b.getId());
         assertEquals(m1.getDate(), m1b.getDate());
