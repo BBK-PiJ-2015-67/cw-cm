@@ -7,6 +7,7 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A Contact Manager implementation
@@ -20,7 +21,7 @@ import java.util.*;
  *     This will only affect edge cases but it is worth noting.
  *     <br>
  *     For example, calling {@code addNewPastMeeting()} with a newly instantiated Calendar object
- *     set to "now" will succeed as the time (micro/nano seconds) elapsed between the method
+ *     set to "now" will succeed as the time elapsed between the method
  *     being called and its execution will mean that the meeting is now in the past.
  *     </li>
  *     <li>
@@ -44,11 +45,6 @@ public class ContactManagerImpl implements ContactManager {
     private int nextMeetingId;
     private int nextContactId;
 
-    // TODO ideas:
-    // 1. split meetings into 2 lists - not sure
-    // 2. retrieve meetingId/userId from max current id - DONE
-    // 3. USE STREAMS - WIP
-
     public ContactManagerImpl () {
         readDataFromFile();
         cmDate = new GregorianCalendar();
@@ -62,9 +58,8 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
-        if (contacts == null || date == null) {
-            throw new NullPointerException("null argument passed to contacts and/or date");
-        }
+        Objects.requireNonNull(contacts);
+        Objects.requireNonNull(date);
 
         // update the internal clock before any date comparison
         cmDate = new GregorianCalendar();
@@ -123,12 +118,11 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public Meeting getMeeting(int id) {
-        for (Meeting m: cmMeetings) {
-            if (m.getId() == id) {
-                return m;
-            }
+        try {
+            return cmMeetings.stream().filter(mtg -> mtg.getId() == id).findFirst().get();
+        } catch (NoSuchElementException noSuchElEx) {
+            return null;
         }
-        return null;
     }
 
     /**
@@ -138,30 +132,19 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public List<Meeting> getFutureMeetingList(Contact contact) {
-        if (contact == null) {
-            throw new NullPointerException("contact should not be null");
-        }
+        Objects.requireNonNull(contact);
         if (!isValidContact(contact)) {
             throw new IllegalArgumentException("specified contact does not exist");
         }
 
-        // Use a set so we have no duplicates
-        Set<Meeting> uniqueResult = new HashSet<>();
-
-        // Really want to use streams but we haven't had them in class yet so
-        // not sure it's permitted
-        for(Meeting m: cmMeetings) {
-            if (m.getContacts().contains(contact) && m instanceof FutureMeeting) {
-                uniqueResult.add(m);
-            }
-        }
-
         List<Meeting> result = new ArrayList<>();
-        result.addAll(uniqueResult);
-
-        // Sort using a lambda here
-        // saves on writing a comparison method
-        Collections.sort(result, (m1, m2) -> (m1.getDate().compareTo(m2.getDate())));
+        result.addAll(
+            cmMeetings.stream()
+            .filter(m -> m.getContacts().contains(contact) && m instanceof FutureMeeting)
+            .sorted((m1, m2) -> (m1.getDate().compareTo(m2.getDate())))
+            .distinct()
+            .collect(Collectors.toList())
+        );
         return result;
     }
 
@@ -171,30 +154,18 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public List<Meeting> getMeetingListOn(Calendar date) {
-        if (date == null) {
-            throw new NullPointerException("no date provided.");
-        }
+        Objects.requireNonNull(date);
 
-        // Use a set so we have no duplicates
-        Set<Meeting> uniqueResult = new HashSet<>();
-
-        // since the method is "getMeetingListOn" it
-        // seems sensible to assume we're talking about
-        // a day as opposed to a specific time
-        for(Meeting m : cmMeetings) {
-            if (m.getDate().get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
-                    m.getDate().get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
-                    m.getDate().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)) {
-                uniqueResult.add(m);
-            }
-        }
         List<Meeting> result = new ArrayList<>();
-        result.addAll(uniqueResult);
-
-        // Sort using a lambda here
-        // saves on writing a comparison method
-        // TODO: implement this with streams maybe?
-        Collections.sort(result, (m1, m2) -> (m1.getDate().compareTo(m2.getDate())));
+        result.addAll(
+            cmMeetings.stream()
+            .filter(m -> m.getDate().get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
+                    m.getDate().get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
+                    m.getDate().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
+            .sorted((m1, m2) -> (m1.getDate().compareTo(m2.getDate())))
+            .distinct()
+            .collect(Collectors.toList())
+        );
         return result;
     }
 
@@ -205,30 +176,21 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public List<PastMeeting> getPastMeetingListFor(Contact contact) {
-        if (contact == null) {
-            throw new NullPointerException("contact should not be null");
-        }
+        Objects.requireNonNull(contact);
         if (!isValidContact(contact)) {
             throw new IllegalArgumentException("specified contact does not exist");
         }
 
-        // Use a set so we have no duplicates
-        Set<PastMeeting> uniqueResult = new HashSet<>();
-
-        // Really want to use streams but we haven't had them in class yet so
-        // not sure it's permitted
-        for(Meeting m: cmMeetings) {
-            if (m.getContacts().contains(contact) && m instanceof PastMeeting) {
-                uniqueResult.add((PastMeeting) m);
-            }
-        }
-
         List<PastMeeting> result = new ArrayList<>();
-        result.addAll(uniqueResult);
+        result.addAll(
+            cmMeetings.stream()
+            .filter(m -> m.getContacts().contains(contact) && m instanceof PastMeeting)
+            .sorted((m1, m2) -> (m1.getDate().compareTo(m2.getDate())))
+            .map(m -> (PastMeeting) m)
+            .distinct()
+            .collect(Collectors.toList())
+        );
 
-        // Sort using a lambda here
-        // saves on writing a comparison method
-        Collections.sort(result, (m1, m2) -> (m1.getDate().compareTo(m2.getDate())));
         return result;
     }
 
@@ -239,9 +201,9 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text) {
-        if (contacts == null || date == null || text == null) {
-            throw new NullPointerException("null argument passed to contacts, date, or notes");
-        }
+        Objects.requireNonNull(contacts);
+        Objects.requireNonNull(date);
+        Objects.requireNonNull(text);
 
         // update the internal clock before any date comparison
         cmDate = new GregorianCalendar();
@@ -269,14 +231,14 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public void addMeetingNotes(int id, String text) {
-        if (text == null) throw new NullPointerException("Notes cannot be null");
+        Objects.requireNonNull(text);
 
         // update the internal clock before any date comparison
         cmDate = new GregorianCalendar();
 
         Meeting mtg = getMeeting(id);
         if (mtg == null) throw new IllegalArgumentException("Meeting does not exist");
-        if (mtg.getDate().compareTo(cmDate) > 0) throw new IllegalStateException("Meeting is a future meeting");
+        if (mtg.getDate().after(cmDate)) throw new IllegalStateException("Meeting is a future meeting");
 
         String newNotes = null;
         if (mtg instanceof PastMeeting && !((PastMeeting) mtg).getNotes().equals("")) {
@@ -285,8 +247,7 @@ public class ContactManagerImpl implements ContactManager {
         newNotes = (newNotes == null) ? text : newNotes;
 
         PastMeeting newMeeting = new PastMeetingImpl(id, mtg.getDate(), mtg.getContacts(), newNotes);
-        cmMeetings.remove(mtg);
-        cmMeetings.add(newMeeting);
+        cmMeetings.set(id - 1, newMeeting);
     }
 
     /**
@@ -296,9 +257,8 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public int addNewContact(String name, String notes) {
-        if (name == null || notes == null) {
-            throw new NullPointerException("null argument passed to name or notes");
-        }
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(notes);
         if (name.equals("") || notes.equals("")) {
             throw new IllegalArgumentException("A contact must have a name and notes");
         }
@@ -309,29 +269,26 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     /**
+     * As per spec, this method can be used to retrieve the complete set of contacts.
+     * This implementation returns a copy of the set rather than a reference to the internal set.
+     *
      * @see ContactManager#getContacts(String)
      * @throws NullPointerException if the parameter is null
      */
     @Override
     public Set<Contact> getContacts(String name) {
-        if(name == null) {
-            throw new NullPointerException("null passed as argument for name");
-        }
-        // if an empty string is passed we return the full/empty set of contacts
-        // in the Manager. I've opted to return a clone rather than a reference
-        // to the internal set.
+        Objects.requireNonNull(name);
         if(name.equals("")) {
             return cloneContacts();
         }
 
         Set<Contact> result = new HashSet<>();
-
-        for(Contact c : cmContacts) {
-            if (c.getName().contains(name)) {
-                result.add(c);
-            }
-        }
-
+        result.addAll(
+            cmContacts
+                .stream()
+                .filter(c -> c.getName().contains(name))
+                .collect(Collectors.toSet())
+        );
         return result;
     }
 
@@ -342,16 +299,13 @@ public class ContactManagerImpl implements ContactManager {
      * @throws NullPointerException if the argument is null
      */
     @Override
-    public Set<Contact> getContacts(int... ids) {
-        if (ids == null) {
-            throw new NullPointerException("null argument passed for ids");
-        }
-        if (ids.length == 0 || !isValidContactIds(ids)) {
+    public Set<Contact> getContacts (int... ids) {
+        Objects.requireNonNull(ids);
+        if (!isValidContactIds(ids)) {
             throw new IllegalArgumentException("one or more of the specified ids does not exist");
         }
 
         Set<Contact> result = new HashSet<>();
-
         for (Contact c : cmContacts) {
             for(int i : ids) {
                 if(c.getId() == i) {
@@ -434,23 +388,6 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     /**
-     * Helper method to check if a single Contact exists in the system
-     * @param contact the Contact to check
-     * @return true if the Contact exists, false if not
-     */
-    private boolean isValidContact(Contact contact) {
-        boolean result = false;
-
-        for (Contact c : cmContacts) {
-            if (c.getId() == contact.getId() && c.getName().equals(contact.getName())) {
-                result = true;
-                break;
-            }
-        }
-        return result;
-    }
-
-    /**
      * Helper method to check if a list of Contact ids exist in the
      * internal Contact list
      *
@@ -458,12 +395,10 @@ public class ContactManagerImpl implements ContactManager {
      * @return True if ALL the ids are found, false if ANY are NOT found
      */
     private boolean isValidContactIds(int... ids) {
-        int found = 0;
-
         if (ids.length == 0) {
             return false;
         }
-
+        int found = 0;
         for (Contact c : cmContacts) {
             for (int i : ids) {
                 if (c.getId() == i) {
@@ -471,8 +406,16 @@ public class ContactManagerImpl implements ContactManager {
                 }
             }
         }
-
         return (found == ids.length);
+    }
+
+    /**
+     * Helper method to check if a single Contact exists in the system
+     * @param contact the Contact to check
+     * @return true if the Contact exists, false if not
+     */
+    private boolean isValidContact (Contact contact) {
+        return isValidContactIds((new int[1])[0] = contact.getId());
     }
 
     /**
@@ -481,18 +424,8 @@ public class ContactManagerImpl implements ContactManager {
      * @param contacts The Set of contacts to check
      * @return true if all contacts exist, false if any contacts do not exist
      */
-    private boolean isValidContacts(Set<Contact> contacts) {
-        if (contacts.isEmpty()) {
-            return false;
-        }
-        int found = 0;
-        for (Contact contact : contacts) {
-            if (isValidContact(contact)) {
-                found++;
-            }
-        }
-
-        return found == contacts.size();
+    private boolean isValidContacts (Set<Contact> contacts) {
+        return !contacts.isEmpty() && isValidContactIds(contacts.stream().mapToInt(Contact::getId).toArray());
     }
 
     /**
