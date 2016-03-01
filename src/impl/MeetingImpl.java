@@ -5,6 +5,7 @@ import spec.Meeting;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -33,14 +34,10 @@ public abstract class MeetingImpl implements Meeting, Serializable {
      *                                  or if the set of contacts is empty
      */
     public MeetingImpl (int id, Calendar date, Set<Contact> contacts) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("IDs must be greater than 0");
-        }
-        if (date == null || contacts == null) {
-            throw new NullPointerException("null passed as argument to date, contacts, or both");
-        }
-        if (contacts.isEmpty()) {
-            throw new IllegalArgumentException("No contacts provided, cannot have a meeting without contacts.");
+        Objects.requireNonNull(date);
+        Objects.requireNonNull(contacts);
+        if (id <= 0 || contacts.isEmpty()) {
+            throw new IllegalArgumentException();
         }
 
         meetingId = id;

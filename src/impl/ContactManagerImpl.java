@@ -65,11 +65,8 @@ public class ContactManagerImpl implements ContactManager {
         // update the internal clock before any date comparison
         cmDate = new GregorianCalendar();
 
-        if (!date.after(cmDate)) {
-            throw new IllegalArgumentException("a future meeting must be set in the future");
-        }
-        if (!isValidContacts(contacts)) {
-            throw new IllegalArgumentException("one or more of the provided contacts do not exist");
+        if (!date.after(cmDate) || !isValidContacts(contacts)) {
+            throw new IllegalArgumentException();
         }
 
         int id = nextMeetingId;
@@ -91,7 +88,7 @@ public class ContactManagerImpl implements ContactManager {
             if (mtg instanceof PastMeeting) {
                 return (PastMeeting) mtg;
             } else {
-                throw new IllegalStateException("id specifies a meeting that is a future meeting");
+                throw new IllegalStateException();
             }
         }
     }
@@ -109,7 +106,7 @@ public class ContactManagerImpl implements ContactManager {
             if (mtg instanceof FutureMeeting) {
                 return (FutureMeeting) mtg;
             } else {
-                throw new IllegalArgumentException("id specifies a meeting that occurred in the past");
+                throw new IllegalArgumentException();
             }
         }
     }
@@ -135,7 +132,7 @@ public class ContactManagerImpl implements ContactManager {
     public List<Meeting> getFutureMeetingList(Contact contact) {
         Objects.requireNonNull(contact);
         if (!isValidContact(contact)) {
-            throw new IllegalArgumentException("specified contact does not exist");
+            throw new IllegalArgumentException();
         }
 
         List<Meeting> result = new ArrayList<>();
@@ -179,7 +176,7 @@ public class ContactManagerImpl implements ContactManager {
     public List<PastMeeting> getPastMeetingListFor(Contact contact) {
         Objects.requireNonNull(contact);
         if (!isValidContact(contact)) {
-            throw new IllegalArgumentException("specified contact does not exist");
+            throw new IllegalArgumentException();
         }
 
         List<PastMeeting> result = new ArrayList<>();
@@ -209,14 +206,8 @@ public class ContactManagerImpl implements ContactManager {
         // update the internal clock before any date comparison
         cmDate = new GregorianCalendar();
 
-        if (!date.before(cmDate)) {
-            throw new IllegalArgumentException("a past meeting must have occurred in the past");
-        }
-        if (text.equals("")) {
-            throw new IllegalArgumentException("messages should not be empty");
-        }
-        if (!isValidContacts(contacts)) {
-            throw new IllegalArgumentException("one or more of the provided contacts do not exist");
+        if (!date.before(cmDate) || text.equals("") || !isValidContacts(contacts)) {
+            throw new IllegalArgumentException();
         }
 
         int id = nextMeetingId;
@@ -238,8 +229,8 @@ public class ContactManagerImpl implements ContactManager {
         cmDate = new GregorianCalendar();
 
         Meeting mtg = getMeeting(id);
-        if (mtg == null) { throw new IllegalArgumentException("Meeting does not exist"); }
-        if (mtg.getDate().after(cmDate)) { throw new IllegalStateException("Meeting is a future meeting"); }
+        if (mtg == null) { throw new IllegalArgumentException(); }
+        if (mtg.getDate().after(cmDate)) { throw new IllegalStateException(); }
 
         String newNotes = null;
         if (mtg instanceof PastMeeting && !((PastMeeting) mtg).getNotes().equals("")) {
@@ -261,7 +252,7 @@ public class ContactManagerImpl implements ContactManager {
         Objects.requireNonNull(name);
         Objects.requireNonNull(notes);
         if (name.equals("") || notes.equals("")) {
-            throw new IllegalArgumentException("A contact must have a name and notes");
+            throw new IllegalArgumentException();
         }
         int id = nextContactId;
         cmContacts.add(new ContactImpl(id, name, notes));
@@ -305,7 +296,7 @@ public class ContactManagerImpl implements ContactManager {
     public Set<Contact> getContacts (int... ids) {
         Objects.requireNonNull(ids);
         if (!isValidContactIds(ids)) {
-            throw new IllegalArgumentException("one or more of the specified ids does not exist");
+            throw new IllegalArgumentException();
         }
 
         Set<Contact> result = new HashSet<>();

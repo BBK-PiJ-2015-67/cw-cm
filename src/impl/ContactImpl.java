@@ -5,6 +5,7 @@ import spec.Contact;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -29,14 +30,9 @@ public class ContactImpl implements Contact, Serializable {
      * @throws NullPointerException if the name is null
      */
     public ContactImpl (int id, String name) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("IDs must be greater than 0");
-        }
-        if (name == null) {
-            throw new NullPointerException("A contact's name cannot be null");
-        }
-        if (name.equals("")) {
-            throw new IllegalArgumentException("A contact's name cannot be empty");
+        Objects.requireNonNull(name);
+        if (id <= 0 || name.equals("")) {
+            throw new IllegalArgumentException();
         }
 
         notes = new ArrayList<>();
@@ -86,9 +82,7 @@ public class ContactImpl implements Contact, Serializable {
      */
     @Override
     public void addNotes(String note) {
-        if (note == null) {
-            throw new NullPointerException("Notes cannot be null");
-        }
+        Objects.requireNonNull(note);
         if (note.equals("")) {
             throw new IllegalArgumentException("Notes cannot be empty");
         }

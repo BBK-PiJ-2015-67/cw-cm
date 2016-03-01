@@ -5,6 +5,7 @@ import spec.PastMeeting;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -30,9 +31,7 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting, Seriali
      */
     public PastMeetingImpl(int id, Calendar date, Set<Contact> contacts, String notes) {
         super(id, date, contacts);
-        if(notes == null) {
-            throw new NullPointerException("null passed as argument to notes");
-        }
+        Objects.requireNonNull(notes);
         meetingNotes = notes;
     }
 
