@@ -34,7 +34,8 @@ public interface ContactManager {
      *
      * @param id the ID for the meeting
      * @return the meeting with the requested ID, or null if there is none.
-     * @throws IllegalStateException if there is a meeting with that ID happening in the future
+     * @throws IllegalStateException if there is a meeting with that
+     *                               ID happening in the future
      */
     PastMeeting getPastMeeting(int id);
 
@@ -44,7 +45,8 @@ public interface ContactManager {
      *
      * @param id the ID for the meeting
      * @return the meeting with the requested ID, or null if there is none.
-     * @throws IllegalArgumentException if there is a meeting with that ID happening in the past
+     * @throws IllegalArgumentException if there is a meeting with that
+     *                                  ID happening in the past
      */
     FutureMeeting getFutureMeeting(int id);
 

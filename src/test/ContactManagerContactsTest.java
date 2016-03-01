@@ -27,7 +27,7 @@ public class ContactManagerContactsTest {
     @Before
     public void setUp() {
         // delete any data file if present before running tests
-        TestCommon.deleteDataFile();
+        deleteDataFile();
 
         emptyContactManager = new ContactManagerImpl();
         contactManagerWithContacts = new ContactManagerImpl();
@@ -41,7 +41,7 @@ public class ContactManagerContactsTest {
     @After
     public void tearDown() {
         // delete any data file if present after running tests
-        TestCommon.deleteDataFile();
+        deleteDataFile();
 
         emptyContactManager = null;
         contactManagerWithContacts = null;

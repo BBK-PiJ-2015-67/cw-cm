@@ -3,7 +3,6 @@ package test;
 import spec.Contact;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,6 +18,8 @@ import java.util.Set;
  * </ul>
  */
 final class TestCommon {
+
+    private TestCommon () { }
 
     static final String FILENAME = "contacts.txt";
 
@@ -40,6 +41,7 @@ final class TestCommon {
     static final String CONTACT_3_NAME_SUFFIX = "Jessica Jones ";
 
     static final int EXPECTED_CONTACT_SET_SIZE = 4;
+    static final String NON_EXISTENT_CONTACT_NAME = "Matt Murdock";
 
     static final int MEETING_ID = 458;
     static final int FIRST_MEETING_ID = 1;
@@ -51,7 +53,6 @@ final class TestCommon {
     static final String MEETING_NOTES_2 = "Notes about meeting 2";
     static final String MEETING_NOTES_3 = "Notes about meeting 3";
     static final String MEETING_NOTES_4 = "Notes about meeting 4";
-    static final String NON_EXISTENT_CONTACT_NAME = "Matt Murdock";
     static final String NOTES_DELIMITER = "\n";
 
     static final int FUTURE_YEAR = 2020;
@@ -103,11 +104,7 @@ final class TestCommon {
             if (Files.exists(p)) {
                 Files.delete(p);
             }
-        } catch (AccessDeniedException adEx) {
-            System.err.println("Access denied while attempting to delete " + FILENAME);
-            adEx.printStackTrace();
         } catch (IOException ioEx) {
-            System.err.println("I/O error occurred while attempting to delete " + FILENAME);
             ioEx.printStackTrace();
         }
     }

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Implementation of Contact interface
+ * Implementation of Contact interface.
  *
  * @see Contact
  * @author lmignot
@@ -24,7 +24,8 @@ public class ContactImpl implements Contact, Serializable {
      *
      * @param id The contact's ID
      * @param name The contact's name
-     * @throws IllegalArgumentException if the ID is 0 or negative, or the name is an empty string
+     * @throws IllegalArgumentException if the ID is 0 or negative,
+     *                                  or the name is an empty string
      * @throws NullPointerException if the name is null
      */
     public ContactImpl (int id, String name) {
@@ -81,7 +82,6 @@ public class ContactImpl implements Contact, Serializable {
      */
     @Override
     public String getNotes() {
-        // my first use of Java streams! :)
         return notes.stream().collect(Collectors.joining("\n"));
     }
 

@@ -15,18 +15,20 @@ import java.util.stream.Collectors;
  * <h3>Assumptions</h3>
  * <ul>
  *     <li>
- *     <strong>Date/Time:</strong> I've opted to update the application's internal calendar object
- *     whenever a date comparison is needed. eg. {@code addFutureMeeting()}, {@code addNewPastMeeting()},
+ *     <strong>Date/Time:</strong> I've opted to update the application's
+ *     internal calendar object whenever a date comparison is needed.
+ *     eg. {@code addFutureMeeting()}, {@code addNewPastMeeting()},
  *     {@code addMeetingNotes()}<br>
  *     This will only affect edge cases but it is worth noting.
  *     <br>
- *     For example, calling {@code addNewPastMeeting()} with a newly instantiated Calendar object
- *     set to "now" will succeed as the time elapsed between the method
- *     being called and its execution will mean that the meeting is now in the past.
+ *     For example, calling {@code addNewPastMeeting()} with a newly
+ *     instantiated Calendar object set to "now" will succeed as the time elapsed
+ *     between the method being called and its execution will mean that the
+ *     meeting is now in the past.
  *     </li>
  *     <li>
- *     <strong>Meeting/Contact IDs:</strong> The CM is limited to 2^31 - 1 meetings/contacts
- *     due to the spec calling for int as the ID type.<br>
+ *     <strong>Meeting/Contact IDs:</strong> The CM is limited to
+ *     2^31 - 1 meetings/contacts due to the spec calling for int as the ID type.<br>
  *     Ideally we should use a UUID &ndash; or we should let a database handle it.
  *     </li>
  * </ul>
@@ -236,8 +238,8 @@ public class ContactManagerImpl implements ContactManager {
         cmDate = new GregorianCalendar();
 
         Meeting mtg = getMeeting(id);
-        if (mtg == null) throw new IllegalArgumentException("Meeting does not exist");
-        if (mtg.getDate().after(cmDate)) throw new IllegalStateException("Meeting is a future meeting");
+        if (mtg == null) { throw new IllegalArgumentException("Meeting does not exist"); }
+        if (mtg.getDate().after(cmDate)) { throw new IllegalStateException("Meeting is a future meeting"); }
 
         String newNotes = null;
         if (mtg instanceof PastMeeting && !((PastMeeting) mtg).getNotes().equals("")) {
@@ -268,8 +270,10 @@ public class ContactManagerImpl implements ContactManager {
     }
 
     /**
-     * As per spec, this method can be used to retrieve the complete set of contacts.
-     * This implementation returns a copy of the set rather than a reference to the internal set.
+     * As per spec, this method can be used to retrieve the
+     * complete set of contacts.<br>
+     * This implementation returns a copy of the set rather
+     * than a reference to the internal set.
      *
      * @see ContactManager#getContacts(String)
      * @throws NullPointerException if the parameter is null
@@ -337,10 +341,8 @@ public class ContactManagerImpl implements ContactManager {
             out.writeObject(nextMeetingId);
             out.writeObject(nextContactId);
         } catch (FileNotFoundException nfEx) {
-            System.err.println("Destination file disappeared...");
             nfEx.printStackTrace();
         } catch (AccessDeniedException secEx) {
-            System.err.println("Insufficient permission to write to destination file.");
             secEx.printStackTrace();
         } catch (IOException ioEx) {
             ioEx.printStackTrace();

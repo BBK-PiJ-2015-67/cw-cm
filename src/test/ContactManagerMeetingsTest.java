@@ -31,7 +31,7 @@ public class ContactManagerMeetingsTest {
 
     @Before
     public void setUp() {
-        TestCommon.deleteDataFile();
+        deleteDataFile();
 
         emptyContactManager = new ContactManagerImpl();
         contactManagerWithContacts = new ContactManagerImpl();
@@ -50,7 +50,7 @@ public class ContactManagerMeetingsTest {
 
     @After
     public void tearDown() {
-        TestCommon.deleteDataFile();
+        deleteDataFile();
 
         emptyContactManager = null;
         contactManagerWithContacts = null;

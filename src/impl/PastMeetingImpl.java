@@ -18,14 +18,15 @@ import java.util.Set;
  */
 public class PastMeetingImpl extends MeetingImpl implements PastMeeting, Serializable {
 
-    private String meetingNotes;
+    private final String meetingNotes;
 
     /**
      * @see MeetingImpl
      * @param notes The notes for the meeting
      * @throws NullPointerException if the date or contacts are null
      * @throws NullPointerException if the notes are null
-     * @throws IllegalArgumentException if the id is negative or 0, or if the set of contacts is empty
+     * @throws IllegalArgumentException if the id is negative or 0,
+     *                                  or if the set of contacts is empty
      */
     public PastMeetingImpl(int id, Calendar date, Set<Contact> contacts, String notes) {
         super(id, date, contacts);

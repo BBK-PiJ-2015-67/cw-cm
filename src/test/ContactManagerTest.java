@@ -33,7 +33,7 @@ public class ContactManagerTest {
 
     @Before
     public void setUp() {
-        TestCommon.deleteDataFile();
+        deleteDataFile();
 
         cm = new ContactManagerImpl();
         cm.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
@@ -42,7 +42,7 @@ public class ContactManagerTest {
 
     @After
     public void tearDown() {
-        TestCommon.deleteDataFile();
+        deleteDataFile();
         cm = null;
     }
 
