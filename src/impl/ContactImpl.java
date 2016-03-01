@@ -54,13 +54,7 @@ public class ContactImpl implements Contact, Serializable {
      */
     public ContactImpl (int id, String name, String notes) {
         this(id, name);
-        try {
-            addNotes(notes);
-        } catch(NullPointerException e) {
-            throw new NullPointerException(e.getMessage());
-        } catch(IllegalArgumentException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
+        addNotes(notes);
     }
 
     /**
