@@ -317,44 +317,38 @@ public class ContactManagerMeetingsTest {
 
     @Test
     public void testGetMeetingListOnPast() {
-        Set<Contact> meetingSet = contactManagerWithContacts.getContacts(1,3,2);
-        Calendar testDate = new GregorianCalendar(1979, 7, 10, 9, 30);
-        Calendar testDate2 = new GregorianCalendar(1979, 7, 10, 14, 30);
-        Calendar testDate3 = new GregorianCalendar(1979, 7, 10, 11, 0);
+        Calendar pastDate1 = new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY, HOUR_11, MINUTE_15);
+        Calendar pastDate2 = new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY, HOUR_9, MINUTE_20);
+        Calendar pastDate3 = new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY, HOUR_14, MINUTE_35);
 
-        contactManagerWithContacts.addFutureMeeting(meetingSet, new GregorianCalendar(2016, 11, 20)); // ID: 1
-        contactManagerWithContacts.addNewPastMeeting(meetingSet, testDate, "Notes"); // ID: 2
-        contactManagerWithContacts.addFutureMeeting(meetingSet, new GregorianCalendar(2016, 11, 20)); // ID: 3
-        contactManagerWithContacts.addFutureMeeting(meetingSet, new GregorianCalendar(2016, 11, 20)); // ID: 4
-        contactManagerWithContacts.addNewPastMeeting(meetingSet, testDate2, "Notes"); // ID: 5
-        contactManagerWithContacts.addNewPastMeeting(meetingSet, testDate3, "Notes"); // ID: 6
+        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate); // ID: 1
+        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate1, "Notes"); // ID: 2
+        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate); // ID: 3
+        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate2, "Notes"); // ID: 4
+        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate3, "Notes"); // ID: 5
 
-        List<Meeting> meetingList = contactManagerWithContacts.getMeetingListOn(new GregorianCalendar(1979, 7, 10));
+        List<Meeting> meetingList = contactManagerWithContacts.getMeetingListOn(new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY));
 
         assertNotNull(meetingList);
-        assertEquals(meetingList.size(), 3);
         assertFalse(meetingList.isEmpty());
+        assertEquals(meetingList.size(), 3);
 
         Meeting mtg1 = meetingList.get(0);
         Meeting mtg2 = meetingList.get(1);
         Meeting mtg3 = meetingList.get(2);
 
-        assertEquals(mtg1.getId(), 2);
-        assertEquals(mtg2.getId(), 6);
+        assertEquals(mtg1.getId(), 4);
+        assertEquals(mtg2.getId(), 2);
         assertEquals(mtg3.getId(), 5);
 
-        assertEquals(mtg1.getContacts(), meetingSet);
-        assertEquals(mtg2.getContacts(), meetingSet);
-        assertEquals(mtg3.getContacts(), meetingSet);
-
-        assertEquals(mtg1.getDate(), testDate);
-        assertEquals(mtg2.getDate(), testDate3);
-        assertEquals(mtg3.getDate(), testDate2);
+        assertEquals(mtg1.getDate(), pastDate2);
+        assertEquals(mtg2.getDate(), pastDate1);
+        assertEquals(mtg3.getDate(), pastDate3);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetMeetingListOnShouldThrowForNullDate() {
-        contactManagerWithContacts.getMeetingListOn(null);
+        contactManagerWithContacts.getMeetingListOn(NULL_CAL);
     }
 
     @Test
