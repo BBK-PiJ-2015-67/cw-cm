@@ -1,6 +1,5 @@
 package test;
 
-import impl.ContactImpl;
 import impl.PastMeetingImpl;
 import org.junit.After;
 import org.junit.Before;
@@ -11,7 +10,6 @@ import spec.PastMeeting;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -25,24 +23,17 @@ import static test.TestCommon.*;
  */
 public class PastMeetingTest {
 
-    private Meeting meeting;
     private Set<Contact> meetingContacts;
     private Calendar meetingDate;
 
     @Before
     public void setUp () {
         meetingDate = new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY);
-        meetingContacts = new HashSet<>();
-
-        meetingContacts.add(new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME));
-        meetingContacts.add(new ContactImpl(CONTACT_2_ID, CONTACT_2_NAME));
-        meetingContacts.add(new ContactImpl(CONTACT_3_ID, CONTACT_3_NAME));
-        meetingContacts.add(new ContactImpl(CONTACT_4_ID, CONTACT_4_NAME));
+        meetingContacts = getMeetingContacts();
     }
     
     @After
     public void tearDown () {
-        meeting = null;
         meetingContacts = null;
         meetingDate = null;
     }
@@ -75,51 +66,51 @@ public class PastMeetingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void negativeIdShouldThrow () {
-        meeting = new PastMeetingImpl(ID_NEG, meetingDate, meetingContacts, MEETING_NOTES_1);
+        new PastMeetingImpl(ID_NEG, meetingDate, meetingContacts, MEETING_NOTES_1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void zeroIdShouldThrow () {
-        meeting = new PastMeetingImpl(ID_ZERO, meetingDate, meetingContacts, MEETING_NOTES_1);
+        new PastMeetingImpl(ID_ZERO, meetingDate, meetingContacts, MEETING_NOTES_1);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullDateShouldThrow () {
-        meeting = new PastMeetingImpl(MEETING_ID, NULL_CAL, meetingContacts, MEETING_NOTES_1);
+        new PastMeetingImpl(MEETING_ID, NULL_CAL, meetingContacts, MEETING_NOTES_1);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullContactsShouldThrow () {
-        meeting = new PastMeetingImpl(MEETING_ID, meetingDate, NULL_CONTACTS, MEETING_NOTES_1);
+        new PastMeetingImpl(MEETING_ID, meetingDate, NULL_CONTACTS, MEETING_NOTES_1);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullContactsAndDateShouldThrow () {
-        meeting = new PastMeetingImpl(MEETING_ID, NULL_CAL, NULL_CONTACTS, MEETING_NOTES_1);
+        new PastMeetingImpl(MEETING_ID, NULL_CAL, NULL_CONTACTS, MEETING_NOTES_1);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullNotesShouldThrow () {
-        meeting = new PastMeetingImpl(MEETING_ID, meetingDate, meetingContacts, NULL_STRING);
+        new PastMeetingImpl(MEETING_ID, meetingDate, meetingContacts, NULL_STRING);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullNotesAndDateShouldThrow () {
-        meeting = new PastMeetingImpl(MEETING_ID, NULL_CAL, meetingContacts, NULL_STRING);
+        new PastMeetingImpl(MEETING_ID, NULL_CAL, meetingContacts, NULL_STRING);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullNotesAndContactsShouldThrow () {
-        meeting = new PastMeetingImpl(MEETING_ID, meetingDate, NULL_CONTACTS, NULL_STRING);
+        new PastMeetingImpl(MEETING_ID, meetingDate, NULL_CONTACTS, NULL_STRING);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullContactsAndDateAndNotesShouldThrow () {
-        meeting = new PastMeetingImpl(MEETING_ID, NULL_CAL, NULL_CONTACTS, NULL_STRING);
+        new PastMeetingImpl(MEETING_ID, NULL_CAL, NULL_CONTACTS, NULL_STRING);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void emptyContactsShouldThrow () {
-        meeting = new PastMeetingImpl(MEETING_ID, meetingDate, EMPTY_CONTACTS, MEETING_NOTES_1);
+        new PastMeetingImpl(MEETING_ID, meetingDate, EMPTY_CONTACTS, MEETING_NOTES_1);
     }
 }

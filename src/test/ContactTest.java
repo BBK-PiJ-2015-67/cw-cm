@@ -34,7 +34,6 @@ public class ContactTest {
     @Test
     public void testAddNotesToContact () {
         Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME);
-
         testContact.addNotes(MEETING_NOTES_1);
 
         assertEquals(testContact.getNotes(), MEETING_NOTES_1);
@@ -43,7 +42,6 @@ public class ContactTest {
     @Test
     public void testAddNotesToContactWithExistingNotes () {
         Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME);
-
         testContact.addNotes(MEETING_NOTES_1);
         testContact.addNotes(MEETING_NOTES_2);
 
@@ -53,7 +51,6 @@ public class ContactTest {
     @Test
     public void testAddNotesToContactWithNotesInConstructor () {
         Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME, MEETING_NOTES_1);
-
         testContact.addNotes(MEETING_NOTES_2);
 
         assertEquals(testContact.getNotes(), MEETING_NOTES_1 + NOTES_DELIMITER + MEETING_NOTES_2);

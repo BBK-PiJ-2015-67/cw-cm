@@ -16,6 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static test.TestCommon.*;
 
@@ -29,35 +30,52 @@ import static test.TestCommon.*;
  */
 public class ContactManagerTest {
 
-    private ContactManager cm;
+    private ContactManager contactsCM;
+    private ContactManager emptyCM;
 
     @Before
     public void setUp() {
         deleteDataFile();
-
-        cm = new ContactManagerImpl();
-        cm.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
-        cm.addNewContact(CONTACT_2_NAME, CONTACT_2_NOTES);
+        emptyCM = new ContactManagerImpl();
+        contactsCM = new ContactManagerImpl();
+        addFourContactsToCm(contactsCM);
     }
 
     @After
     public void tearDown() {
         deleteDataFile();
-        cm = null;
+        contactsCM = null;
+        emptyCM = null;
     }
 
     /* =================== FLUSH, ETC... =================== */
 
     @Test
-    public void testContactManagerShouldHaveFileAfterFlush () {
-        cm.flush();
+    public void testContactManagerShouldHaveFileAfterFlush() {
+        contactsCM.flush();
         Path p = FileSystems.getDefault().getPath(FILENAME);
         assertTrue(Files.exists(p));
     }
 
     @Test
-    public void testContactManagerShouldHaveAddedContactsAfterFlush () {
-        cm.flush();
+    public void testEmptyCMShouldHaveNoContactsAfterFlush() {
+        emptyCM.flush();
+        emptyCM = new ContactManagerImpl();
+        Set<Contact> contacts = emptyCM.getContacts(EMPTY_STRING);
+        assertTrue(contacts.isEmpty());
+    }
+
+    @Test
+    public void testEmptyCMShouldHaveNoMeetingsAfterFlush() {
+        emptyCM.flush();
+        emptyCM = new ContactManagerImpl();
+        Meeting mtg = emptyCM.getMeeting(FIRST_MEETING_ID);
+        assertNull(mtg);
+    }
+
+    @Test
+    public void testContactManagerShouldHaveAddedDefaultContactsAfterFlush() {
+        contactsCM.flush();
 
         ContactManager cm2 = new ContactManagerImpl();
 
@@ -73,16 +91,16 @@ public class ContactManagerTest {
     }
 
     @Test
-    public void testContactManagerShouldHaveAddedMeetingsAfterFlush () {
-        Set<Contact> contacts = cm.getContacts(CONTACT_1_ID, CONTACT_2_ID);
+    public void testContactManagerShouldHaveAddedMeetingsAfterFlush() {
+        Set<Contact> contacts = contactsCM.getContacts(CONTACT_1_ID, CONTACT_2_ID);
 
-        cm.addFutureMeeting(contacts, new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY));
-        cm.addNewPastMeeting(contacts, new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY), MEETING_NOTES_1);
+        contactsCM.addFutureMeeting(contacts, new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY));
+        contactsCM.addNewPastMeeting(contacts, new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY), MEETING_NOTES_1);
 
-        Meeting m1 = cm.getFutureMeeting(FIRST_MEETING_ID);
-        PastMeeting m2 = cm.getPastMeeting(SECOND_MEETING_ID);
+        Meeting m1 = contactsCM.getFutureMeeting(FIRST_MEETING_ID);
+        PastMeeting m2 = contactsCM.getPastMeeting(SECOND_MEETING_ID);
 
-        cm.flush();
+        contactsCM.flush();
 
         ContactManager cm2 = new ContactManagerImpl();
 

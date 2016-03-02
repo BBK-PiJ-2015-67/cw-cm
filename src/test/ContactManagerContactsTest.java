@@ -21,21 +21,15 @@ import static test.TestCommon.*;
  */
 public class ContactManagerContactsTest {
 
-    private ContactManager emptyContactManager;
-    private ContactManager contactManagerWithContacts;
+    private ContactManager cleanCM;
+    private ContactManager contactsCM;
 
     @Before
     public void setUp() {
-        // delete any data file if present before running tests
         deleteDataFile();
-
-        emptyContactManager = new ContactManagerImpl();
-        contactManagerWithContacts = new ContactManagerImpl();
-
-        contactManagerWithContacts.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
-        contactManagerWithContacts.addNewContact(CONTACT_2_NAME, CONTACT_2_NOTES);
-        contactManagerWithContacts.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
-        contactManagerWithContacts.addNewContact(CONTACT_4_NAME, CONTACT_4_NOTES);
+        cleanCM = new ContactManagerImpl();
+        contactsCM = new ContactManagerImpl();
+        addFourContactsToCm(contactsCM);
     }
 
     @After
@@ -43,40 +37,37 @@ public class ContactManagerContactsTest {
         // delete any data file if present after running tests
         deleteDataFile();
 
-        emptyContactManager = null;
-        contactManagerWithContacts = null;
+        cleanCM = null;
+        contactsCM = null;
     }
 
     /* =================== CONTACTS =================== */
 
     @Test
-    public void testAddContactsToEmptyCM () {
-        emptyContactManager.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
-        emptyContactManager.addNewContact(CONTACT_2_NAME, CONTACT_2_NOTES);
-        emptyContactManager.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
-        emptyContactManager.addNewContact(CONTACT_4_NAME, CONTACT_4_NOTES);
+    public void testAddContactsToEmptyCM() {
+        cleanCM.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
+        cleanCM.addNewContact(CONTACT_2_NAME, CONTACT_2_NOTES);
+        cleanCM.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
+        cleanCM.addNewContact(CONTACT_4_NAME, CONTACT_4_NOTES);
 
-        assertNotNull(emptyContactManager.getContacts(EMPTY_STRING));
-        assertFalse(emptyContactManager.getContacts(EMPTY_STRING).isEmpty());
-        assertEquals(emptyContactManager.getContacts(EMPTY_STRING).size(), EXPECTED_CONTACT_SET_SIZE);
+        assertFalse(cleanCM.getContacts(EMPTY_STRING).isEmpty());
+        assertEquals(cleanCM.getContacts(EMPTY_STRING).size(), EXPECTED_CONTACT_SET_SIZE);
     }
 
     @Test
-    public void testThatNewCMHasEmptyContacts () {
-        assertNotNull(emptyContactManager.getContacts(EMPTY_STRING));
-        assertTrue(emptyContactManager.getContacts(EMPTY_STRING).isEmpty());
-        assertEquals(emptyContactManager.getContacts(EMPTY_STRING).size(), EMPTY_SIZE);
+    public void testThatNewCMHasEmptyContacts() {
+        assertTrue(cleanCM.getContacts(EMPTY_STRING).isEmpty());
+        assertEquals(cleanCM.getContacts(EMPTY_STRING).size(), EMPTY_SIZE);
     }
 
     @Test
-    public void testGetSpecificContactsByNameFromCM () {
-        int dupContact1Id = emptyContactManager.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
-        int dupContact2Id = emptyContactManager.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
-        int dupContact3Id = emptyContactManager.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
+    public void testGetSpecificContactsByNameFromCM() {
+        int dupContact1Id = cleanCM.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
+        int dupContact2Id = cleanCM.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
+        int dupContact3Id = cleanCM.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
 
-        Set<Contact> testContacts = emptyContactManager.getContacts(CONTACT_1_NAME);
+        Set<Contact> testContacts = cleanCM.getContacts(CONTACT_1_NAME);
 
-        assertNotNull(testContacts);
         assertFalse(testContacts.isEmpty());
         assertEquals(testContacts.size(), 3);
 
@@ -86,46 +77,42 @@ public class ContactManagerContactsTest {
     }
 
     @Test
-    public void testGetContactsByNameDoesIgnoreWhitespace () {
-        emptyContactManager.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
-        emptyContactManager.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
-        emptyContactManager.addNewContact(CONTACT_3_NAME_PREFIX, CONTACT_3_NOTES);
-        emptyContactManager.addNewContact(CONTACT_3_NAME_SUFFIX, CONTACT_3_NOTES);
-        emptyContactManager.addNewContact(CONTACT_3_NAME_WHITESPACE, CONTACT_3_NOTES);
+    public void testGetContactsByNameDoesIgnoreWhitespace() {
+        cleanCM.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
+        cleanCM.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
+        cleanCM.addNewContact(CONTACT_3_NAME_PREFIX, CONTACT_3_NOTES);
+        cleanCM.addNewContact(CONTACT_3_NAME_SUFFIX, CONTACT_3_NOTES);
+        cleanCM.addNewContact(CONTACT_3_NAME_WHITESPACE, CONTACT_3_NOTES);
 
-        Set<Contact> testContacts = emptyContactManager.getContacts(CONTACT_3_NAME);
+        Set<Contact> testContacts = cleanCM.getContacts(CONTACT_3_NAME);
 
-        assertNotNull(testContacts);
         assertFalse(testContacts.isEmpty());
         assertEquals(testContacts.size(), 4);
     }
 
     @Test
-    public void testGetContactsStringWhenCMHasNoContacts () {
-        Set<Contact> testContacts = emptyContactManager.getContacts(CONTACT_1_NAME);
+    public void testGetContactsStringWhenCMHasNoContacts() {
+        Set<Contact> testContacts = cleanCM.getContacts(CONTACT_1_NAME);
 
         assertTrue(testContacts.isEmpty());
-        assertEquals(testContacts.size(),0);
     }
 
     @Test
-    public void testGetContactsStringWithNonExistentContact () {
-        Set<Contact> testContacts = contactManagerWithContacts.getContacts(NON_EXISTENT_CONTACT_NAME);
+    public void testGetContactsStringWithNonExistentContact() {
+        Set<Contact> testContacts = contactsCM.getContacts(NON_EXISTENT_CONTACT_NAME);
 
         assertTrue(testContacts.isEmpty());
-        assertEquals(testContacts.size(), EMPTY_SIZE);
     }
 
     @Test
-    public void testGetContactsByIds () {
-        Set<Contact> testContacts = contactManagerWithContacts.getContacts(
+    public void testGetContactsByIds() {
+        Set<Contact> testContacts = contactsCM.getContacts(
             CONTACT_1_ID,
             CONTACT_2_ID,
             CONTACT_3_ID,
             CONTACT_4_ID
         );
 
-        assertNotNull(testContacts);
         assertEquals(testContacts.size(), EXPECTED_CONTACT_SET_SIZE);
 
         Contact c1 = testContacts.stream().filter(c -> c.getId() == CONTACT_1_ID).findFirst().get();
@@ -144,8 +131,8 @@ public class ContactManagerContactsTest {
     }
 
     @Test
-    public void testGetContactsByIdsWithDuplicates () {
-        Set<Contact> testContacts = contactManagerWithContacts.getContacts(
+    public void testGetContactsByIdsWithDuplicates() {
+        Set<Contact> testContacts = contactsCM.getContacts(
             CONTACT_1_ID,
             CONTACT_2_ID,
             CONTACT_3_ID,
@@ -154,22 +141,12 @@ public class ContactManagerContactsTest {
             CONTACT_1_ID
         );
 
-        assertNotNull(testContacts);
         assertEquals(testContacts.size(), EXPECTED_CONTACT_SET_SIZE);
-
-        boolean testPassed = false;
-        for(Contact c : testContacts) {
-            testPassed = (c.getName().equals(CONTACT_1_NAME) ||
-                          c.getName().equals(CONTACT_2_NAME) ||
-                          c.getName().equals(CONTACT_3_NAME) ||
-                          c.getName().equals(CONTACT_4_NAME));
-        }
-        assertTrue(testPassed);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGetContactsIdsWithInvalidIds () {
-        contactManagerWithContacts.getContacts(
+    public void testGetContactsIdsWithInvalidIds() {
+        contactsCM.getContacts(
             ILLEGAL_ID_1,
             ILLEGAL_ID_2,
             ILLEGAL_ID_3,
@@ -178,13 +155,13 @@ public class ContactManagerContactsTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testGetContactsIdsWithNull () {
-        emptyContactManager.getContacts(NULL_INT_ARRAY);
+    public void testGetContactsIdsWithNull() {
+        cleanCM.getContacts(NULL_INT_ARRAY);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGetContactsIdsWhenCMHasNoContacts () {
-        emptyContactManager.getContacts(
+    public void testGetContactsIdsWhenCMHasNoContacts() {
+        cleanCM.getContacts(
             CONTACT_1_ID,
             CONTACT_2_ID,
             CONTACT_3_ID,
@@ -193,38 +170,38 @@ public class ContactManagerContactsTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testGetContactsByNameWithNull () {
-        emptyContactManager.getContacts(NULL_STRING);
+    public void testGetContactsByNameWithNull() {
+        cleanCM.getContacts(NULL_STRING);
     }
 
     @Test(expected = NullPointerException.class)
-    public void testAddContactsWithNullName () {
-        emptyContactManager.addNewContact(NULL_STRING, CONTACT_1_NOTES);
+    public void testAddContactsWithNullName() {
+        cleanCM.addNewContact(NULL_STRING, CONTACT_1_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
-    public void testAddContactsWithNullNotes () {
-        emptyContactManager.addNewContact(CONTACT_1_NAME, NULL_STRING);
+    public void testAddContactsWithNullNotes() {
+        cleanCM.addNewContact(CONTACT_1_NAME, NULL_STRING);
     }
 
     @Test(expected = NullPointerException.class)
-    public void testAddContactsWithNullNameAndNotes () {
-        emptyContactManager.addNewContact(NULL_STRING, NULL_STRING);
+    public void testAddContactsWithNullNameAndNotes() {
+        cleanCM.addNewContact(NULL_STRING, NULL_STRING);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testAddContactsWithEmptyName () {
-        emptyContactManager.addNewContact(EMPTY_STRING, CONTACT_1_NOTES);
+    public void testAddContactsWithEmptyName() {
+        cleanCM.addNewContact(EMPTY_STRING, CONTACT_1_NOTES);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testAddContactsWithEmptyNotes () {
-        emptyContactManager.addNewContact(CONTACT_1_NAME, EMPTY_STRING);
+    public void testAddContactsWithEmptyNotes() {
+        cleanCM.addNewContact(CONTACT_1_NAME, EMPTY_STRING);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testAddContactsWithEmptyNameAndNotes () {
-        emptyContactManager.addNewContact(EMPTY_STRING, EMPTY_STRING);
+    public void testAddContactsWithEmptyNameAndNotes() {
+        cleanCM.addNewContact(EMPTY_STRING, EMPTY_STRING);
     }
 
 }

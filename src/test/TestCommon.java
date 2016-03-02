@@ -1,6 +1,8 @@
 package test;
 
+import impl.ContactImpl;
 import spec.Contact;
+import spec.ContactManager;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -108,4 +110,33 @@ final class TestCommon {
             ioEx.printStackTrace();
         }
     }
+
+    /**
+     * Returns a Set of contacts for testing purposes.
+     *
+     * @return The set of test contacts
+     */
+    static Set<Contact> getMeetingContacts() {
+        Set<Contact> meetingContacts = new HashSet<>();
+        meetingContacts.add(new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME));
+        meetingContacts.add(new ContactImpl(CONTACT_2_ID, CONTACT_2_NAME));
+        meetingContacts.add(new ContactImpl(CONTACT_3_ID, CONTACT_3_NAME));
+        meetingContacts.add(new ContactImpl(CONTACT_4_ID, CONTACT_4_NAME));
+        return meetingContacts;
+    }
+
+    /**
+     * Adds 4 contacts to a Contact Manager instance for testing
+     * Some tests require a CM to have contacts &ndash; this method avoids
+     * code duplication in tests
+     *
+     * @param cm The CM instance to which contacts will be added
+     */
+    static void addFourContactsToCm(ContactManager cm) {
+        cm.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
+        cm.addNewContact(CONTACT_2_NAME, CONTACT_2_NOTES);
+        cm.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
+        cm.addNewContact(CONTACT_4_NAME, CONTACT_4_NOTES);
+    }
+
 }

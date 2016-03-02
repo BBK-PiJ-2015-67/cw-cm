@@ -21,8 +21,8 @@ import static test.TestCommon.*;
  */
 public class ContactManagerMeetingsTest {
 
-    private ContactManager emptyContactManager;
-    private ContactManager contactManagerWithContacts;
+    private ContactManager emptyCM;
+    private ContactManager meetingsCM;
     private Set<Contact> meetingContacts;
 
     private Calendar futureDate;
@@ -32,16 +32,11 @@ public class ContactManagerMeetingsTest {
     @Before
     public void setUp() {
         deleteDataFile();
+        emptyCM = new ContactManagerImpl();
+        meetingsCM = new ContactManagerImpl();
+        addFourContactsToCm(meetingsCM);
 
-        emptyContactManager = new ContactManagerImpl();
-        contactManagerWithContacts = new ContactManagerImpl();
-
-        contactManagerWithContacts.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
-        contactManagerWithContacts.addNewContact(CONTACT_2_NAME, CONTACT_2_NOTES);
-        contactManagerWithContacts.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
-        contactManagerWithContacts.addNewContact(CONTACT_4_NAME, CONTACT_4_NOTES);
-
-        meetingContacts = contactManagerWithContacts.getContacts(CONTACT_1_ID, CONTACT_3_ID, CONTACT_4_ID);
+        meetingContacts = meetingsCM.getContacts(CONTACT_1_ID, CONTACT_3_ID, CONTACT_4_ID);
 
         currentDate = new GregorianCalendar();
         futureDate = new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY);
@@ -52,8 +47,8 @@ public class ContactManagerMeetingsTest {
     public void tearDown() {
         deleteDataFile();
 
-        emptyContactManager = null;
-        contactManagerWithContacts = null;
+        emptyCM = null;
+        meetingsCM = null;
         meetingContacts = null;
         currentDate = null;
         futureDate = null;
@@ -64,8 +59,8 @@ public class ContactManagerMeetingsTest {
 
     @Test
     public void testGetExistingMeeting () {
-        int id = contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate);
-        Meeting mtg = contactManagerWithContacts.getMeeting(id);
+        int id = meetingsCM.addFutureMeeting(meetingContacts, futureDate);
+        Meeting mtg = meetingsCM.getMeeting(id);
 
         assertNotNull(mtg);
         assertEquals(mtg.getId(), id);
@@ -77,9 +72,9 @@ public class ContactManagerMeetingsTest {
 
     @Test
     public void testAddFutureMeeting () {
-        int futureMeetingId = contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate);
+        int futureMeetingId = meetingsCM.addFutureMeeting(meetingContacts, futureDate);
         currentDate.add(Calendar.SECOND, THIRTY_SECONDS);
-        int futureMeetingId2 = contactManagerWithContacts.addFutureMeeting(meetingContacts,currentDate);
+        int futureMeetingId2 = meetingsCM.addFutureMeeting(meetingContacts, currentDate);
 
         assertEquals(futureMeetingId, FIRST_MEETING_ID);
         assertEquals(futureMeetingId2, SECOND_MEETING_ID);
@@ -87,9 +82,9 @@ public class ContactManagerMeetingsTest {
 
     @Test
     public void testGetFutureMeeting () {
-        int futureMeetingId = contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate);
+        int futureMeetingId = meetingsCM.addFutureMeeting(meetingContacts, futureDate);
 
-        Meeting meeting = contactManagerWithContacts.getFutureMeeting(futureMeetingId);
+        Meeting meeting = meetingsCM.getFutureMeeting(futureMeetingId);
 
         assertNotNull(meeting);
         assertFalse(meeting instanceof PastMeeting);
@@ -100,50 +95,51 @@ public class ContactManagerMeetingsTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetFutureMeetingWithPastMeetingId () {
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1);
-        contactManagerWithContacts.getFutureMeeting(FIRST_MEETING_ID);
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1);
+        meetingsCM.getFutureMeeting(FIRST_MEETING_ID);
     }
 
     @Test(expected = NullPointerException.class)
     public void testAddFutureMeetingWithNullContacts () {
-        contactManagerWithContacts.addFutureMeeting(NULL_CONTACTS, futureDate);
+        meetingsCM.addFutureMeeting(NULL_CONTACTS, futureDate);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddFutureMeetingWithEmptyContacts () {
-        contactManagerWithContacts.addFutureMeeting(EMPTY_CONTACTS, futureDate);
+        meetingsCM.addFutureMeeting(EMPTY_CONTACTS, futureDate);
     }
 
     @Test(expected = NullPointerException.class)
     public void testAddFutureMeetingWithNullDate () {
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, NULL_CAL);
+        meetingsCM.addFutureMeeting(meetingContacts, NULL_CAL);
     }
 
     @Test(expected = NullPointerException.class)
     public void testAddFutureMeetingWithNullDateAndContacts () {
-        contactManagerWithContacts.addFutureMeeting(NULL_CONTACTS, NULL_CAL);
+        meetingsCM.addFutureMeeting(NULL_CONTACTS, NULL_CAL);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddFutureMeetingWithPastDate () {
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, pastDate);
+        meetingsCM.addFutureMeeting(meetingContacts, pastDate);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddFutureMeetingWithCurrentDate () {
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, currentDate);
+        meetingsCM.addFutureMeeting(meetingContacts, currentDate);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddFutureMeetingWithInvalidContacts () {
-        emptyContactManager.addFutureMeeting(meetingContacts, pastDate);
+        emptyCM.addFutureMeeting(meetingContacts, pastDate);
     }
 
     /* =================== PAST MEETINGS =================== */
+
     @Test
     public void testAddPastMeeting () {
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1);
-        PastMeeting pMtg = contactManagerWithContacts.getPastMeeting(FIRST_MEETING_ID);
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1);
+        PastMeeting pMtg = meetingsCM.getPastMeeting(FIRST_MEETING_ID);
 
         assertNotNull(pMtg);
         assertEquals(pMtg.getId(), FIRST_MEETING_ID);
@@ -154,9 +150,9 @@ public class ContactManagerMeetingsTest {
 
     @Test
     public void testGetPastMeeting () {
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1);
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1);
 
-        PastMeeting pMtg = contactManagerWithContacts.getPastMeeting(FIRST_MEETING_ID);
+        PastMeeting pMtg = meetingsCM.getPastMeeting(FIRST_MEETING_ID);
 
         assertNotNull(pMtg);
         assertFalse(pMtg instanceof FutureMeeting);
@@ -167,11 +163,10 @@ public class ContactManagerMeetingsTest {
     }
 
     @Test
-    public void testAddPastMeetingWithCurrentDate () {
-        Calendar currentDate = new GregorianCalendar();
+    public void testAddPastMeetingWithCurrentDateMinusFiveMillis () {
         currentDate.add(Calendar.MILLISECOND, MINUS_FIVE_MILLISECONDS);
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, currentDate, MEETING_NOTES_1);
-        PastMeeting pMtg = contactManagerWithContacts.getPastMeeting(FIRST_MEETING_ID);
+        meetingsCM.addNewPastMeeting(meetingContacts, currentDate, MEETING_NOTES_1);
+        PastMeeting pMtg = meetingsCM.getPastMeeting(FIRST_MEETING_ID);
 
         assertNotNull(pMtg);
         assertEquals(pMtg.getId(), FIRST_MEETING_ID);
@@ -181,48 +176,46 @@ public class ContactManagerMeetingsTest {
 
     @Test(expected = IllegalStateException.class)
     public void testGetPastMeetingWithFutureMeetingId () {
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate);
-        contactManagerWithContacts.getPastMeeting(FIRST_MEETING_ID);
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate);
+        meetingsCM.getPastMeeting(FIRST_MEETING_ID);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddPastMeetingWithFutureDate () {
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, futureDate, MEETING_NOTES_1);
+        meetingsCM.addNewPastMeeting(meetingContacts, futureDate, MEETING_NOTES_1);
     }
 
     @Test(expected = NullPointerException.class)
     public void testAddPastMeetingWithNullContacts () {
-        contactManagerWithContacts.addNewPastMeeting(NULL_CONTACTS, pastDate, MEETING_NOTES_1);
+        meetingsCM.addNewPastMeeting(NULL_CONTACTS, pastDate, MEETING_NOTES_1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddPastMeetingWithEmptyContacts () {
-        contactManagerWithContacts.addNewPastMeeting(EMPTY_CONTACTS, pastDate, MEETING_NOTES_1);
+        meetingsCM.addNewPastMeeting(EMPTY_CONTACTS, pastDate, MEETING_NOTES_1);
     }
 
     @Test(expected = NullPointerException.class)
     public void testAddPastMeetingWithNullDate () {
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, NULL_CAL, MEETING_NOTES_1);
+        meetingsCM.addNewPastMeeting(meetingContacts, NULL_CAL, MEETING_NOTES_1);
     }
 
     @Test(expected = NullPointerException.class)
     public void testAddPastMeetingWithNullNotes () {
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate, NULL_STRING);
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate, NULL_STRING);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddPastMeetingWithEmptyNotes () {
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate, EMPTY_STRING);
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate, EMPTY_STRING);
     }
 
     /* =================== MEETING LISTS =================== */
 
     @Test
     public void testGetEmptyFutureMeetingListIsEmpty() {
-        Set<Contact> contactSet = contactManagerWithContacts.getContacts(CONTACT_1_ID);
-        Contact testContact = contactSet.stream().findFirst().get();
-
-        List<Meeting> futureMeetingList = contactManagerWithContacts.getFutureMeetingList(testContact);
+        Contact testContact = meetingsCM.getContacts(CONTACT_1_ID).stream().findFirst().get();
+        List<Meeting> futureMeetingList = meetingsCM.getFutureMeetingList(testContact);
 
         assertNotNull(futureMeetingList);
         assertEquals(futureMeetingList.size(), EMPTY_SIZE);
@@ -231,20 +224,19 @@ public class ContactManagerMeetingsTest {
 
     @Test
     public void testGetFutureMeetingListIsNotEmptyAndSorted() {
-        Set<Contact> contactSet = contactManagerWithContacts.getContacts(CONTACT_1_ID);
-        Contact testContact = contactSet.stream().findFirst().get();
+        Contact testContact = meetingsCM.getContacts(CONTACT_1_ID).stream().findFirst().get();
 
         Calendar futureDate1 = new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY, HOUR_11, MINUTE_20);
         Calendar futureDate2 = new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY, HOUR_9, MINUTE_15);
         Calendar futureDate3 = new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY, HOUR_14, MINUTE_35);
 
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate1); // ID: 1
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1); // ID: 2
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate2); // ID: 3
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate3); // ID: 4
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_2); // ID: 5
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate1); // ID: 1
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1); // ID: 2
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate2); // ID: 3
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate3); // ID: 4
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_2); // ID: 5
 
-        List<Meeting> futureMeetingList = contactManagerWithContacts.getFutureMeetingList(testContact);
+        List<Meeting> futureMeetingList = meetingsCM.getFutureMeetingList(testContact);
 
         assertNotNull(futureMeetingList);
         assertEquals(futureMeetingList.size(), 3);
@@ -265,17 +257,17 @@ public class ContactManagerMeetingsTest {
 
     @Test(expected = NullPointerException.class)
     public void testGetFutureMeetingListWithNullContactShouldThrow () {
-        contactManagerWithContacts.getFutureMeetingList(null);
+        meetingsCM.getFutureMeetingList(NULL_CONTACT);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetFutureMeetingListWithInvalidContactShouldThrow () {
-        contactManagerWithContacts.getFutureMeetingList(new ContactImpl(ILLEGAL_ID_3, NON_EXISTENT_CONTACT_NAME));
+        meetingsCM.getFutureMeetingList(new ContactImpl(ILLEGAL_ID_3, NON_EXISTENT_CONTACT_NAME));
     }
 
     @Test
     public void testGetMeetingListOnIsEmpty() {
-        List<Meeting> meetingList = contactManagerWithContacts.getMeetingListOn(
+        List<Meeting> meetingList = meetingsCM.getMeetingListOn(
             new GregorianCalendar(FUTURE_YEAR,FUTURE_MONTH, FUTURE_DAY)
         );
 
@@ -290,13 +282,13 @@ public class ContactManagerMeetingsTest {
         Calendar futureDate2 = new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY, HOUR_9, MINUTE_15);
         Calendar futureDate3 = new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY, HOUR_14, MINUTE_35);
 
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate1); // ID: 1
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1); // ID: 2
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate2); // ID: 3
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate3); // ID: 4
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_2); // ID: 5
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate1); // ID: 1
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1); // ID: 2
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate2); // ID: 3
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate3); // ID: 4
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_2); // ID: 5
 
-        List<Meeting> meetingList = contactManagerWithContacts.getMeetingListOn(futureDate);
+        List<Meeting> meetingList = meetingsCM.getMeetingListOn(futureDate);
 
         assertNotNull(meetingList);
         assertEquals(meetingList.size(), 3);
@@ -321,13 +313,13 @@ public class ContactManagerMeetingsTest {
         Calendar pastDate2 = new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY, HOUR_9, MINUTE_20);
         Calendar pastDate3 = new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY, HOUR_14, MINUTE_35);
 
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate); // ID: 1
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate1, "Notes"); // ID: 2
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate); // ID: 3
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate2, "Notes"); // ID: 4
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate3, "Notes"); // ID: 5
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate); // ID: 1
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate1, "Notes"); // ID: 2
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate); // ID: 3
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate2, "Notes"); // ID: 4
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate3, "Notes"); // ID: 5
 
-        List<Meeting> meetingList = contactManagerWithContacts.getMeetingListOn(new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY));
+        List<Meeting> meetingList = meetingsCM.getMeetingListOn(new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY));
 
         assertNotNull(meetingList);
         assertFalse(meetingList.isEmpty());
@@ -348,15 +340,15 @@ public class ContactManagerMeetingsTest {
 
     @Test(expected = NullPointerException.class)
     public void testGetMeetingListOnShouldThrowForNullDate() {
-        contactManagerWithContacts.getMeetingListOn(NULL_CAL);
+        meetingsCM.getMeetingListOn(NULL_CAL);
     }
 
     @Test
     public void testGetEmptyPastMeetingListForIsEmpty() {
-        Set<Contact> contactSet = contactManagerWithContacts.getContacts(CONTACT_1_ID);
+        Set<Contact> contactSet = meetingsCM.getContacts(CONTACT_1_ID);
         Contact testContact = contactSet.stream().findFirst().get();
 
-        List<PastMeeting> pastMeetingList = contactManagerWithContacts.getPastMeetingListFor(testContact);
+        List<PastMeeting> pastMeetingList = meetingsCM.getPastMeetingListFor(testContact);
 
         assertNotNull(pastMeetingList);
         assertEquals(pastMeetingList.size(), EMPTY_SIZE);
@@ -365,7 +357,7 @@ public class ContactManagerMeetingsTest {
 
     @Test
     public void testGetPastMeetingListForIsNotEmptyAndSorted() {
-        Set<Contact> contactSet = contactManagerWithContacts.getContacts(CONTACT_1_ID);
+        Set<Contact> contactSet = meetingsCM.getContacts(CONTACT_1_ID);
         Contact testContact = contactSet.stream().findFirst().get();
 
         Calendar pastDate1 = new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY, HOUR_11, MINUTE_20);
@@ -373,15 +365,15 @@ public class ContactManagerMeetingsTest {
         Calendar pastDate3 = new GregorianCalendar(PAST_YEAR_2, PAST_MONTH, PAST_DAY);
         Calendar pastDate4 = new GregorianCalendar(PAST_YEAR_3, PAST_MONTH, PAST_DAY);
 
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate); // ID: 1
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate1, MEETING_NOTES_1); // ID: 2
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate); // ID: 3
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate2, MEETING_NOTES_2); // ID: 4
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate); // ID: 5
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate4, MEETING_NOTES_3); // ID: 6
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate3, MEETING_NOTES_4); // ID: 7
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate); // ID: 1
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate1, MEETING_NOTES_1); // ID: 2
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate); // ID: 3
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate2, MEETING_NOTES_2); // ID: 4
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate); // ID: 5
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate4, MEETING_NOTES_3); // ID: 6
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate3, MEETING_NOTES_4); // ID: 7
 
-        List<PastMeeting> pastMeetings = contactManagerWithContacts.getPastMeetingListFor(testContact);
+        List<PastMeeting> pastMeetings = meetingsCM.getPastMeetingListFor(testContact);
 
         assertNotNull(pastMeetings);
         assertEquals(pastMeetings.size(), 4);
@@ -406,19 +398,19 @@ public class ContactManagerMeetingsTest {
 
     @Test(expected = NullPointerException.class)
     public void testGetPastMeetingListForWithNullContactShouldThrow () {
-        contactManagerWithContacts.getPastMeetingListFor(NULL_CONTACT);
+        meetingsCM.getPastMeetingListFor(NULL_CONTACT);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetPastMeetingListForWithInvalidContactShouldThrow () {
-        contactManagerWithContacts.getPastMeetingListFor(new ContactImpl(ILLEGAL_ID_1, NON_EXISTENT_CONTACT_NAME));
+        meetingsCM.getPastMeetingListFor(new ContactImpl(ILLEGAL_ID_1, NON_EXISTENT_CONTACT_NAME));
     }
 
     @Test
     public void testAddMeetingNotes () {
         Calendar futureTime = new GregorianCalendar();
         futureTime.add(Calendar.MILLISECOND, ONE_MILLISECOND);
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureTime);
+        meetingsCM.addFutureMeeting(meetingContacts, futureTime);
 
         // pause for 5 milliseconds to ensure the new Future meeting
         // is now in the past
@@ -428,33 +420,33 @@ public class ContactManagerMeetingsTest {
             iEx.printStackTrace();
         }
 
-        contactManagerWithContacts.addMeetingNotes(FIRST_MEETING_ID, MEETING_NOTES_1);
-        assertEquals(contactManagerWithContacts.getPastMeeting(FIRST_MEETING_ID).getNotes(), MEETING_NOTES_1);
+        meetingsCM.addMeetingNotes(FIRST_MEETING_ID, MEETING_NOTES_1);
+        assertEquals(meetingsCM.getPastMeeting(FIRST_MEETING_ID).getNotes(), MEETING_NOTES_1);
     }
 
     @Test
     public void testAppendMeetingNotes () {
-        contactManagerWithContacts.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1);
-        contactManagerWithContacts.addMeetingNotes(FIRST_MEETING_ID, MEETING_NOTES_2);
-        contactManagerWithContacts.addMeetingNotes(FIRST_MEETING_ID, MEETING_NOTES_3);
+        meetingsCM.addNewPastMeeting(meetingContacts, pastDate, MEETING_NOTES_1);
+        meetingsCM.addMeetingNotes(FIRST_MEETING_ID, MEETING_NOTES_2);
+        meetingsCM.addMeetingNotes(FIRST_MEETING_ID, MEETING_NOTES_3);
 
-        assertEquals(contactManagerWithContacts.getPastMeeting(FIRST_MEETING_ID).getNotes(),
+        assertEquals(meetingsCM.getPastMeeting(FIRST_MEETING_ID).getNotes(),
                 MEETING_NOTES_1 + NOTES_DELIMITER + MEETING_NOTES_2 + NOTES_DELIMITER + MEETING_NOTES_3);
     }
 
     @Test(expected = NullPointerException.class)
     public void testAddMeetingNotesWithNullNotes () {
-        contactManagerWithContacts.addMeetingNotes(FIRST_MEETING_ID, NULL_STRING);
+        meetingsCM.addMeetingNotes(FIRST_MEETING_ID, NULL_STRING);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddMeetingNotesWithInvalidId () {
-        contactManagerWithContacts.addMeetingNotes(ILLEGAL_ID_3, MEETING_NOTES_1);
+        meetingsCM.addMeetingNotes(ILLEGAL_ID_3, MEETING_NOTES_1);
     }
 
     @Test(expected = IllegalStateException.class)
     public void testAddMeetingNotesToFutureMeeting () {
-        contactManagerWithContacts.addFutureMeeting(meetingContacts, futureDate);
-        contactManagerWithContacts.addMeetingNotes(FIRST_MEETING_ID, MEETING_NOTES_1);
+        meetingsCM.addFutureMeeting(meetingContacts, futureDate);
+        meetingsCM.addMeetingNotes(FIRST_MEETING_ID, MEETING_NOTES_1);
     }
 }

@@ -1,6 +1,5 @@
 package test;
 
-import impl.ContactImpl;
 import org.junit.Before;
 import org.junit.Test;
 import spec.Contact;
@@ -8,11 +7,10 @@ import spec.Meeting;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static test.TestCommon.*;
 
 /**
@@ -31,19 +29,13 @@ public class MeetingTest {
     @Before
     public void setUp () {
         meetingDate = new GregorianCalendar(YEAR, MONTH, DAY);
-        meetingContacts = new HashSet<>();
-
-        meetingContacts.add(new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME));
-        meetingContacts.add(new ContactImpl(CONTACT_2_ID, CONTACT_2_NAME));
-        meetingContacts.add(new ContactImpl(CONTACT_3_ID, CONTACT_3_NAME));
-        meetingContacts.add(new ContactImpl(CONTACT_4_ID, CONTACT_4_NAME));
+        meetingContacts = getMeetingContacts();
     }
 
     @Test
     public void createAMeeting () {
         meeting = new MeetingMock(MEETING_ID, meetingDate, meetingContacts);
 
-        assertNotNull(meeting);
         assertEquals(meeting.getDate(), meetingDate);
         assertEquals(meeting.getId(), MEETING_ID);
         assertEquals(meeting.getContacts(), meetingContacts);
@@ -83,18 +75,17 @@ public class MeetingTest {
      * A Mock Meeting class implemented in order to test
      * basic Meeting Interface functionality
      */
-    private class MeetingMock implements Meeting {
+    private final class MeetingMock implements Meeting {
 
         private Calendar meetingDate;
         private int meetingId;
         private Set<Contact> meetingContacts;
 
         MeetingMock (int id, Calendar date, Set<Contact> contacts) {
+            Objects.requireNonNull(date);
+            Objects.requireNonNull(contacts);
             if (id <= 0) {
                 throw new IllegalArgumentException("IDs must be greater than 0");
-            }
-            if (date == null || contacts == null) {
-                throw new NullPointerException("null passed as argument to date, contacts, or both");
             }
             if (contacts.isEmpty()) {
                 throw new IllegalArgumentException("No contacts provided, cannot have a meeting without contacts.");
