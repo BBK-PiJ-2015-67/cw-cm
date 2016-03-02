@@ -98,7 +98,7 @@ final class TestCommon {
      * Deletes the ContactManager data file<br>
      * The file is assumed to be named "contacts.txt"
      */
-    static void deleteDataFile () {
+    static void deleteDataFile() {
         try {
             Path p = FileSystems.getDefault().getPath(FILENAME);
             if (Files.exists(p)) {

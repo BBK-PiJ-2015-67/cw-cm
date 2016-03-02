@@ -33,7 +33,7 @@ public abstract class MeetingImpl implements Meeting, Serializable {
      * @throws IllegalArgumentException if the id is negative or 0,
      *                                  or if the set of contacts is empty
      */
-    public MeetingImpl (int id, Calendar date, Set<Contact> contacts) {
+    public MeetingImpl(int id, Calendar date, Set<Contact> contacts) {
         Objects.requireNonNull(date);
         Objects.requireNonNull(contacts);
         if (id <= 0 || contacts.isEmpty()) {

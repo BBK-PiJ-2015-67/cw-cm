@@ -3,7 +3,6 @@ package impl;
 import spec.*;
 
 import java.io.*;
-import java.nio.file.AccessDeniedException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.*;
@@ -46,7 +45,7 @@ public class ContactManagerImpl implements ContactManager {
     private int nextMeetingId;
     private int nextContactId;
 
-    public ContactManagerImpl () {
+    public ContactManagerImpl() {
         readDataFromFile();
         cmDate = new GregorianCalendar();
     }
@@ -291,7 +290,7 @@ public class ContactManagerImpl implements ContactManager {
      * @throws NullPointerException if the argument is null
      */
     @Override
-    public Set<Contact> getContacts (int... ids) {
+    public Set<Contact> getContacts(int... ids) {
         Objects.requireNonNull(ids);
         if (!isValidContactIds(ids)) { throw new IllegalArgumentException(); }
 
@@ -327,10 +326,6 @@ public class ContactManagerImpl implements ContactManager {
             out.writeObject(cmMeetings);
             out.writeObject(nextMeetingId);
             out.writeObject(nextContactId);
-        } catch (FileNotFoundException nfEx) {
-            nfEx.printStackTrace();
-        } catch (AccessDeniedException secEx) {
-            secEx.printStackTrace();
         } catch (IOException ioEx) {
             ioEx.printStackTrace();
         }
@@ -378,9 +373,7 @@ public class ContactManagerImpl implements ContactManager {
      * @return True if ALL the ids are found, false if ANY are NOT found
      */
     private boolean isValidContactIds(int... ids) {
-        if (ids.length == 0) {
-            return false;
-        }
+        if (ids.length == 0) { return false; }
         int found = 0;
         for (Contact c : cmContacts) {
             for (int i : ids) {
@@ -397,7 +390,7 @@ public class ContactManagerImpl implements ContactManager {
      * @param contact the Contact to check
      * @return true if the Contact exists, false if not
      */
-    private boolean isValidContact (Contact contact) {
+    private boolean isValidContact(Contact contact) {
         return isValidContactIds((new int[1])[0] = contact.getId());
     }
 
@@ -407,7 +400,7 @@ public class ContactManagerImpl implements ContactManager {
      * @param contacts The Set of contacts to check
      * @return true if all contacts exist, false if any contacts do not exist
      */
-    private boolean isValidContacts (Set<Contact> contacts) {
+    private boolean isValidContacts(Set<Contact> contacts) {
         return !contacts.isEmpty() && isValidContactIds(contacts.stream().mapToInt(Contact::getId).toArray());
     }
 

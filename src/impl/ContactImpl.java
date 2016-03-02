@@ -29,7 +29,7 @@ public class ContactImpl implements Contact, Serializable {
      *                                  or the name is an empty string
      * @throws NullPointerException if the name is null
      */
-    public ContactImpl (int id, String name) {
+    public ContactImpl(int id, String name) {
         Objects.requireNonNull(name);
         if (id <= 0 || name.equals("")) {
             throw new IllegalArgumentException();

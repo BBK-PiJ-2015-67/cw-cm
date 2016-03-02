@@ -25,7 +25,7 @@ public class FutureMeetingImpl extends MeetingImpl implements FutureMeeting, Ser
      * @throws IllegalArgumentException if the id is negative or 0,
      *                                  or if the set of contacts is empty
      */
-    public FutureMeetingImpl (int id, Calendar date, Set<Contact> contacts) {
+    public FutureMeetingImpl(int id, Calendar date, Set<Contact> contacts) {
         super(id, date, contacts);
     }
 }
