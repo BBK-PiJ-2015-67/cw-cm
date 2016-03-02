@@ -232,13 +232,13 @@ public class ContactManagerImpl implements ContactManager {
         if (mtg == null) { throw new IllegalArgumentException(); }
         if (mtg.getDate().after(cmDate)) { throw new IllegalStateException(); }
 
-        String newNotes = null;
+        StringJoiner sj = new StringJoiner("\n");
         if (mtg instanceof PastMeeting && !((PastMeeting) mtg).getNotes().equals("")) {
-            newNotes = ((PastMeeting) mtg).getNotes() + "\n" + text;
+            sj.add(((PastMeeting) mtg).getNotes());
         }
-        newNotes = (newNotes == null) ? text : newNotes;
+        sj.add(text);
 
-        PastMeeting newMeeting = new PastMeetingImpl(id, mtg.getDate(), mtg.getContacts(), newNotes);
+        PastMeeting newMeeting = new PastMeetingImpl(id, mtg.getDate(), mtg.getContacts(), sj.toString());
         cmMeetings.set(id - 1, newMeeting);
     }
 
@@ -272,9 +272,7 @@ public class ContactManagerImpl implements ContactManager {
     @Override
     public Set<Contact> getContacts(String name) {
         Objects.requireNonNull(name);
-        if(name.equals("")) {
-            return cloneContacts();
-        }
+        if(name.equals("")) { return cloneContacts(); }
 
         Set<Contact> result = new HashSet<>();
         result.addAll(
@@ -295,9 +293,7 @@ public class ContactManagerImpl implements ContactManager {
     @Override
     public Set<Contact> getContacts (int... ids) {
         Objects.requireNonNull(ids);
-        if (!isValidContactIds(ids)) {
-            throw new IllegalArgumentException();
-        }
+        if (!isValidContactIds(ids)) { throw new IllegalArgumentException(); }
 
         Set<Contact> result = new HashSet<>();
         for (Contact c : cmContacts) {
