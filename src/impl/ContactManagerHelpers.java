@@ -17,7 +17,7 @@ final class ContactManagerHelpers {
      * Check for null values in an array of objects
      *
      * @param args The arguments to check
-     * @throws NullPointerException if any of the arguments are null
+     * @throws NullPointerException if ANY of the arguments are null
      */
     @SafeVarargs
     static <T> void requireNonNullArguments(T... args) {

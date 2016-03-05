@@ -60,7 +60,6 @@ final class TestCommon {
     static final String MEETING_NOTES = "Notes";
     static final String MEETING_NOTES_2 = "More Notes";
     static final String MEETING_NOTES_3 = "More than more Notes";
-    static final String MEETING_NOTES_4 = "And some more notes. This can go on";
     static final String NOTES_DELIMITER = "\n";
 
     static final int FUTURE_YEAR = 2020;
@@ -73,8 +72,6 @@ final class TestCommon {
     static final int MINUTE_15 = 15;
     static final int MINUTE_35 = 35;
     static final int PAST_YEAR = 1967;
-    static final int PAST_YEAR_2 = 1979;
-    static final int PAST_YEAR_3 = 2011;
     static final int PAST_MONTH = 8;
     static final int PAST_DAY = 2;
     static final int YEAR = 1967;
@@ -142,7 +139,7 @@ final class TestCommon {
     }
 
     /**
-     * Adds 4 contacts to a Contact Manager instance for testing
+     * Adds test contacts to a Contact Manager instance for testing
      * Some tests require a CM to have contacts &ndash; this method avoids
      * code duplication in tests
      *
