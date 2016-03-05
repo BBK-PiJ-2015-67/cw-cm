@@ -8,6 +8,9 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static impl.ContactManagerHelpers.*;
+import static java.util.Objects.requireNonNull;
+
 /**
  * A Contact Manager implementation
  *
@@ -95,7 +98,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
-        requireNonNull(contacts, date);
+        requireNonNullArguments(contacts, date);
 
         cmDate = new GregorianCalendar();
 
@@ -156,16 +159,17 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public List<Meeting> getFutureMeetingList(Contact contact) {
-        Objects.requireNonNull(contact);
+        requireNonNull(contact);
         if (!cmContacts.contains(contact)) {
             throw new IllegalArgumentException();
         }
 
-        return cmMeetings.stream()
+        List<Meeting> result = cmMeetings.stream()
             .filter(m -> m.getContacts().contains(contact) && m instanceof FutureMeeting)
             .sorted((m1, m2) -> (m1.getDate().compareTo(m2.getDate())))
-            .distinct()
             .collect(Collectors.toList());
+        
+        return getDistinctMeetings(result);
     }
 
     /**
@@ -174,15 +178,16 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public List<Meeting> getMeetingListOn(Calendar date) {
-        Objects.requireNonNull(date);
+        requireNonNull(date);
 
-        return cmMeetings.stream()
+        List<Meeting> result = cmMeetings.stream()
             .filter(m -> m.getDate().get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
                     m.getDate().get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
                     m.getDate().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
             .sorted((m1, m2) -> (m1.getDate().compareTo(m2.getDate())))
-            .distinct()
             .collect(Collectors.toList());
+
+        return getDistinctMeetings(result);
     }
 
     /**
@@ -192,17 +197,17 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public List<PastMeeting> getPastMeetingListFor(Contact contact) {
-        Objects.requireNonNull(contact);
+        requireNonNull(contact);
         if (!cmContacts.contains(contact)) {
             throw new IllegalArgumentException();
         }
 
-        return cmMeetings.stream()
+        List<Meeting> result = cmMeetings.stream()
             .filter(m -> m.getContacts().contains(contact) && m instanceof PastMeeting)
             .sorted((m1, m2) -> (m1.getDate().compareTo(m2.getDate())))
-            .map(m -> (PastMeeting) m)
-            .distinct()
             .collect(Collectors.toList());
+
+        return getDistinctMeetings(result).stream().map(m -> (PastMeeting) m).collect(Collectors.toList());
     }
 
     /**
@@ -212,7 +217,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text) {
-        requireNonNull(contacts,date,text);
+        requireNonNullArguments(contacts,date,text);
 
         cmDate = new GregorianCalendar();
 
@@ -233,7 +238,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public void addMeetingNotes(int id, String text) {
-        Objects.requireNonNull(text);
+        requireNonNull(text);
 
         cmDate = new GregorianCalendar();
 
@@ -258,7 +263,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public int addNewContact(String name, String notes) {
-        requireNonNull(name, notes);
+        requireNonNullArguments(name, notes);
         if (name.equals("") || notes.equals("")) {
             throw new IllegalArgumentException();
         }
@@ -279,7 +284,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public Set<Contact> getContacts(String name) {
-        Objects.requireNonNull(name);
+        requireNonNull(name);
 
         if(name.equals("")) {
             return cmContacts.stream().collect(Collectors.toSet());
@@ -297,7 +302,7 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public Set<Contact> getContacts(int... ids) {
-        Objects.requireNonNull(ids);
+        requireNonNull(ids);
 
         Set<Contact> result = cmContacts.stream()
             .filter(c -> Arrays.stream(ids).anyMatch(i -> i == c.getId()))
@@ -332,20 +337,6 @@ public class ContactManagerImpl implements ContactManager {
             out.writeObject(nextContactId);
         } catch (IOException ioEx) {
             ioEx.printStackTrace();
-        }
-    }
-
-    /**
-     * Check for null values in an array of arguments
-     * Helper method when more than one argument should not be null
-     *
-     * @param args The arguments to check
-     * @throws NullPointerException if any of the arguments are null
-     */
-    @SafeVarargs
-    private static <T> void requireNonNull(T... args) {
-        for (T t : args) {
-            Objects.requireNonNull(t);
         }
     }
 }
