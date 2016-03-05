@@ -29,16 +29,12 @@ public class ContactManagerContactsTest {
         deleteDataFile();
         cleanCM = new ContactManagerImpl();
         contactsCM = new ContactManagerImpl();
-        addFourContactsToCm(contactsCM);
+        addTestContacts(contactsCM);
     }
 
     @After
     public void tearDown() {
-        // delete any data file if present after running tests
         deleteDataFile();
-
-        cleanCM = null;
-        contactsCM = null;
     }
 
     /* =================== CONTACTS =================== */
@@ -51,7 +47,7 @@ public class ContactManagerContactsTest {
         cleanCM.addNewContact(CONTACT_4_NAME, CONTACT_4_NOTES);
 
         assertFalse(cleanCM.getContacts(EMPTY_STRING).isEmpty());
-        assertEquals(cleanCM.getContacts(EMPTY_STRING).size(), EXPECTED_CONTACT_SET_SIZE);
+        assertEquals(cleanCM.getContacts(EMPTY_STRING).size(), EXPECTED_NUM_CONTACTS_4);
     }
 
     @Test
@@ -87,7 +83,7 @@ public class ContactManagerContactsTest {
         Set<Contact> testContacts = cleanCM.getContacts(CONTACT_3_NAME);
 
         assertFalse(testContacts.isEmpty());
-        assertEquals(testContacts.size(), 4);
+        assertEquals(testContacts.size(), EXPECTED_NUM_CONTACTS_4);
     }
 
     @Test
@@ -113,7 +109,7 @@ public class ContactManagerContactsTest {
             CONTACT_4_ID
         );
 
-        assertEquals(testContacts.size(), EXPECTED_CONTACT_SET_SIZE);
+        assertEquals(testContacts.size(), EXPECTED_NUM_CONTACTS_4);
 
         Contact c1 = testContacts.stream().filter(c -> c.getId() == CONTACT_1_ID).findFirst().get();
         Contact c2 = testContacts.stream().filter(c -> c.getId() == CONTACT_2_ID).findFirst().get();
@@ -138,10 +134,12 @@ public class ContactManagerContactsTest {
             CONTACT_3_ID,
             CONTACT_4_ID,
             CONTACT_3_ID,
-            CONTACT_1_ID
+            CONTACT_1_ID,
+            CONTACT_5_ID,
+            CONTACT_6_ID
         );
 
-        assertEquals(testContacts.size(), EXPECTED_CONTACT_SET_SIZE);
+        assertEquals(testContacts.size(), EXPECTED_NUM_CONTACTS);
     }
 
     @Test(expected = IllegalArgumentException.class)

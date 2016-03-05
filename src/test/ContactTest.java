@@ -16,11 +16,11 @@ public class ContactTest {
 
     @Test
     public void testNewContactWithNotes () {
-        Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME, MEETING_NOTES_1);
+        Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME, MEETING_NOTES);
 
         assertEquals(testContact.getId(), CONTACT_1_ID);
         assertEquals(testContact.getName(), CONTACT_1_NAME);
-        assertEquals(testContact.getNotes(), MEETING_NOTES_1);
+        assertEquals(testContact.getNotes(), MEETING_NOTES);
     }
 
     @Test
@@ -34,26 +34,26 @@ public class ContactTest {
     @Test
     public void testAddNotesToContact () {
         Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME);
-        testContact.addNotes(MEETING_NOTES_1);
+        testContact.addNotes(MEETING_NOTES);
 
-        assertEquals(testContact.getNotes(), MEETING_NOTES_1);
+        assertEquals(testContact.getNotes(), MEETING_NOTES);
     }
 
     @Test
     public void testAddNotesToContactWithExistingNotes () {
         Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME);
-        testContact.addNotes(MEETING_NOTES_1);
+        testContact.addNotes(MEETING_NOTES);
         testContact.addNotes(MEETING_NOTES_2);
 
-        assertEquals(testContact.getNotes(), MEETING_NOTES_1 + NOTES_DELIMITER + MEETING_NOTES_2);
+        assertEquals(testContact.getNotes(), MEETING_NOTES + NOTES_DELIMITER + MEETING_NOTES_2);
     }
 
     @Test
     public void testAddNotesToContactWithNotesInConstructor () {
-        Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME, MEETING_NOTES_1);
+        Contact testContact = new ContactImpl(CONTACT_1_ID, CONTACT_1_NAME, MEETING_NOTES);
         testContact.addNotes(MEETING_NOTES_2);
 
-        assertEquals(testContact.getNotes(), MEETING_NOTES_1 + NOTES_DELIMITER + MEETING_NOTES_2);
+        assertEquals(testContact.getNotes(), MEETING_NOTES + NOTES_DELIMITER + MEETING_NOTES_2);
     }
 
     @Test(expected = IllegalArgumentException.class)

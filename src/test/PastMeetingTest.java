@@ -1,7 +1,6 @@
 package test;
 
 import impl.PastMeetingImpl;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import spec.Contact;
@@ -31,62 +30,56 @@ public class PastMeetingTest {
         meetingDate = new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY);
         meetingContacts = getMeetingContacts();
     }
-    
-    @After
-    public void tearDown () {
-        meetingContacts = null;
-        meetingDate = null;
-    }
 
     @Test
     public void createAPastMeeting() {
-        Meeting mMtg = new PastMeetingImpl(MEETING_ID, meetingDate, meetingContacts, MEETING_NOTES_1);
+        Meeting mMtg = new PastMeetingImpl(MEETING_ID, meetingDate, meetingContacts, MEETING_NOTES);
 
         assertNotNull(mMtg);
         assertEquals(mMtg.getId(), MEETING_ID);
         assertEquals(mMtg.getDate(), meetingDate);
         assertEquals(mMtg.getContacts(),meetingContacts);
-        assertEquals(mMtg.getContacts().size(), EXPECTED_CONTACT_SET_SIZE);
+        assertEquals(mMtg.getContacts().size(), EXPECTED_NUM_CONTACTS_4);
         assertNotNull(((PastMeeting) mMtg).getNotes());
-        assertEquals(((PastMeeting) mMtg).getNotes(), MEETING_NOTES_1);
+        assertEquals(((PastMeeting) mMtg).getNotes(), MEETING_NOTES);
     }
 
     @Test
     public void createAPastMeetingOfTypePastMeeting() {
-        PastMeeting pMtg = new PastMeetingImpl(MEETING_ID, meetingDate, meetingContacts, MEETING_NOTES_1);
+        PastMeeting pMtg = new PastMeetingImpl(MEETING_ID, meetingDate, meetingContacts, MEETING_NOTES);
 
         assertNotNull(pMtg);
         assertEquals(pMtg.getId(), MEETING_ID);
         assertEquals(pMtg.getDate(), meetingDate);
-        assertEquals(pMtg.getContacts().size(), EXPECTED_CONTACT_SET_SIZE);
+        assertEquals(pMtg.getContacts().size(), EXPECTED_NUM_CONTACTS_4);
         assertEquals(pMtg.getContacts(),meetingContacts);
         assertNotNull(pMtg.getNotes());
-        assertEquals(pMtg.getNotes(), MEETING_NOTES_1);
+        assertEquals(pMtg.getNotes(), MEETING_NOTES);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void negativeIdShouldThrow () {
-        new PastMeetingImpl(ID_NEG, meetingDate, meetingContacts, MEETING_NOTES_1);
+        new PastMeetingImpl(ID_NEG, meetingDate, meetingContacts, MEETING_NOTES);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void zeroIdShouldThrow () {
-        new PastMeetingImpl(ID_ZERO, meetingDate, meetingContacts, MEETING_NOTES_1);
+        new PastMeetingImpl(ID_ZERO, meetingDate, meetingContacts, MEETING_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullDateShouldThrow () {
-        new PastMeetingImpl(MEETING_ID, NULL_CAL, meetingContacts, MEETING_NOTES_1);
+        new PastMeetingImpl(MEETING_ID, NULL_CAL, meetingContacts, MEETING_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullContactsShouldThrow () {
-        new PastMeetingImpl(MEETING_ID, meetingDate, NULL_CONTACTS, MEETING_NOTES_1);
+        new PastMeetingImpl(MEETING_ID, meetingDate, NULL_CONTACTS, MEETING_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
     public void nullContactsAndDateShouldThrow () {
-        new PastMeetingImpl(MEETING_ID, NULL_CAL, NULL_CONTACTS, MEETING_NOTES_1);
+        new PastMeetingImpl(MEETING_ID, NULL_CAL, NULL_CONTACTS, MEETING_NOTES);
     }
 
     @Test(expected = NullPointerException.class)
@@ -111,6 +104,6 @@ public class PastMeetingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void emptyContactsShouldThrow () {
-        new PastMeetingImpl(MEETING_ID, meetingDate, EMPTY_CONTACTS, MEETING_NOTES_1);
+        new PastMeetingImpl(MEETING_ID, meetingDate, EMPTY_CONTACTS, MEETING_NOTES);
     }
 }

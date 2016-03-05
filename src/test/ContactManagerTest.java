@@ -38,14 +38,12 @@ public class ContactManagerTest {
         deleteDataFile();
         emptyCM = new ContactManagerImpl();
         contactsCM = new ContactManagerImpl();
-        addFourContactsToCm(contactsCM);
+        addTestContacts(contactsCM);
     }
 
     @After
     public void tearDown() {
         deleteDataFile();
-        contactsCM = null;
-        emptyCM = null;
     }
 
     /* =================== FLUSH, ETC... =================== */
@@ -69,7 +67,7 @@ public class ContactManagerTest {
     public void testEmptyCMShouldHaveNoMeetingsAfterFlush() {
         emptyCM.flush();
         emptyCM = new ContactManagerImpl();
-        Meeting mtg = emptyCM.getMeeting(FIRST_MEETING_ID);
+        Meeting mtg = emptyCM.getMeeting(ID_ONE);
         assertNull(mtg);
     }
 
@@ -95,7 +93,7 @@ public class ContactManagerTest {
         Set<Contact> contacts = contactsCM.getContacts(CONTACT_1_ID, CONTACT_2_ID);
 
         contactsCM.addFutureMeeting(contacts, new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY));
-        contactsCM.addNewPastMeeting(contacts, new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY), MEETING_NOTES_1);
+        contactsCM.addNewPastMeeting(contacts, new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY), MEETING_NOTES);
 
         Meeting m1 = contactsCM.getFutureMeeting(FIRST_MEETING_ID);
         PastMeeting m2 = contactsCM.getPastMeeting(SECOND_MEETING_ID);
