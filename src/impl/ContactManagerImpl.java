@@ -41,15 +41,50 @@ import java.util.stream.Collectors;
 public class ContactManagerImpl implements ContactManager {
 
     private static final String FILENAME = "contacts.txt";
+
+    private final Set<Contact> cmContacts;
+    private final List<Meeting> cmMeetings;
+
     private Calendar cmDate;
-    private Set<Contact> cmContacts;
-    private List<Meeting> cmMeetings;
     private int nextMeetingId;
     private int nextContactId;
 
+    /**
+     * As per the specification a ContactManager has one
+     * constructor with no argument. On instantiation, we check
+     * if a data file exists, if it does we attempt to read in
+     * the contents of meetings, contacts and the next ID for
+     * new contacts &amp; meetings.<br>
+     * If there is no file, or there's an error reading the file
+     * we initialise a new CM with default values and empty data
+     * structures.
+     */
     public ContactManagerImpl() {
-        readDataFromFile();
+        Set<Contact> tmpContacts = null;
+        List<Meeting> tmpMeetings = null;
+        int tmpNextMeetingId = -1;
+        int tmpNextContactId = -1;
+
+        if(Files.exists(FileSystems.getDefault().getPath(FILENAME))) {
+            try (ObjectInputStream in = new ObjectInputStream(
+                    new BufferedInputStream(
+                            new FileInputStream(FILENAME)
+                    )
+            )) {
+                tmpContacts = (Set<Contact>) in.readObject();
+                tmpMeetings = (List<Meeting>) in.readObject();
+                tmpNextMeetingId = (int) in.readObject();
+                tmpNextContactId = (int) in.readObject();
+            } catch (ClassNotFoundException | IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
         cmDate = new GregorianCalendar();
+        cmContacts = (tmpContacts == null) ? new HashSet<>() : tmpContacts;
+        cmMeetings = (tmpMeetings == null) ? new ArrayList<>() : tmpMeetings;
+        nextMeetingId = (tmpNextMeetingId == -1) ? 1 : tmpNextMeetingId;
+        nextContactId = (tmpNextContactId == -1) ? 1 : tmpNextContactId;
     }
 
     /**
@@ -298,40 +333,6 @@ public class ContactManagerImpl implements ContactManager {
         } catch (IOException ioEx) {
             ioEx.printStackTrace();
         }
-    }
-
-    /**
-     * Reads ContactManager data from a file if it exists.<br>
-     * The file is assumed to be in the same directory as the class
-     * and named {@code contacts.txt}<br>
-     * If the file does not exist, initialises ContactManager with empty
-     * data structures and starting Contact/Meeting ids of 1
-     */
-    private void readDataFromFile() {
-        Set<Contact> tmpContacts = null;
-        List<Meeting> tmpMeetings = null;
-        int tmpNextMeetingId = -1;
-        int tmpNextContactId = -1;
-
-        if(Files.exists(FileSystems.getDefault().getPath(FILENAME))) {
-            try (ObjectInputStream in = new ObjectInputStream(
-                new BufferedInputStream(
-                    new FileInputStream(FILENAME)
-                )
-            )) {
-                tmpContacts = (Set<Contact>) in.readObject();
-                tmpMeetings = (List<Meeting>) in.readObject();
-                tmpNextMeetingId = (int) in.readObject();
-                tmpNextContactId = (int) in.readObject();
-            } catch (ClassNotFoundException | IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        cmContacts = (tmpContacts == null) ? new HashSet<>() : tmpContacts;
-        cmMeetings = (tmpMeetings == null) ? new ArrayList<>() : tmpMeetings;
-        nextMeetingId = (tmpNextMeetingId == -1) ? 1 : tmpNextMeetingId;
-        nextContactId = (tmpNextContactId == -1) ? 1 : tmpNextContactId;
     }
 
     /**
