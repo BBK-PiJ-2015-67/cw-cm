@@ -91,14 +91,14 @@ public class ContactManagerContactsTest {
     }
 
     @Test
-    public void testGetContactsStringWhenCMHasNoContacts() {
+    public void testGetContactsByNameWhenCMHasNoContacts() {
         Set<Contact> testContacts = cleanCM.getContacts(CONTACT_1_NAME);
 
         assertTrue(testContacts.isEmpty());
     }
 
     @Test
-    public void testGetContactsStringWithNonExistentContact() {
+    public void testGetContactsByNameWithNonExistentContact() {
         Set<Contact> testContacts = contactsCM.getContacts(NON_EXISTENT_CONTACT_NAME);
 
         assertTrue(testContacts.isEmpty());
@@ -145,7 +145,7 @@ public class ContactManagerContactsTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGetContactsIdsWithInvalidIds() {
+    public void testGetContactsByIdsWithInvalidIds() {
         contactsCM.getContacts(
             ILLEGAL_ID_1,
             ILLEGAL_ID_2,
@@ -155,12 +155,12 @@ public class ContactManagerContactsTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testGetContactsIdsWithNull() {
+    public void testGetContactsByIdsWithNull() {
         cleanCM.getContacts(NULL_INT_ARRAY);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGetContactsIdsWhenCMHasNoContacts() {
+    public void testGetContactsByIdsWhenCMHasNoContacts() {
         cleanCM.getContacts(
             CONTACT_1_ID,
             CONTACT_2_ID,
@@ -170,7 +170,7 @@ public class ContactManagerContactsTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testGetContactsByNameWithNull() {
+    public void testGetContactsWithNullName() {
         cleanCM.getContacts(NULL_STRING);
     }
 

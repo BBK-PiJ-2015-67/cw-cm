@@ -357,8 +357,7 @@ public class ContactManagerMeetingsTest {
 
     @Test
     public void testGetPastMeetingListForIsNotEmptyAndSorted() {
-        Set<Contact> contactSet = meetingsCM.getContacts(CONTACT_1_ID);
-        Contact testContact = contactSet.stream().findFirst().get();
+        Contact testContact = meetingsCM.getContacts(CONTACT_1_ID).stream().findFirst().get();
 
         Calendar pastDate1 = new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY, HOUR_11, MINUTE_20);
         Calendar pastDate2 = new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY, HOUR_14, MINUTE_35);
