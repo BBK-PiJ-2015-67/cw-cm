@@ -166,7 +166,7 @@ public class ContactManagerImpl implements ContactManager {
 
         List<Meeting> result = cmMeetings.stream()
             .filter(m -> m.getContacts().contains(contact) && m instanceof FutureMeeting)
-            .sorted((m1, m2) -> (m1.getDate().compareTo(m2.getDate())))
+            .sorted(Comparator.comparing(Meeting::getDate))
             .collect(Collectors.toList());
         
         return getDistinctMeetings(result);
@@ -184,7 +184,7 @@ public class ContactManagerImpl implements ContactManager {
             .filter(m -> m.getDate().get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
                     m.getDate().get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
                     m.getDate().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
-            .sorted((m1, m2) -> (m1.getDate().compareTo(m2.getDate())))
+            .sorted(Comparator.comparing(Meeting::getDate))
             .collect(Collectors.toList());
 
         return getDistinctMeetings(result);
@@ -204,7 +204,7 @@ public class ContactManagerImpl implements ContactManager {
 
         List<Meeting> result = cmMeetings.stream()
             .filter(m -> m.getContacts().contains(contact) && m instanceof PastMeeting)
-            .sorted((m1, m2) -> (m1.getDate().compareTo(m2.getDate())))
+            .sorted(Comparator.comparing(Meeting::getDate))
             .collect(Collectors.toList());
 
         return getDistinctMeetings(result).stream().map(m -> (PastMeeting) m).collect(Collectors.toList());
