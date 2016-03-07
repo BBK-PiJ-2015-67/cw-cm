@@ -60,7 +60,10 @@ public class ContactManagerImpl implements ContactManager {
      * new contacts &amp; meetings.<br>
      * If there is no file, or there's an error reading the file
      * we initialise a new CM with default values and empty data
-     * structures.
+     * structures.<br>
+     * This op is performed in the Constructor rather than another
+     * method as it is not possible to initialise final
+     * fields outside the constructor.
      */
     public ContactManagerImpl() {
         Set<Contact> tmpContacts = null;
