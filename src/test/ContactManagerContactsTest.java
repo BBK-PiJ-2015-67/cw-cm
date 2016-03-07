@@ -11,7 +11,6 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 import static test.TestCommon.*;
-import static test.TestCommon.addTestContacts;
 
 /**
  * ContactManager tests
