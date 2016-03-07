@@ -36,7 +36,7 @@ public class FutureMeetingTest {
 
         assertEquals(mMtg.getId(), MEETING_ID);
         assertEquals(mMtg.getDate(), futureDate);
-        assertEquals(mMtg.getContacts().size(), EXPECTED_NUM_CONTACTS_4);
+        assertEquals(mMtg.getContacts().size(), FOUR);
         assertEquals(mMtg.getContacts(), meetingContacts);
     }
 
@@ -46,7 +46,7 @@ public class FutureMeetingTest {
 
         assertEquals(fMtg.getId(), MEETING_ID);
         assertEquals(fMtg.getDate(), futureDate);
-        assertEquals(fMtg.getContacts().size(), EXPECTED_NUM_CONTACTS_4);
+        assertEquals(fMtg.getContacts().size(), FOUR);
         assertEquals(fMtg.getContacts(), meetingContacts);
     }
 
@@ -57,7 +57,7 @@ public class FutureMeetingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void zeroIdShouldThrow () {
-        new FutureMeetingImpl(ID_ZERO, futureDate, meetingContacts);
+        new FutureMeetingImpl(ZERO, futureDate, meetingContacts);
     }
 
     @Test(expected = NullPointerException.class)

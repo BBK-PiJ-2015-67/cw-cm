@@ -48,7 +48,7 @@ public class MeetingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void zeroIdShouldThrow () {
-        meeting = new MeetingMock(ID_ZERO, meetingDate, meetingContacts);
+        meeting = new MeetingMock(ZERO, meetingDate, meetingContacts);
     }
 
     @Test(expected = NullPointerException.class)

@@ -81,8 +81,8 @@ public class ContactManagerMeetingsTest {
         currentDate.add(Calendar.SECOND, THIRTY_SECONDS);
         int futureMeetingId2 = contactsCM.addFutureMeeting(contactsA, currentDate);
 
-        assertEquals(futureMeetingId, ID_ONE);
-        assertEquals(futureMeetingId2, ID_TWO);
+        assertEquals(futureMeetingId, ONE);
+        assertEquals(futureMeetingId2, TWO);
     }
 
     @Test
@@ -101,7 +101,7 @@ public class ContactManagerMeetingsTest {
     @Test(expected = IllegalArgumentException.class)
     public void testGetFutureMeetingWithPastMeetingId () {
         contactsCM.addNewPastMeeting(contactsA, pastDate, MEETING_NOTES);
-        contactsCM.getFutureMeeting(ID_ONE);
+        contactsCM.getFutureMeeting(ONE);
     }
 
     @Test(expected = NullPointerException.class)
@@ -144,10 +144,10 @@ public class ContactManagerMeetingsTest {
     @Test
     public void testAddPastMeeting () {
         contactsCM.addNewPastMeeting(contactsA, pastDate, MEETING_NOTES);
-        PastMeeting pMtg = contactsCM.getPastMeeting(ID_ONE);
+        PastMeeting pMtg = contactsCM.getPastMeeting(ONE);
 
         assertNotNull(pMtg);
-        assertEquals(pMtg.getId(), ID_ONE);
+        assertEquals(pMtg.getId(), ONE);
         assertEquals(pMtg.getContacts(), contactsA);
         assertEquals(pMtg.getDate(), pastDate);
         assertEquals(pMtg.getNotes(), MEETING_NOTES);
@@ -157,11 +157,11 @@ public class ContactManagerMeetingsTest {
     public void testGetPastMeeting () {
         contactsCM.addNewPastMeeting(contactsA, pastDate, MEETING_NOTES);
 
-        PastMeeting pMtg = contactsCM.getPastMeeting(ID_ONE);
+        PastMeeting pMtg = contactsCM.getPastMeeting(ONE);
 
         assertNotNull(pMtg);
         assertFalse(pMtg instanceof FutureMeeting);
-        assertEquals(pMtg.getId(), ID_ONE);
+        assertEquals(pMtg.getId(), ONE);
         assertEquals(pMtg.getDate(), pastDate);
         assertEquals(pMtg.getContacts(), contactsA);
         assertEquals(pMtg.getNotes(), MEETING_NOTES);
@@ -171,10 +171,10 @@ public class ContactManagerMeetingsTest {
     public void testAddPastMeetingWithCurrentDateMinusFiveMillis () {
         currentDate.add(Calendar.MILLISECOND, MINUS_FIVE_MILLISECONDS);
         contactsCM.addNewPastMeeting(contactsA, currentDate, MEETING_NOTES);
-        PastMeeting pMtg = contactsCM.getPastMeeting(ID_ONE);
+        PastMeeting pMtg = contactsCM.getPastMeeting(ONE);
 
         assertNotNull(pMtg);
-        assertEquals(pMtg.getId(), ID_ONE);
+        assertEquals(pMtg.getId(), ONE);
         assertEquals(pMtg.getDate(), currentDate);
         assertEquals(pMtg.getNotes(), MEETING_NOTES);
     }
@@ -182,7 +182,7 @@ public class ContactManagerMeetingsTest {
     @Test(expected = IllegalStateException.class)
     public void testGetPastMeetingWithFutureMeetingId () {
         contactsCM.addFutureMeeting(contactsA, futureDate);
-        contactsCM.getPastMeeting(ID_ONE);
+        contactsCM.getPastMeeting(ONE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -231,11 +231,11 @@ public class ContactManagerMeetingsTest {
         Contact testContact = meetingsCM.getContacts(CONTACT_1_ID).stream().findFirst().get();
         List<Meeting> futureMeetingList = meetingsCM.getFutureMeetingList(testContact);
 
-        assertEquals(futureMeetingList.size(), 4);
-        assertEquals(futureMeetingList.get(0).getId(), ID_ONE);
-        assertEquals(futureMeetingList.get(1).getId(), ID_FOUR);
-        assertEquals(futureMeetingList.get(2).getId(), ID_FIVE);
-        assertEquals(futureMeetingList.get(3).getId(), ID_SEVEN);
+        assertEquals(futureMeetingList.size(), FOUR);
+        assertEquals(futureMeetingList.get(ZERO).getId(), ONE);
+        assertEquals(futureMeetingList.get(ONE).getId(), FOUR);
+        assertEquals(futureMeetingList.get(TWO).getId(), FIVE);
+        assertEquals(futureMeetingList.get(THREE).getId(), SEVEN);
     }
 
     @Test
@@ -245,7 +245,7 @@ public class ContactManagerMeetingsTest {
         List<Meeting> futureMeetingList = meetingsCM.getFutureMeetingList(testContact);
 
         assertEquals(futureMeetingList.size(), 5);
-        assertEquals(futureMeetingList.get(1).getId(), ID_NINE);
+        assertEquals(futureMeetingList.get(1).getId(), NINE);
     }
 
     @Test(expected = NullPointerException.class)
@@ -274,7 +274,7 @@ public class ContactManagerMeetingsTest {
             new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH,FUTURE_DAY)
         );
 
-        assertEquals(meetingList.size(), 5);
+        assertEquals(meetingList.size(), FIVE);
     }
 
     @Test
@@ -283,11 +283,11 @@ public class ContactManagerMeetingsTest {
             new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH,FUTURE_DAY)
         );
 
-        assertEquals(meetingList.get(0).getId(), ID_ONE);
-        assertEquals(meetingList.get(1).getId(), ID_NINE);
-        assertEquals(meetingList.get(2).getId(), ID_FOUR);
-        assertEquals(meetingList.get(3).getId(), ID_FIVE);
-        assertEquals(meetingList.get(4).getId(), ID_SEVEN);
+        assertEquals(meetingList.get(ZERO).getId(), ONE);
+        assertEquals(meetingList.get(ONE).getId(), NINE);
+        assertEquals(meetingList.get(TWO).getId(), FOUR);
+        assertEquals(meetingList.get(THREE).getId(), FIVE);
+        assertEquals(meetingList.get(FOUR).getId(), SEVEN);
     }
 
     @Test
@@ -296,7 +296,7 @@ public class ContactManagerMeetingsTest {
             new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY)
         );
 
-        assertEquals(meetingList.size(), 5);
+        assertEquals(meetingList.size(), FIVE);
     }
 
     @Test
@@ -305,11 +305,11 @@ public class ContactManagerMeetingsTest {
             new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY)
         );
 
-        assertEquals(meetingList.get(0).getId(), ID_TWO);
-        assertEquals(meetingList.get(1).getId(), ID_ELEVEN);
-        assertEquals(meetingList.get(2).getId(), ID_THREE);
-        assertEquals(meetingList.get(3).getId(), ID_SIX);
-        assertEquals(meetingList.get(4).getId(), ID_EIGHT);
+        assertEquals(meetingList.get(ZERO).getId(), TWO);
+        assertEquals(meetingList.get(ONE).getId(), ELEVEN);
+        assertEquals(meetingList.get(TWO).getId(), THREE);
+        assertEquals(meetingList.get(THREE).getId(), SIX);
+        assertEquals(meetingList.get(FOUR).getId(), EIGHT);
     }
 
     @Test(expected = NullPointerException.class)
@@ -332,11 +332,11 @@ public class ContactManagerMeetingsTest {
         Contact testContact = meetingsCM.getContacts(CONTACT_1_ID).stream().findFirst().get();
         List<PastMeeting> pastMeetings = meetingsCM.getPastMeetingListFor(testContact);
 
-        assertEquals(pastMeetings.size(), 4);
-        assertEquals(pastMeetings.get(0).getId(), ID_TWO);
-        assertEquals(pastMeetings.get(1).getId(), ID_THREE);
-        assertEquals(pastMeetings.get(2).getId(), ID_SIX);
-        assertEquals(pastMeetings.get(3).getId(), ID_EIGHT);
+        assertEquals(pastMeetings.size(), FOUR);
+        assertEquals(pastMeetings.get(ZERO).getId(), TWO);
+        assertEquals(pastMeetings.get(ONE).getId(), THREE);
+        assertEquals(pastMeetings.get(TWO).getId(), SIX);
+        assertEquals(pastMeetings.get(THREE).getId(), EIGHT);
     }
 
     @Test
@@ -344,8 +344,8 @@ public class ContactManagerMeetingsTest {
         Contact testContact = meetingsCM.getContacts(CONTACT_4_ID).stream().findFirst().get();
         List<PastMeeting> pastMeetings = meetingsCM.getPastMeetingListFor(testContact);
 
-        assertEquals(pastMeetings.size(), 5);
-        assertEquals(pastMeetings.get(1).getId(), ID_ELEVEN);
+        assertEquals(pastMeetings.size(), FIVE);
+        assertEquals(pastMeetings.get(ONE).getId(), ELEVEN);
     }
 
     @Test(expected = NullPointerException.class)
@@ -372,23 +372,23 @@ public class ContactManagerMeetingsTest {
             iEx.printStackTrace();
         }
 
-        contactsCM.addMeetingNotes(ID_ONE, MEETING_NOTES);
-        assertEquals(contactsCM.getPastMeeting(ID_ONE).getNotes(), MEETING_NOTES);
+        contactsCM.addMeetingNotes(ONE, MEETING_NOTES);
+        assertEquals(contactsCM.getPastMeeting(ONE).getNotes(), MEETING_NOTES);
     }
 
     @Test
     public void testAppendMeetingNotes () {
         contactsCM.addNewPastMeeting(contactsA, pastDate, MEETING_NOTES);
-        contactsCM.addMeetingNotes(ID_ONE, MEETING_NOTES_2);
-        contactsCM.addMeetingNotes(ID_ONE, MEETING_NOTES_3);
+        contactsCM.addMeetingNotes(ONE, MEETING_NOTES_2);
+        contactsCM.addMeetingNotes(ONE, MEETING_NOTES_3);
 
-        assertEquals(contactsCM.getPastMeeting(ID_ONE).getNotes(),
+        assertEquals(contactsCM.getPastMeeting(ONE).getNotes(),
                 MEETING_NOTES + NOTES_DELIMITER + MEETING_NOTES_2 + NOTES_DELIMITER + MEETING_NOTES_3);
     }
 
     @Test(expected = NullPointerException.class)
     public void testAddMeetingNotesWithNullNotes () {
-        contactsCM.addMeetingNotes(ID_ONE, NULL_STRING);
+        contactsCM.addMeetingNotes(ONE, NULL_STRING);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -399,6 +399,6 @@ public class ContactManagerMeetingsTest {
     @Test(expected = IllegalStateException.class)
     public void testAddMeetingNotesToFutureMeeting () {
         contactsCM.addFutureMeeting(contactsA, futureDate);
-        contactsCM.addMeetingNotes(ID_ONE, MEETING_NOTES);
+        contactsCM.addMeetingNotes(ONE, MEETING_NOTES);
     }
 }

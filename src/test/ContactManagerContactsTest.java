@@ -11,6 +11,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 import static test.TestCommon.*;
+import static test.TestCommon.addTestContacts;
 
 /**
  * ContactManager tests
@@ -41,13 +42,10 @@ public class ContactManagerContactsTest {
 
     @Test
     public void testAddContactsToEmptyCM() {
-        cleanCM.addNewContact(CONTACT_1_NAME, CONTACT_1_NOTES);
-        cleanCM.addNewContact(CONTACT_2_NAME, CONTACT_2_NOTES);
-        cleanCM.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
-        cleanCM.addNewContact(CONTACT_4_NAME, CONTACT_4_NOTES);
+        addTestContacts(cleanCM);
 
         assertFalse(cleanCM.getContacts(EMPTY_STRING).isEmpty());
-        assertEquals(cleanCM.getContacts(EMPTY_STRING).size(), EXPECTED_NUM_CONTACTS_4);
+        assertEquals(cleanCM.getContacts(EMPTY_STRING).size(), NUM_CONTACTS_DEFAULT);
     }
 
     @Test
@@ -65,7 +63,7 @@ public class ContactManagerContactsTest {
         Set<Contact> testContacts = cleanCM.getContacts(CONTACT_1_NAME);
 
         assertFalse(testContacts.isEmpty());
-        assertEquals(testContacts.size(), 3);
+        assertEquals(testContacts.size(), DUPLICATE_CONTACTS);
 
         assertNotEquals(dupContact1Id, dupContact2Id);
         assertNotEquals(dupContact1Id, dupContact3Id);
@@ -83,7 +81,7 @@ public class ContactManagerContactsTest {
         Set<Contact> testContacts = cleanCM.getContacts(CONTACT_3_NAME);
 
         assertFalse(testContacts.isEmpty());
-        assertEquals(testContacts.size(), EXPECTED_NUM_CONTACTS_4);
+        assertEquals(testContacts.size(), SIMILAR_CONTACTS);
     }
 
     @Test
@@ -104,26 +102,20 @@ public class ContactManagerContactsTest {
     public void testGetContactsByIds() {
         Set<Contact> testContacts = contactsCM.getContacts(
             CONTACT_1_ID,
-            CONTACT_2_ID,
-            CONTACT_3_ID,
-            CONTACT_4_ID
+            CONTACT_2_ID
         );
 
-        assertEquals(testContacts.size(), EXPECTED_NUM_CONTACTS_4);
+        assertEquals(testContacts.size(), TWO);
 
-        Contact c1 = testContacts.stream().filter(c -> c.getId() == CONTACT_1_ID).findFirst().get();
-        Contact c2 = testContacts.stream().filter(c -> c.getId() == CONTACT_2_ID).findFirst().get();
-        Contact c3 = testContacts.stream().filter(c -> c.getId() == CONTACT_3_ID).findFirst().get();
-        Contact c4 = testContacts.stream().filter(c -> c.getId() == CONTACT_4_ID).findFirst().get();
+        Contact c1 = testContacts.stream().filter(c -> c.getId() == CONTACT_1_ID).findFirst().orElse(NULL_CONTACT);
+        Contact c2 = testContacts.stream().filter(c -> c.getId() == CONTACT_2_ID).findFirst().orElse(NULL_CONTACT);
 
+        assertNotNull(c1);
+        assertNotNull(c2);
         assertEquals(c1.getName(), CONTACT_1_NAME);
         assertEquals(c1.getNotes(), CONTACT_1_NOTES);
         assertEquals(c2.getName(), CONTACT_2_NAME);
         assertEquals(c2.getNotes(), CONTACT_2_NOTES);
-        assertEquals(c3.getName(), CONTACT_3_NAME);
-        assertEquals(c3.getNotes(), CONTACT_3_NOTES);
-        assertEquals(c4.getName(), CONTACT_4_NAME);
-        assertEquals(c4.getNotes(), CONTACT_4_NOTES);
     }
 
     @Test
@@ -139,7 +131,7 @@ public class ContactManagerContactsTest {
             CONTACT_6_ID
         );
 
-        assertEquals(testContacts.size(), EXPECTED_NUM_CONTACTS);
+        assertEquals(testContacts.size(), NUM_CONTACTS_DEFAULT);
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -39,7 +39,7 @@ public class PastMeetingTest {
         assertEquals(mMtg.getId(), MEETING_ID);
         assertEquals(mMtg.getDate(), meetingDate);
         assertEquals(mMtg.getContacts(),meetingContacts);
-        assertEquals(mMtg.getContacts().size(), EXPECTED_NUM_CONTACTS_4);
+        assertEquals(mMtg.getContacts().size(), FOUR);
         assertNotNull(((PastMeeting) mMtg).getNotes());
         assertEquals(((PastMeeting) mMtg).getNotes(), MEETING_NOTES);
     }
@@ -51,7 +51,7 @@ public class PastMeetingTest {
         assertNotNull(pMtg);
         assertEquals(pMtg.getId(), MEETING_ID);
         assertEquals(pMtg.getDate(), meetingDate);
-        assertEquals(pMtg.getContacts().size(), EXPECTED_NUM_CONTACTS_4);
+        assertEquals(pMtg.getContacts().size(), FOUR);
         assertEquals(pMtg.getContacts(),meetingContacts);
         assertNotNull(pMtg.getNotes());
         assertEquals(pMtg.getNotes(), MEETING_NOTES);
@@ -64,7 +64,7 @@ public class PastMeetingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void zeroIdShouldThrow () {
-        new PastMeetingImpl(ID_ZERO, meetingDate, meetingContacts, MEETING_NOTES);
+        new PastMeetingImpl(ZERO, meetingDate, meetingContacts, MEETING_NOTES);
     }
 
     @Test(expected = NullPointerException.class)

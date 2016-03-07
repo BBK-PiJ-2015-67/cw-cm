@@ -49,8 +49,9 @@ final class TestCommon {
     static final String CONTACT_3_NAME_PREFIX = " Jessica Jones";
     static final String CONTACT_3_NAME_SUFFIX = "Jessica Jones ";
 
-    static final int EXPECTED_NUM_CONTACTS = 6;
-    static final int EXPECTED_NUM_CONTACTS_4 = 4;
+    static final int NUM_CONTACTS_DEFAULT = 6;
+    static final int DUPLICATE_CONTACTS = 3;
+    static final int SIMILAR_CONTACTS = 4;
     static final String NON_EXISTENT_CONTACT_NAME = "Matt Murdock";
 
     static final int MEETING_ID = 458;
@@ -88,17 +89,17 @@ final class TestCommon {
     static final int ILLEGAL_ID_3 = 43;
     static final int ILLEGAL_ID_4 = 987;
     static final int ID_NEG = -2;
-    static final int ID_ZERO = 0;
-    static final int ID_ONE = 1;
-    static final int ID_TWO = 2;
-    static final int ID_THREE = 3;
-    static final int ID_FOUR = 4;
-    static final int ID_FIVE = 5;
-    static final int ID_SIX = 6;
-    static final int ID_SEVEN = 7;
-    static final int ID_EIGHT = 8;
-    static final int ID_NINE = 9;
-    static final int ID_ELEVEN = 11;
+    static final int ZERO = 0;
+    static final int ONE = 1;
+    static final int TWO = 2;
+    static final int THREE = 3;
+    static final int FOUR = 4;
+    static final int FIVE = 5;
+    static final int SIX = 6;
+    static final int SEVEN = 7;
+    static final int EIGHT = 8;
+    static final int NINE = 9;
+    static final int ELEVEN = 11;
 
     static final int EMPTY_SIZE = 0;
     static final String EMPTY_STRING = "";

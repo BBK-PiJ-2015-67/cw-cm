@@ -67,7 +67,7 @@ public class ContactManagerTest {
     public void testEmptyCMShouldHaveNoMeetingsAfterFlush() {
         emptyCM.flush();
         emptyCM = new ContactManagerImpl();
-        Meeting mtg = emptyCM.getMeeting(ID_ONE);
+        Meeting mtg = emptyCM.getMeeting(ONE);
         assertNull(mtg);
     }
 

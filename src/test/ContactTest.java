@@ -69,7 +69,7 @@ public class ContactTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNewContactWithZeroID () {
-        new ContactImpl(ID_ZERO, CONTACT_1_NAME);
+        new ContactImpl(ZERO, CONTACT_1_NAME);
     }
 
     @Test(expected = IllegalArgumentException.class)
