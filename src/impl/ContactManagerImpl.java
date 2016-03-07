@@ -148,11 +148,10 @@ public class ContactManagerImpl implements ContactManager {
      */
     @Override
     public Meeting getMeeting(int id) {
-        try {
-            return cmMeetings.parallelStream().filter(mtg -> mtg.getId() == id).findFirst().get();
-        } catch (NoSuchElementException noSuchElEx) {
-            return null;
-        }
+        return cmMeetings.parallelStream()
+            .filter(mtg -> mtg.getId() == id)
+            .findFirst()
+            .orElse(null);
     }
 
     /**
