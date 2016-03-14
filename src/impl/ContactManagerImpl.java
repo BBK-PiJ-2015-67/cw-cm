@@ -309,9 +309,8 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 
         if (result.size() == 0) {
             throw new IllegalArgumentException();
-        } else {
-            return result;
         }
+        return result;
     }
 
     /**
