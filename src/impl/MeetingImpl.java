@@ -68,4 +68,38 @@ public abstract class MeetingImpl implements Meeting, Serializable {
     public Set<Contact> getContacts() {
         return meetingContacts;
     }
+
+    /**
+     * Override {@code java.lang.Object.hashCode()}<br>
+     * This is required in order to be able to use
+     * {@code distinct()} in the Java 8 streams api.<br>
+     *
+     * @return the hashCode
+     */
+    @Override
+    public int hashCode() {
+        return meetingDate.hashCode() + meetingContacts.hashCode();
+    }
+
+    /**
+     * Override {@code java.lang.Object.equals()}<br>
+     * For our purposes a Meeting is equal if:
+     * <ul>
+     *     <li>It occurs on the same date as another meeting</li>
+     *     <li>Both meetings contain ALL the same contacts</li>
+     * </ul>
+     *
+     * @param other The object to compare this Meeting with
+     * @return True if the Meetings are the same, false if not
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Meeting) {
+            Meeting tmp = (Meeting) other;
+            return tmp.getDate().compareTo(getDate()) == 0 &&
+                    tmp.getContacts().containsAll(getContacts()) &&
+                    getContacts().containsAll(tmp.getContacts());
+        }
+        return false;
+    }
 }

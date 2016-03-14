@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static impl.ContactManagerHelpers.*;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -41,7 +40,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author lmignot
  */
-public class ContactManagerImpl implements ContactManager {
+public class ContactManagerImpl implements ContactManager, Serializable {
 
     private static final String FILENAME = "contacts.txt";
 
@@ -86,7 +85,7 @@ public class ContactManagerImpl implements ContactManager {
             }
         }
 
-        cmDate = new GregorianCalendar();
+        cmDate = Calendar.getInstance();
         cmContacts = (tmpContacts == null) ? new HashSet<>() : tmpContacts;
         cmMeetings = (tmpMeetings == null) ? new ArrayList<>() : tmpMeetings;
         nextMeetingId = (tmpNextMeetingId == -1) ? 1 : tmpNextMeetingId;
@@ -103,7 +102,7 @@ public class ContactManagerImpl implements ContactManager {
     public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
         requireNonNullArguments(contacts, date);
 
-        cmDate = new GregorianCalendar();
+        cmDate = Calendar.getInstance();
 
         if (!date.after(cmDate) || !cmContacts.containsAll(contacts)) {
             throw new IllegalArgumentException();
@@ -166,12 +165,11 @@ public class ContactManagerImpl implements ContactManager {
             throw new IllegalArgumentException();
         }
 
-        List<Meeting> result = cmMeetings.parallelStream()
+        return cmMeetings.parallelStream()
             .filter(m -> m.getContacts().contains(contact) && m instanceof FutureMeeting)
             .sorted(Comparator.comparing(Meeting::getDate))
+            .distinct()
             .collect(Collectors.toList());
-        
-        return getDistinctMeetings(result);
     }
 
     /**
@@ -182,14 +180,13 @@ public class ContactManagerImpl implements ContactManager {
     public List<Meeting> getMeetingListOn(Calendar date) {
         requireNonNull(date);
 
-        List<Meeting> result = cmMeetings.parallelStream()
+        return cmMeetings.parallelStream()
             .filter(m -> m.getDate().get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
                     m.getDate().get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
                     m.getDate().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
             .sorted(Comparator.comparing(Meeting::getDate))
+            .distinct()
             .collect(Collectors.toList());
-
-        return getDistinctMeetings(result);
     }
 
     /**
@@ -204,12 +201,12 @@ public class ContactManagerImpl implements ContactManager {
             throw new IllegalArgumentException();
         }
 
-        List<Meeting> result = cmMeetings.parallelStream()
+        return cmMeetings.parallelStream()
             .filter(m -> m.getContacts().contains(contact) && m instanceof PastMeeting)
+            .map(m -> (PastMeeting) m)
             .sorted(Comparator.comparing(Meeting::getDate))
+            .distinct()
             .collect(Collectors.toList());
-
-        return getDistinctMeetings(result).parallelStream().map(m -> (PastMeeting) m).collect(Collectors.toList());
     }
 
     /**
@@ -221,7 +218,7 @@ public class ContactManagerImpl implements ContactManager {
     public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text) {
         requireNonNullArguments(contacts,date,text);
 
-        cmDate = new GregorianCalendar();
+        cmDate = Calendar.getInstance();
 
         if (!date.before(cmDate) || text.equals("") || !cmContacts.containsAll(contacts)) {
             throw new IllegalArgumentException();
@@ -242,7 +239,7 @@ public class ContactManagerImpl implements ContactManager {
     public void addMeetingNotes(int id, String text) {
         requireNonNull(text);
 
-        cmDate = new GregorianCalendar();
+        cmDate = Calendar.getInstance();
 
         Meeting mtg = getMeeting(id);
         if (mtg == null) { throw new IllegalArgumentException(); }
@@ -339,6 +336,19 @@ public class ContactManagerImpl implements ContactManager {
             out.writeObject(nextContactId);
         } catch (IOException ioEx) {
             ioEx.printStackTrace();
+        }
+    }
+
+    /**
+     * Check for null values in an array of objects
+     *
+     * @param args The arguments to check
+     * @throws NullPointerException if ANY of the arguments are null
+     */
+    @SafeVarargs
+    private static <T> void requireNonNullArguments(T... args) {
+        for (T t : args) {
+            Objects.requireNonNull(t);
         }
     }
 }
