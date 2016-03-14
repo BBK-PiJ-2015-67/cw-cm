@@ -147,7 +147,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
      */
     @Override
     public Meeting getMeeting(int id) {
-        return cmMeetings.parallelStream()
+        return cmMeetings.stream()
             .filter(mtg -> mtg.getId() == id)
             .findFirst()
             .orElse(null);
@@ -165,7 +165,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
             throw new IllegalArgumentException();
         }
 
-        return cmMeetings.parallelStream()
+        return cmMeetings.stream()
             .filter(m -> m.getContacts().contains(contact) && m instanceof FutureMeeting)
             .sorted(Comparator.comparing(Meeting::getDate))
             .distinct()
@@ -180,7 +180,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
     public List<Meeting> getMeetingListOn(Calendar date) {
         requireNonNull(date);
 
-        return cmMeetings.parallelStream()
+        return cmMeetings.stream()
             .filter(m -> m.getDate().get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
                     m.getDate().get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
                     m.getDate().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
@@ -201,7 +201,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
             throw new IllegalArgumentException();
         }
 
-        return cmMeetings.parallelStream()
+        return cmMeetings.stream()
             .filter(m -> m.getContacts().contains(contact) && m instanceof PastMeeting)
             .map(m -> (PastMeeting) m)
             .sorted(Comparator.comparing(Meeting::getDate))
@@ -286,9 +286,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
         requireNonNull(name);
 
         if(name.equals("")) {
-            return cmContacts.parallelStream().collect(Collectors.toSet());
+            return cmContacts.stream().collect(Collectors.toSet());
         }
-        return cmContacts.parallelStream()
+        return cmContacts.stream()
             .filter(c -> c.getName().contains(name))
             .collect(Collectors.toSet());
     }
@@ -303,7 +303,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
     public Set<Contact> getContacts(int... ids) {
         requireNonNull(ids);
 
-        Set<Contact> result = cmContacts.parallelStream()
+        Set<Contact> result = cmContacts.stream()
             .filter(c -> Arrays.stream(ids).parallel().anyMatch(i -> i == c.getId()))
             .collect(Collectors.toSet());
 
