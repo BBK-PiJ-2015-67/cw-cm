@@ -15,9 +15,7 @@ import java.nio.file.Path;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static test.TestCommon.*;
 
 /**
@@ -79,9 +77,11 @@ public class ContactManagerTest {
 
         Set<Contact> contacts = cm2.getContacts(CONTACT_1_ID, CONTACT_2_ID);
 
-        Contact c1 = contacts.stream().filter(c -> c.getId() == CONTACT_1_ID).findFirst().get();
-        Contact c2 = contacts.stream().filter(c -> c.getId() == CONTACT_2_ID).findFirst().get();
+        Contact c1 = contacts.stream().filter(c -> c.getId() == CONTACT_1_ID).findFirst().orElse(NULL_CONTACT);
+        Contact c2 = contacts.stream().filter(c -> c.getId() == CONTACT_2_ID).findFirst().orElse(NULL_CONTACT);
 
+        assertNotNull(c1);
+        assertNotNull(c2);
         assertEquals(c1.getName(), CONTACT_1_NAME);
         assertEquals(c1.getNotes(), CONTACT_1_NOTES);
         assertEquals(c2.getName(), CONTACT_2_NAME);
