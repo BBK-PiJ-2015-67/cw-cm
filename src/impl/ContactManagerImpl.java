@@ -40,7 +40,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author lmignot
  */
-public class ContactManagerImpl implements ContactManager, Serializable {
+public class ContactManagerImpl implements ContactManager {
 
     private static final String FILENAME = "contacts.txt";
 
