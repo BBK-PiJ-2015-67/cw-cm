@@ -27,7 +27,9 @@ public class ContactManagerContactsTest {
     @Before
     public void setUp() {
         deleteDataFile();
+        // No contacts, used for edge-case tests
         cleanCM = new ContactManagerImpl();
+        // A CM with some contacts, to keep tests DRY
         contactsCM = new ContactManagerImpl();
         addTestContacts(contactsCM);
     }
@@ -69,6 +71,13 @@ public class ContactManagerContactsTest {
         assertNotEquals(dupContact2Id, dupContact3Id);
     }
 
+    /**
+     * Test that {@code getContacts(String)} correctly
+     * returns contacts containing the name passed
+     * as a parameter. It should ignore whitespace
+     * before and after, as well as any additional names
+     * following or preceeding.
+     */
     @Test
     public void testGetContactsByNameDoesIgnoreWhitespace() {
         cleanCM.addNewContact(CONTACT_3_NAME, CONTACT_3_NOTES);
@@ -76,6 +85,7 @@ public class ContactManagerContactsTest {
         cleanCM.addNewContact(CONTACT_3_NAME_PREFIX, CONTACT_3_NOTES);
         cleanCM.addNewContact(CONTACT_3_NAME_SUFFIX, CONTACT_3_NOTES);
         cleanCM.addNewContact(CONTACT_3_NAME_WHITESPACE, CONTACT_3_NOTES);
+        cleanCM.addNewContact(CONTACT_3_NAME_EXTENDED, CONTACT_3_NOTES);
 
         Set<Contact> testContacts = cleanCM.getContacts(CONTACT_3_NAME);
 

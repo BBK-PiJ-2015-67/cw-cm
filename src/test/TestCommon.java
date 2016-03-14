@@ -48,10 +48,11 @@ final class TestCommon {
     static final String CONTACT_3_NAME_WHITESPACE = "Jessica  Jones";
     static final String CONTACT_3_NAME_PREFIX = " Jessica Jones";
     static final String CONTACT_3_NAME_SUFFIX = "Jessica Jones ";
+    static final String CONTACT_3_NAME_EXTENDED = "Jessica Jones - Metahuman";
 
     static final int NUM_CONTACTS_DEFAULT = 6;
     static final int DUPLICATE_CONTACTS = 3;
-    static final int SIMILAR_CONTACTS = 4;
+    static final int SIMILAR_CONTACTS = 5;
     static final String NON_EXISTENT_CONTACT_NAME = "Matt Murdock";
 
     static final int MEETING_ID = 458;
