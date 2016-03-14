@@ -71,7 +71,8 @@ public abstract class MeetingImpl implements Meeting, Serializable {
 
     /**
      * Override {@code java.lang.Object.hashCode()}<br>
-     * This is required in order to be able to use
+     * This is required in order to be able to override
+     * {@code java.lang.Object.equals()} so that we can use
      * {@code distinct()} in the Java 8 streams api.<br>
      *
      * @return the hashCode
