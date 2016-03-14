@@ -36,8 +36,11 @@ public class ContactManagerMeetingsTest {
     public void setUp() {
         deleteDataFile();
 
+        // for edge-case tests
         emptyCM = new ContactManagerImpl();
+        // contains contacts, but no meetings
         contactsCM = new ContactManagerImpl();
+        // contains contacts and meetings
         meetingsCM = new ContactManagerImpl();
 
         addTestContacts(contactsCM);
@@ -45,12 +48,13 @@ public class ContactManagerMeetingsTest {
 
         contactsA = contactsCM.getContacts(CONTACT_1_ID, CONTACT_2_ID, CONTACT_3_ID, CONTACT_4_ID);
 
+        // Contact 4 is in both sets so we can test for duplicate meetings
         contactsB = meetingsCM.getContacts(CONTACT_1_ID, CONTACT_2_ID, CONTACT_3_ID, CONTACT_4_ID);
         contactsC = meetingsCM.getContacts(CONTACT_4_ID, CONTACT_5_ID, CONTACT_6_ID);
 
         addTestMeetings(meetingsCM, contactsB, contactsC);
 
-        currentDate = new GregorianCalendar();
+        currentDate = Calendar.getInstance();
         futureDate = new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH, FUTURE_DAY);
         pastDate = new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY);
     }
@@ -215,7 +219,7 @@ public class ContactManagerMeetingsTest {
         contactsCM.addNewPastMeeting(contactsA, pastDate, EMPTY_STRING);
     }
 
-    /* =================== MEETING LISTS =================== */
+    /* =================== FUTURE MEETING LISTS =================== */
 
     @Test
     public void testEmptyGetFutureMeetingListForIsEmpty() {
@@ -232,6 +236,7 @@ public class ContactManagerMeetingsTest {
         List<Meeting> futureMeetingList = meetingsCM.getFutureMeetingList(testContact);
 
         assertEquals(futureMeetingList.size(), FOUR);
+        // expected sort order by date, see TestCommon.addTestMeetings()
         assertEquals(futureMeetingList.get(ZERO).getId(), ONE);
         assertEquals(futureMeetingList.get(ONE).getId(), FOUR);
         assertEquals(futureMeetingList.get(TWO).getId(), FIVE);
@@ -258,6 +263,8 @@ public class ContactManagerMeetingsTest {
         contactsCM.getFutureMeetingList(new ContactImpl(ILLEGAL_ID_3, NON_EXISTENT_CONTACT_NAME));
     }
 
+/* =================== GET MEETING LISTS ON SPECIFIC DATE =================== */
+
     @Test
     public void testGetMeetingListOnIsEmpty() {
         List<Meeting> meetingList = contactsCM.getMeetingListOn(
@@ -283,6 +290,7 @@ public class ContactManagerMeetingsTest {
             new GregorianCalendar(FUTURE_YEAR, FUTURE_MONTH,FUTURE_DAY)
         );
 
+        // expected sort order by date, see TestCommon.addTestMeetings()
         assertEquals(meetingList.get(ZERO).getId(), ONE);
         assertEquals(meetingList.get(ONE).getId(), NINE);
         assertEquals(meetingList.get(TWO).getId(), FOUR);
@@ -305,6 +313,7 @@ public class ContactManagerMeetingsTest {
             new GregorianCalendar(PAST_YEAR, PAST_MONTH, PAST_DAY)
         );
 
+        // expected sort order by date, see TestCommon.addTestMeetings()
         assertEquals(meetingList.get(ZERO).getId(), TWO);
         assertEquals(meetingList.get(ONE).getId(), ELEVEN);
         assertEquals(meetingList.get(TWO).getId(), THREE);
@@ -316,6 +325,8 @@ public class ContactManagerMeetingsTest {
     public void testGetMeetingListOnShouldThrowForNullDate() {
         contactsCM.getMeetingListOn(NULL_CAL);
     }
+
+/* =================== GET MEETING LISTS FOR SPECIFIC CONTACT =================== */
 
     @Test
     public void testGetEmptyPastMeetingListForIsEmpty() {
@@ -332,6 +343,7 @@ public class ContactManagerMeetingsTest {
         Contact testContact = meetingsCM.getContacts(CONTACT_1_ID).stream().findFirst().get();
         List<PastMeeting> pastMeetings = meetingsCM.getPastMeetingListFor(testContact);
 
+        // expected sort order by date, see TestCommon.addTestMeetings()
         assertEquals(pastMeetings.size(), FOUR);
         assertEquals(pastMeetings.get(ZERO).getId(), TWO);
         assertEquals(pastMeetings.get(ONE).getId(), THREE);
@@ -357,6 +369,8 @@ public class ContactManagerMeetingsTest {
     public void testGetPastMeetingListForWithInvalidContactShouldThrow () {
         contactsCM.getPastMeetingListFor(new ContactImpl(ILLEGAL_ID_1, NON_EXISTENT_CONTACT_NAME));
     }
+
+    /* =================== ADD NOTES TO MEETINGS =================== */
 
     @Test
     public void testAddMeetingNotes () {
