@@ -34,6 +34,11 @@ import static java.util.Objects.requireNonNull;
  *     Ideally we'd use some sort of UNIQUE IDENTIFIER such as UUID,
  *     or we'd let a database handle it.
  *     </li>
+ *     <li>
+ *     <strong>Meeting equality:</strong> Meetings are considered
+ *     equal IF and ONLY IF Meeting A is at the same time as Meeting B,
+ *     AND Meeting A contains all contacts in Meeting B AND vice-versa.
+ *     </li>
  * </ul>
  *
  * @see ContactManager
